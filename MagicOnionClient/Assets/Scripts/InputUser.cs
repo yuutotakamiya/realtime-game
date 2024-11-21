@@ -1,4 +1,4 @@
-using MagicOnionServer.Model.Entity;
+using MessagePack.Formatters.MagicOnionServer.Model.Entity;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

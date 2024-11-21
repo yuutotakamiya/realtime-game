@@ -49,5 +49,21 @@ namespace StreamingHubs
 
             return joinedUserList;
        }
+
+
+        public async Task LeaveAsync()
+        {
+            //グループデータから削除
+            this.room.GetInMemoryStorage<RoomData>().Remove(this.ConnectionId);
+
+            //ルーム内のメンバーから自分を削除
+            await room.RemoveAsync(this.Context);
+
+            var joinedUser = new JoinedUser() { ConnectionId = this.ConnectionId };
+
+            //ルーム参加者全員に(自分以外)、ユーザーの退室通知を送信
+            this.Broadcast(room).OnLeave(joinedUser);
+
+        }
     }
 }

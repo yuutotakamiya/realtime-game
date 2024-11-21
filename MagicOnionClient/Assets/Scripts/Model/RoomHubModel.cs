@@ -2,6 +2,7 @@ using Cysharp.Net.Http;
 using Cysharp.Threading.Tasks;
 using Grpc.Net.Client;
 using MagicOnion.Client;
+using MagicOnionServer.Model.Entity;
 using Shared.Interfaces.StreamingHubs;
 using System;
 using System.Collections;
@@ -17,8 +18,11 @@ public class RoomHubModel : BaseModel, IRoomHubReceiver
 
     //接続ID
     public Guid ConnectionId;
+
     //ユーザー接続通知
     public Action<JoinedUser> OnJoinedUser {  get; set; }//Modelを使うクラスにはActionを使ってサーバーから届いたデータを渡す
+
+    public Action<JoinedUser> OnExitUser { get; set; }
 
 
     //MagicOnion接続処理
@@ -64,4 +68,15 @@ public class RoomHubModel : BaseModel, IRoomHubReceiver
         OnJoinedUser(user);
     }
 
+    //退室
+    public async UniTask LeaveAsync()
+    {
+      await roomHub.LeaveAsync();
+    }
+
+    //退室通知(IRoomHubReceiverインターフェイスの実装)
+    public void OnLeave(JoinedUser user)
+    {
+        OnExitUser(user);
+    }
 }
