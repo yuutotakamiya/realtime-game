@@ -8,6 +8,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class RoomHubModel : BaseModel, IRoomHubReceiver
@@ -23,6 +24,8 @@ public class RoomHubModel : BaseModel, IRoomHubReceiver
     public Action<JoinedUser> OnJoinedUser {  get; set; }//Modelを使うクラスにはActionを使ってサーバーから届いたデータを渡す
 
     public Action<JoinedUser> OnExitUser { get; set; }
+
+    public Action<Guid,Vector3> OnMoveCharacter {  get; set; }
 
 
     //MagicOnion接続処理
@@ -57,8 +60,8 @@ public class RoomHubModel : BaseModel, IRoomHubReceiver
             if (user.UserData.Id == userId)
             {
                 this.ConnectionId = user.ConnectionId;
-                OnJoinedUser(user);
             }
+            OnJoinedUser(user);
         }
     }
 
@@ -78,5 +81,18 @@ public class RoomHubModel : BaseModel, IRoomHubReceiver
     public void OnLeave(JoinedUser user)
     {
         OnExitUser(user);
+    }
+
+    //移動通知
+    public void OnMove(Guid connectionId,Vector3 pos)
+    {
+        OnMoveCharacter(connectionId,pos);
+    }
+
+
+    //移動
+    public async UniTask MoveAsync(Vector3 pos)
+    {
+        await roomHub.MoveAsync(pos);
     }
 }

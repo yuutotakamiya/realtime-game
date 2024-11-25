@@ -1,11 +1,13 @@
 ﻿using MagicOnion.Server.Hubs;
 using MagicOnionServer.Model.Context;
+using MagicOnionServer.Model.Entity;
 using Shared.Interfaces.StreamingHubs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace StreamingHubs
 {
@@ -50,7 +52,7 @@ namespace StreamingHubs
             return joinedUserList;
        }
 
-
+        //ユーザーの退室
         public async Task LeaveAsync()
         {
             //グループデータから削除
@@ -64,6 +66,36 @@ namespace StreamingHubs
             //ルーム参加者全員に(自分以外)、ユーザーの退室通知を送信
             this.Broadcast(room).OnLeave(joinedUser);
 
+        }
+
+        //ユーザーの移動
+        public async  Task MoveAsync(Vector3 pos)
+        {
+            //グループストレージにある自身の接続IDを取得
+            var roomStorage = this.room.GetInMemoryStorage<RoomData>();
+            var roomData = roomStorage.Get(this.ConnectionId);
+
+            roomData.Position = pos;
+            roomStorage.Set(this.ConnectionId, roomData);  // 更新されたデータを保存
+
+            //ルーム参加者全員に(自分以外)、ユーザーの退室通知を送信
+            this.BroadcastExceptSelf(room).OnMove(this.ConnectionId,pos);
+        }
+
+        //ユーザーが切断したときの処理
+        protected override ValueTask OnDisconnected()
+        {
+            //グループデータから削除
+            this.room.GetInMemoryStorage<RoomData>().Remove(this.ConnectionId);
+
+            var joinedUser = new JoinedUser() { ConnectionId = this.ConnectionId };
+            //ルーム参加者全員に(自分以外)、ユーザーの退室通知を送信
+            this.Broadcast(room).OnLeave(joinedUser);
+
+            //ルーム内のメンバーから自分を削除
+            room.RemoveAsync(this.Context);
+
+            return CompletedTask;
         }
     }
 }

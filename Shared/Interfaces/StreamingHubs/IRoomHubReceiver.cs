@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using UnityEngine;
 
 namespace Shared.Interfaces.StreamingHubs
 {
@@ -13,5 +14,8 @@ namespace Shared.Interfaces.StreamingHubs
 
         //ユーザーの退室通知
         void OnLeave(JoinedUser user);
+
+        //ユーザーの移動通知
+        void OnMove(Guid connectionId,Vector3 pos);
     }
 }

@@ -1,0 +1,19 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+participant クライアントA
+participant クライアントB
+participant クライアントC
+participant サーバー
+
+autonumber
+
+クライアントA -> サーバー:移動
+クライアントB <- サーバー:クライアントAが移動しました
+クライアントC <- サーバー:クライアントAが移動しました
+クライアントB -> サーバー:移動
+クライアントA <- サーバー:クライアントBが移動しました
+クライアントC <- サーバー:クライアントBが移動しました
+クライアントC -> サーバー:移動
+クライアントA <- サーバー: クライアントCが移動しました
+クライアントB <- サーバー: クライアントCが移動しました
+@enduml
