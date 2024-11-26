@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
 public class GameDirector : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class GameDirector : MonoBehaviour
     [SerializeField] Text roomname;
     [SerializeField] Text userId;
     [SerializeField] GameObject startposition;
+    //[SerializeField] Transform[] respornpositiontransform;
     //[SerializeField] float speed = 3.0f;
     Vector3 position;
     Dictionary <Guid,GameObject> characterList = new Dictionary<Guid,GameObject>();
@@ -45,7 +47,7 @@ public class GameDirector : MonoBehaviour
     {
         //roomname = InpuTuserId.text;
         //入室
-        await roomHubModel.JoinAsync("sampleroom",int.Parse(userId.text));
+        await roomHubModel.JoinAsync(roomname.text, int.Parse(userId.text));
 
         InvokeRepeating("Move", 0.1f, 0.1f);
       
@@ -54,7 +56,10 @@ public class GameDirector : MonoBehaviour
     //ユーザーが入室した時の処理
     private void OnJoinedUser(JoinedUser user)
     {
-        GameObject characterObject = Instantiate(characterPrefab);//インスタンス生成
+        //GameObject randomCharacterPrefab = characterPrefab[UnityEngine.Random.Range(0, characterPrefab.Length)];
+
+        GameObject characterObject = Instantiate(characterPrefab);//Prefabを生成
+
         if (roomHubModel.ConnectionId == user.ConnectionId)
         {
             characterObject.GetComponent<Move>().isself = true;
@@ -104,7 +109,6 @@ public class GameDirector : MonoBehaviour
     //ユーザーの移動、回転
     private void OnMoveCharacter(Guid connectionId, Vector3 pos,Quaternion rotaition)
     {
-
         if (characterList.ContainsKey(connectionId))
         {
             GameObject character = characterList[connectionId];

@@ -1,10 +1,40 @@
 @startuml
 'https://plantuml.com/sequence-diagram
+/'ゲーム開始から終了までの流れ(制限時間の場合)'/
 
 participant クライアントA
 participant サーバー
 participant クライアントB
 
+group ゲーム開始
+サーバー-->クライアントA:ゲーム開始
+サーバー-->クライアントB:ゲーム開始
+note over クライアントA:GO
+note over クライアントB:GO
+end group
 
+alt マスタークライアント方式(一番最初に入室した人が時間をカウント)
+note over クライアントA:1:00
+note over クライアントB:1:00
+クライアントA-->サーバー:60秒
+サーバー-->クライアントA:残り時間(60秒)
+サーバー-->クライアントB:残り時間60秒
 
+note over クライアントA:59
+note over クライアントB:59
+クライアントA-->サーバー:59秒
+サーバー-->クライアントA:残り時間(59秒)
+サーバー-->クライアントB:残り時間59秒
+
+note over クライアントA:0
+note over クライアントB:0
+クライアントA-->サーバー:0秒
+サーバー-->クライアントA:残り時間0秒
+サーバー-->クライアントB:残り時間0秒
+end group
+
+note over クライアントA:結果表示
+note over クライアントB:結果表示
+クライアントA-->サーバー:退室
+クライアントB-->サーバー:退室
 @enduml

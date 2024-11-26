@@ -1,5 +1,7 @@
 @startuml
 'https://plantuml.com/sequence-diagram
+/'入室からゲーム開始までの流れ'/
+
 participant クライアントA
 participant サーバー
 participant クライアントB
@@ -8,19 +10,23 @@ participant クライアントB
 クライアントB-->>サーバー:入室
 
 note over サーバー:全員揃ったかどうか判定
-group Group
+
+group 全員そろったタイミング
 サーバー-->>クライアントA:全員そろった
 サーバー-->>クライアントB:全員そろった
 note over クライアントA:開始前の演出
 note over クライアントB:開始前の演出
 end group
+
 note over サーバー:準備できたかをRoomData.csに保存
-group Group
+
+group 準備
 クライアントA-->>サーバー:準備OK
 note over サーバー:準備できたかを判定
 クライアントB-->>サーバー:準備OK
 note over サーバー:準備できたかを判定
 end group
+
 サーバー-->>クライアントA:ゲーム開始
 サーバー-->>クライアントB:ゲーム開始
 @enduml
