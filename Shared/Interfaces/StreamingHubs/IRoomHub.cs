@@ -18,7 +18,7 @@ namespace Shared.Interfaces.StreamingHubs
         Task LeaveAsync();
 
         //ユーザーの移動
-        Task MoveAsync(Vector3 pos);
+        Task MoveAsync(Vector3 pos ,Quaternion rotaition);
 
     }
 }

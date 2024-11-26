@@ -16,6 +16,6 @@ namespace Shared.Interfaces.StreamingHubs
         void OnLeave(JoinedUser user);
 
         //ユーザーの移動通知
-        void OnMove(Guid connectionId,Vector3 pos);
+        void OnMove(Guid connectionId,Vector3 pos,Quaternion rotaition);
     }
 }

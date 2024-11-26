@@ -69,17 +69,18 @@ namespace StreamingHubs
         }
 
         //ユーザーの移動
-        public async  Task MoveAsync(Vector3 pos)
+        public async  Task MoveAsync(Vector3 pos, Quaternion rotaition)
         {
             //グループストレージにある自身の接続IDを取得
             var roomStorage = this.room.GetInMemoryStorage<RoomData>();
             var roomData = roomStorage.Get(this.ConnectionId);
 
             roomData.Position = pos;
+            roomData.Rotation = rotaition;
             roomStorage.Set(this.ConnectionId, roomData);  // 更新されたデータを保存
 
             //ルーム参加者全員に(自分以外)、ユーザーの退室通知を送信
-            this.BroadcastExceptSelf(room).OnMove(this.ConnectionId,pos);
+            this.BroadcastExceptSelf(room).OnMove(this.ConnectionId,pos, rotaition);
         }
 
         //ユーザーが切断したときの処理

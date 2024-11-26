@@ -1,0 +1,26 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+participant クライアントA
+participant サーバー
+participant クライアントB
+
+クライアントA-->>サーバー:入室
+クライアントB-->>サーバー:入室
+
+note over サーバー:全員揃ったかどうか判定
+group Group
+サーバー-->>クライアントA:全員そろった
+サーバー-->>クライアントB:全員そろった
+note over クライアントA:開始前の演出
+note over クライアントB:開始前の演出
+end group
+note over サーバー:準備できたかをRoomData.csに保存
+group Group
+クライアントA-->>サーバー:準備OK
+note over サーバー:準備できたかを判定
+クライアントB-->>サーバー:準備OK
+note over サーバー:準備できたかを判定
+end group
+サーバー-->>クライアントA:ゲーム開始
+サーバー-->>クライアントB:ゲーム開始
+@enduml

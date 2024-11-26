@@ -1,0 +1,12 @@
+@startuml
+'https://plantuml.com/sequence-diagram クライアントA
+participant クライアントA
+participant サーバー
+participant クライアントB
+
+クライアントA-->サーバー
+クライアントB-->サーバー:切断
+
+サーバー-->クライアントA:クライアントBが切断されました(OnLeave)
+
+@enduml

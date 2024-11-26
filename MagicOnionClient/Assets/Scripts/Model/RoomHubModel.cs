@@ -25,7 +25,7 @@ public class RoomHubModel : BaseModel, IRoomHubReceiver
 
     public Action<JoinedUser> OnExitUser { get; set; }
 
-    public Action<Guid,Vector3> OnMoveCharacter {  get; set; }
+    public Action<Guid,Vector3,Quaternion> OnMoveCharacter {  get; set; }
 
 
     //MagicOnion接続処理
@@ -83,16 +83,16 @@ public class RoomHubModel : BaseModel, IRoomHubReceiver
         OnExitUser(user);
     }
 
-    //移動通知
-    public void OnMove(Guid connectionId,Vector3 pos)
+    //移動、回転通知
+    public void OnMove(Guid connectionId,Vector3 pos, Quaternion rotaition)
     {
-        OnMoveCharacter(connectionId,pos);
+        OnMoveCharacter(connectionId,pos,rotaition);
     }
 
 
-    //移動
-    public async UniTask MoveAsync(Vector3 pos)
+    //移動、回転
+    public async UniTask MoveAsync(Vector3 pos, Quaternion rotaition)
     {
-        await roomHub.MoveAsync(pos);
+        await roomHub.MoveAsync(pos, rotaition);
     }
 }

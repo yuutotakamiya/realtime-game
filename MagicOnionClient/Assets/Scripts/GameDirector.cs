@@ -55,7 +55,7 @@ public class GameDirector : MonoBehaviour
     private void OnJoinedUser(JoinedUser user)
     {
         GameObject characterObject = Instantiate(characterPrefab);//インスタンス生成
-        if(roomHubModel.ConnectionId == user.ConnectionId)
+        if (roomHubModel.ConnectionId == user.ConnectionId)
         {
             characterObject.GetComponent<Move>().isself = true;
         }
@@ -96,13 +96,13 @@ public class GameDirector : MonoBehaviour
 
     //定期的に呼び出すメソッド
     private async void Move()
-    { 
-        //自分自身のtransform.positionをサーバーに送信
-        await roomHubModel.MoveAsync(characterList[roomHubModel.ConnectionId].gameObject.transform.position);
+    {
+        //自分自身のtransform.position、Quaternion.identityをサーバーに送信
+        await roomHubModel.MoveAsync(characterList[roomHubModel.ConnectionId].gameObject.transform.position, characterList[roomHubModel.ConnectionId].gameObject.transform.rotation);
     }
 
-    //ユーザーの移動
-    private void OnMoveCharacter(Guid connectionId, Vector3 pos)
+    //ユーザーの移動、回転
+    private void OnMoveCharacter(Guid connectionId, Vector3 pos,Quaternion rotaition)
     {
 
         if (characterList.ContainsKey(connectionId))
@@ -110,8 +110,8 @@ public class GameDirector : MonoBehaviour
             GameObject character = characterList[connectionId];
 
             // キャラクターの位置と回転をサーバーの値に更新
-            character.transform.DOLocalMove(pos,0.1f);
-            //character.transform.rotation = pos;
+            character.transform.DOLocalMove(pos, 0.1f).SetEase(Ease.Linear);
+            character.transform.DORotate(rotaition.eulerAngles, 0.1f).SetEase(Ease.Linear);
         }
 
     }
