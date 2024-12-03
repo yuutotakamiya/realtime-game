@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
+using static Shared.Interfaces.StreamingHubs.IRoomHubReceiver;
 
 public class RoomHubModel : BaseModel, IRoomHubReceiver
 {
@@ -25,7 +26,11 @@ public class RoomHubModel : BaseModel, IRoomHubReceiver
 
     public Action<JoinedUser> OnExitUser { get; set; }
 
-    public Action<Guid,Vector3,Quaternion> OnMoveCharacter {  get; set; }
+    public Action<Guid,Vector3,Quaternion, CharacterState> OnMoveCharacter {  get; set; }
+
+    public Action<Guid,bool> OnReadyUser {  get; set; }
+
+    public Action<Guid, float> OnTime { get; set; } 
 
 
     //MagicOnion接続処理
@@ -84,15 +89,39 @@ public class RoomHubModel : BaseModel, IRoomHubReceiver
     }
 
     //移動、回転通知
-    public void OnMove(Guid connectionId,Vector3 pos, Quaternion rotaition)
+    public void OnMove(Guid connectionId,Vector3 pos, Quaternion rotaition, CharacterState characterState)
     {
-        OnMoveCharacter(connectionId,pos,rotaition);
+        OnMoveCharacter(connectionId,pos,rotaition,characterState);
     }
 
 
     //移動、回転
-    public async UniTask MoveAsync(Vector3 pos, Quaternion rotaition)
+    public async UniTask MoveAsync(Vector3 pos, Quaternion rotaition, CharacterState characterState)
     {
-        await roomHub.MoveAsync(pos, rotaition);
+        await roomHub.MoveAsync(pos, rotaition,characterState);
+    }
+
+    //ユーザーの準備
+    public async UniTask ReadyAsync()
+    {
+        await roomHub.ReadyAsync();
+    }
+
+    //ルーム内にいる全ユーザーが準備完了したかどうかの通知
+    public void OnReady(Guid connectionId,bool isReady)
+    {
+        OnReadyUser(connectionId,isReady);
+    }
+
+    //ゲーム内制限時間
+    public async UniTask TimeAsync(float time)
+    {
+        await roomHub.TimeAsync(time);
+    }
+
+    //ルーム内全員に制限時間を通知
+    public void OnTimer(Guid connectionId,float time)
+    {
+        OnTime(connectionId,time);
     }
 }

@@ -16,6 +16,21 @@ namespace Shared.Interfaces.StreamingHubs
         void OnLeave(JoinedUser user);
 
         //ユーザーの移動通知
-        void OnMove(Guid connectionId,Vector3 pos,Quaternion rotaition);
+        void OnMove(Guid connectionId,Vector3 pos,Quaternion rotaition,CharacterState characterState);
+
+        //ユーザーの準備
+        void OnReady(Guid connectionId,bool isReady);
+
+        //制限時間
+        void OnTimer(Guid connectionId, float time);
+
+        public enum CharacterState
+        {
+            Idel = 0,
+            Run = 1,
+            Magic= 2,
+            Dead = 3
+
+        }
     }
 }

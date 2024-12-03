@@ -11,5 +11,7 @@ namespace StreamingHubs
         public JoinedUser JoinedUser { get; set; }
         public Vector3 Position { get; set; }
         public Quaternion Rotation { get; set; }
+        public bool IsReady {  get; set; }
+        public float Timer { get; set; }
     }
 }

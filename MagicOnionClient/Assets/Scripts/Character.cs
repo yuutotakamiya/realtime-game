@@ -2,74 +2,48 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Move : MonoBehaviour
+public class Character : MonoBehaviour
 {
     [SerializeField] float speed;
-
     public bool isself = false;
-
-    [SerializeField] float rotationSpeed; // 回転速度
-
-    private Vector3 movement; // 移動ベクトル
-
-
+    public bool isstart = false;
+    FixedJoystick joystick;
+    Rigidbody rb;
+    [SerializeField]float rotateSpeed = 10f;
+    Animator animator;
 
     // Start is called before the first frame update
     void Start()
     {
-        
-
-
-
+         rb= GetComponent<Rigidbody>();
+        joystick = GameObject.Find("Fixed Joystick").GetComponent<FixedJoystick>();
+        Collider characterCollider = GetComponent<Collider>();
+        characterCollider.material = (PhysicMaterial)Resources.Load("CharacterMaterial");
+        animator = GetComponent<Animator>();
 
     }
 
     // Update is called once per frame
     void Update()
     {
-
-
-        movement = Vector3.zero; // 毎フレーム移動ベクトルをリセット
-
-        if (!isself) return;
-
-        //右に移動
-        if (Input.GetKey(KeyCode.D))
+        if (isstart == true)
         {
-            //transform.position += transform.right * speed * Time.deltaTime;
-            //this.transform.Rotate(0, 1f, 0);
-            movement += Vector3.right; // X軸の正方向
-        } 
-         //左に移動
-        if (Input.GetKey(KeyCode.A))
-        {
-            //transform.position -= transform.right * speed * Time.deltaTime;
-            //this.transform.Rotate(0, -1f, 0);
-            movement += Vector3.left; // X軸の負方向
+            Vector3 move = (Camera.main.transform.forward * joystick.Vertical +
+            Camera.main.transform.right * joystick.Horizontal) * speed;
+            move.y = rb.velocity.y;
+            rb.velocity = move;
+            //進む方向に滑らかに向く。
+            transform.forward = Vector3.Slerp(transform.forward, move, Time.deltaTime * rotateSpeed);
         }
-        //前に移動    
-        if (Input.GetKey(KeyCode.W))
+        
+        /*if (rb.velocity.magnitude > 0)
         {
-            //transform.position += transform.forward * speed * Time.deltaTime;
-            movement += Vector3.forward; // Z軸の正方向
-
+            animator.SetBool("Run",true);
         }
-        //後ろに移動   
-        if (Input.GetKey(KeyCode.S))
+        else
         {
-            //transform.position -= transform.forward * speed * Time.deltaTime;
-            movement += Vector3.back; // Z軸の負方向
-        }
-
-
-        if (movement != Vector3.zero)
-        {
-            Quaternion targetRotation = Quaternion.LookRotation(movement);
-            // スムーズに回転させる
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-        }
-
-        // オブジェクトを移動させる
-        transform.Translate(movement.normalized * speed * Time.deltaTime, Space.World);
+            animator.SetBool("Run", false);
+        }*/
+        
     }
 }

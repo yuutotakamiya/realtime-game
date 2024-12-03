@@ -4,7 +4,7 @@ participant クライアントA
 participant サーバー
 participant クライアントB
 
-クライアントA-->サーバー
+クライアントA-->サーバー:
 クライアントB-->サーバー:切断
 
 サーバー-->クライアントA:クライアントBが切断されました(OnLeave)

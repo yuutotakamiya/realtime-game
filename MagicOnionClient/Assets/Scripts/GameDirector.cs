@@ -8,6 +8,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
+using static Shared.Interfaces.StreamingHubs.IRoomHubReceiver;
 public class GameDirector : MonoBehaviour
 {
     [SerializeField] GameObject characterPrefab;//キャラクターのPrefab
@@ -17,9 +18,19 @@ public class GameDirector : MonoBehaviour
     [SerializeField] Text roomname;
     [SerializeField] Text userId;
     [SerializeField] GameObject startposition;
+    [SerializeField] Text timerText;
+    [SerializeField] public float timeLimit;
+    [SerializeField] float currentTime;
+    [SerializeField] int countdownTime;
+    [SerializeField] Text countdownText;
+    [SerializeField] GameObject GameFinish;
+    [SerializeField] GameObject GameStartText;
     //[SerializeField] Transform[] respornpositiontransform;
     //[SerializeField] float speed = 3.0f;
     Vector3 position;
+    /*private bool isGameStart = false;*/
+    Animator animator;
+    Rigidbody rigidbody;
     Dictionary <Guid,GameObject> characterList = new Dictionary<Guid,GameObject>();
     // Start is called before the first frame update
     public async void Start()
@@ -33,6 +44,12 @@ public class GameDirector : MonoBehaviour
         //ユーザーが移動したときにOnMoveCharacterメソッドを実行するよう、モデルに登録
         roomHubModel.OnMoveCharacter += this.OnMoveCharacter;
 
+        //ルーム内にいるユーザーが全員準備完了したらOnReadyメソッドを実行するよう、モデルに登録
+        roomHubModel.OnReadyUser += this.OnReady;
+
+        //ルーム内にいるユーザーが準備完了して、ゲームが開始されたらOnTimeメソッドを実行するよう、モデルに登録
+        roomHubModel.OnTime += this.OnTimer;
+
         //接続
         await roomHubModel.ConnectionAsync();
         
@@ -40,6 +57,14 @@ public class GameDirector : MonoBehaviour
 
         InpuTuserId = GameObject.Find("InputFielUserId").GetComponent<InputField>();
         roomname = roomname. GetComponent<Text>();
+
+        currentTime = timeLimit; // 初期化: 残り時間を設定
+
+        animator = GetComponent<Animator>();
+
+        rigidbody = GetComponent<Rigidbody>();
+
+        CharacterState characterState;
     }
 
     //入室する時に呼び出す関数
@@ -50,7 +75,8 @@ public class GameDirector : MonoBehaviour
         await roomHubModel.JoinAsync(roomname.text, int.Parse(userId.text));
 
         InvokeRepeating("Move", 0.1f, 0.1f);
-      
+
+        /*StartCoroutine(StartCountdown());*/
     }
 
     //ユーザーが入室した時の処理
@@ -62,7 +88,7 @@ public class GameDirector : MonoBehaviour
 
         if (roomHubModel.ConnectionId == user.ConnectionId)
         {
-            characterObject.GetComponent<Move>().isself = true;
+            characterObject.GetComponent<Character>().isself = true;
         }
         characterObject.transform.position = startposition.transform.position;
         characterList[user.ConnectionId] = characterObject;//フィールドで保持
@@ -77,6 +103,7 @@ public class GameDirector : MonoBehaviour
         foreach (var entry in characterList)
         {
             Destroy(entry.Value);  // キャラクターオブジェクトを破棄
+            CancelInvoke("Move");
         }
 
         // characterListをクリア
@@ -84,8 +111,6 @@ public class GameDirector : MonoBehaviour
 
         // 自分のConnectionIdをリセット
         roomHubModel.ConnectionId = Guid.Empty;
-
-        CancelInvoke("Move");
     }
 
     //ユーザーが退室したときの処理
@@ -103,11 +128,12 @@ public class GameDirector : MonoBehaviour
     private async void Move()
     {
         //自分自身のtransform.position、Quaternion.identityをサーバーに送信
-        await roomHubModel.MoveAsync(characterList[roomHubModel.ConnectionId].gameObject.transform.position, characterList[roomHubModel.ConnectionId].gameObject.transform.rotation);
+        await roomHubModel.MoveAsync(characterList[roomHubModel.ConnectionId].gameObject.transform.position,
+            characterList[roomHubModel.ConnectionId].gameObject.transform.rotation,CharacterState.Idel);
     }
 
     //ユーザーの移動、回転
-    private void OnMoveCharacter(Guid connectionId, Vector3 pos,Quaternion rotaition)
+    private void OnMoveCharacter(Guid connectionId, Vector3 pos,Quaternion rotaition, CharacterState characterState)
     {
         if (characterList.ContainsKey(connectionId))
         {
@@ -116,13 +142,122 @@ public class GameDirector : MonoBehaviour
             // キャラクターの位置と回転をサーバーの値に更新
             character.transform.DOLocalMove(pos, 0.1f).SetEase(Ease.Linear);
             character.transform.DORotate(rotaition.eulerAngles, 0.1f).SetEase(Ease.Linear);
+
+            /*switch (characterState)
+            {
+                case CharacterState.Idel:
+                    animator.SetBool("", false);
+                    break;
+                case CharacterState.Run:
+                    animator.SetBool("", true);
+                    break;
+                case CharacterState.Magic:
+                    animator.SetBool("", true);
+                    break;
+                case CharacterState.Dead:
+                    animator.SetBool("", true);
+                    break;
+            }*/
+        }
+    }
+
+    //ユーザーが準備完了を押した時のメソッドを
+    public async void Ready()
+    {
+        await roomHubModel.ReadyAsync();
+    }
+
+    //ルーム内のユーザー全員が準備完了を押したらユーザーが準備完了したときの処理
+    private void OnReady(Guid connectionId,bool isReady)
+    {
+        characterList[roomHubModel.ConnectionId].GetComponent<Character>().isstart = true;
+
+        StartCoroutine(StartCountdown());
+
+        StartCoroutine("Text");
+    }
+
+    // カウントダウンを行うメソッド
+    private IEnumerator StartCountdown()
+    {
+        countdownTime = 3; //3秒のカウントダウン
+        while (countdownTime > 0)
+        {
+            countdownText.text = countdownTime.ToString(); // カウントダウンを表示
+
+            // 演出: 数字を拡大して、表示する
+            countdownText.transform.DOScale(1.5f, 0.5f).SetEase(Ease.OutBounce); // 拡大（0.5秒で）
+            countdownText.color = Color.red; // 数字を赤に変更
+
+            yield return new WaitForSeconds(0.5f); // 0.5秒間待機（拡大表示される時間）
+
+            // 元の状態に戻す
+            countdownText.transform.DOScale(1f, 0.3f).SetEase(Ease.OutBounce); // 縮小（0.3秒で）
+            countdownText.color = Color.white; // 色を白に戻す
+
+            yield return new WaitForSeconds(0.5f); // 数字が表示される時間
+
+            countdownTime--; // 次の数字に進む  
         }
 
+        GameStartText.SetActive(true); // カウントダウン終了
+        countdownText.gameObject.SetActive(false);
+        StartCoroutine(HideGameStartText());
+
+        // ゲーム開始
+        StartCoroutine(CountdownTimer());
+    }
+
+
+    private IEnumerator HideGameStartText()
+    {
+        yield return new WaitForSeconds(1.0f); // 1秒待機
+        GameStartText.SetActive(false); // ゲーム開始メッセージを非表示
+    }
+    //一秒後にテキストを消す
+    private IEnumerator Text()
+    {
+        yield return new WaitForSeconds(1.0f);
+
+        countdownText.text = "";
+    }
+
+    //ゲーム内制限時間
+    public async void TimeAsync(float time)
+    {
+        await roomHubModel.TimeAsync(time);
+    }
+
+    //定期的に呼ぶメソッド
+    private void OnTimer(Guid connectionId,float time)
+    { 
+        /*Time = timeLimit;*/
+        currentTime = time;
+
+        StartCoroutine("CountdownTimer");
+    }
+
+    // タイマーをカウントダウンするメソッド
+    private IEnumerator CountdownTimer()
+    {
+        while (currentTime > 0)
+        {
+            timerText.text = currentTime.ToString(); // UIにタイマーを表示
+            currentTime -= 1f; // 1秒減らす
+            yield return new WaitForSeconds(1f); // 1秒待機
+        }
+
+        if (currentTime == 0)
+        {
+            characterList[roomHubModel.ConnectionId].GetComponent<Character>().isstart = false;
+            timerText.text = "0"; // 0秒になったら表示
+            GameFinish.SetActive(true);
+        }
     }
     // Update is called once per frame
     void Update()
     {
-     
+
+
     }
-    
 }

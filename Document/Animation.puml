@@ -1,0 +1,24 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+participant クライアントA
+participant サーバー
+participant クライアントB
+
+note over サーバー:入室状態
+クライアントA-->>サーバー:IDLE状態
+サーバー-->>クライアントB:IDLE状態
+note over クライアントB:待機
+
+クライアントA-->>サーバー:RUN状態
+サーバー-->>クライアントB:RUN状態
+note over クライアントB:走る
+
+クライアントA-->>サーバー:JUMP状態
+サーバー-->>クライアントB:JUMP状態
+note over クライアントB:ジャンプ
+
+クライアントA-->>サーバー:IDLE状態
+サーバー-->>クライアントB:IDLE状態
+note over クライアントB:待機
+
+@enduml

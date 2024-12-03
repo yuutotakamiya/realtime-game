@@ -44,9 +44,10 @@ GameObject:
   - component: {fileID: 111000010215138216}
   - component: {fileID: -8872915140006015421}
   - component: {fileID: -7845239968638966554}
-  - component: {fileID: 8765162812454109186}
+  - component: {fileID: -2767922739876056481}
+  - component: {fileID: -476571748434055288}
   m_Layer: 0
-  m_Name: wizard_weapon_legacy DEMO
+  m_Name: wizard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -80,17 +81,11 @@ Animation:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1000010252498714}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
-  m_Animation: {fileID: 7400000, guid: 6d2c7b500babe564cbae56db67034d33, type: 2}
+  m_Animation: {fileID: 7400000, guid: 99daf51ff6073ae419449cf61f32d578, type: 2}
   m_Animations:
-  - {fileID: 7400000, guid: 6d2c7b500babe564cbae56db67034d33, type: 2}
-  - {fileID: 7400000, guid: 1f331688dfc131d44ac24de634e5a33f, type: 2}
-  - {fileID: 7400000, guid: fafb667a18a21154db78c60c2cb68841, type: 2}
-  - {fileID: 7400000, guid: 97f061d6fe22cfa4b81db0a070d75bd1, type: 2}
-  - {fileID: 7400000, guid: 9159872ee2dfc97458d179623772e3c1, type: 2}
-  - {fileID: 7400000, guid: e67fd987be4334e469b03cfc2ad2bb35, type: 2}
-  - {fileID: 7400000, guid: 7bd7538e4de8e6b48bac06bed1b90988, type: 2}
+  - {fileID: 7400000, guid: 99daf51ff6073ae419449cf61f32d578, type: 2}
   m_WrapMode: 0
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
@@ -105,7 +100,7 @@ Rigidbody:
   serializedVersion: 4
   m_Mass: 1
   m_Drag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 100
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -120,7 +115,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 126
+  m_Constraints: 84
   m_CollisionDetection: 1
 --- !u!114 &-7845239968638966554
 MonoBehaviour:
@@ -136,15 +131,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   isself: 1
-  rotationSpeed: 10
---- !u!136 &8765162812454109186
+  isstart: 0
+  rotateSpeed: 10
+--- !u!136 &-2767922739876056481
 CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1000010252498714}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: a6043f986e29b7241b704cabff6a599d, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -156,10 +152,31 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.92930794
-  m_Height: 6.015265
+  m_Radius: 0.9265257
+  m_Height: 7.1712646
   m_Direction: 1
-  m_Center: {x: 0.06197095, y: 3.7319553, z: 0}
+  m_Center: {x: -0.0734514, y: 3.0856318, z: 0}
+--- !u!95 &-476571748434055288
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000010252498714}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: be5995a9158bda9459c22d48acd79a3f, type: 3}
+  m_Controller: {fileID: 9100000, guid: 700d9bf6b23d6c7478ef89bf23dd2558, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1000010307727294
 GameObject:
   m_ObjectHideFlags: 0
