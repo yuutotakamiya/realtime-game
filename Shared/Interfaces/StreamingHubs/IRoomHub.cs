@@ -18,8 +18,8 @@ namespace Shared.Interfaces.StreamingHubs
         //ユーザーの退室
         Task LeaveAsync();
 
-        //ユーザーの移動
-        Task MoveAsync(Vector3 pos ,Quaternion rotaition, CharacterState characterState);
+        //ユーザーの移動、回転、アニメーション
+        Task MoveAsync(Vector3 pos ,Quaternion rotaition,CharacterState state);
 
         //ユーザーの準備
         Task ReadyAsync();

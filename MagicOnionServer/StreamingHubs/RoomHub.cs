@@ -32,7 +32,7 @@ namespace StreamingHubs
             var joinedUser = new JoinedUser() { ConnectionId = this.ConnectionId, UserData = user };
             var roomData = new RoomData() { JoinedUser = joinedUser };
             roomStorage.Set(this.ConnectionId, roomData);
-
+            joinedUser.JoinOrder = roomStorage.AllValues.Count();
 
             /*ルーム参加者全員に(自分を含む)、ユーザーの入室通知を送信
             this.Broadcast(room).OnJoin(joinedUser);*/
@@ -69,8 +69,8 @@ namespace StreamingHubs
 
         }
 
-        //ユーザーの移動
-        public async Task MoveAsync(Vector3 pos, Quaternion rotaition, CharacterState characterState)
+        //ユーザーの移動、回転、アニメーション
+        public async Task MoveAsync(Vector3 pos, Quaternion rotaition,CharacterState characterState)
         {
             //RoomDataの情報を取得
             var roomStorage = this.room.GetInMemoryStorage<RoomData>();

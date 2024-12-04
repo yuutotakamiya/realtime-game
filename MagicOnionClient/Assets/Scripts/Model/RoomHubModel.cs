@@ -26,7 +26,7 @@ public class RoomHubModel : BaseModel, IRoomHubReceiver
 
     public Action<JoinedUser> OnExitUser { get; set; }
 
-    public Action<Guid,Vector3,Quaternion, CharacterState> OnMoveCharacter {  get; set; }
+    public Action<Guid,Vector3,Quaternion,CharacterState> OnMoveCharacter {  get; set; }
 
     public Action<Guid,bool> OnReadyUser {  get; set; }
 
@@ -89,16 +89,16 @@ public class RoomHubModel : BaseModel, IRoomHubReceiver
     }
 
     //移動、回転通知
-    public void OnMove(Guid connectionId,Vector3 pos, Quaternion rotaition, CharacterState characterState)
+    public void OnMove(Guid connectionId,Vector3 pos, Quaternion rotaition,CharacterState characterState)
     {
         OnMoveCharacter(connectionId,pos,rotaition,characterState);
     }
 
 
     //移動、回転
-    public async UniTask MoveAsync(Vector3 pos, Quaternion rotaition, CharacterState characterState)
+    public async UniTask MoveAsync(Vector3 pos, Quaternion rotaition,CharacterState characterState)
     {
-        await roomHub.MoveAsync(pos, rotaition,characterState);
+        await roomHub.MoveAsync(pos, rotaition, characterState);
     }
 
     //ユーザーの準備

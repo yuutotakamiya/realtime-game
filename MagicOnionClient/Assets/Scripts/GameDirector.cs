@@ -1,3 +1,4 @@
+using Cinemachine;
 using DG.Tweening;
 using MagicOnionServer.Model.Entity;
 using Shared.Interfaces.StreamingHubs;
@@ -25,6 +26,10 @@ public class GameDirector : MonoBehaviour
     [SerializeField] Text countdownText;
     [SerializeField] GameObject GameFinish;
     [SerializeField] GameObject GameStartText;
+    private CinemachineVirtualCamera virtualCamera; // Cinemachine Virtual Camera
+    private GameObject CurrentCharacter;
+
+
     //[SerializeField] Transform[] respornpositiontransform;
     //[SerializeField] float speed = 3.0f;
     Vector3 position;
@@ -53,7 +58,7 @@ public class GameDirector : MonoBehaviour
         //接続
         await roomHubModel.ConnectionAsync();
         
-        position = startposition.transform.position;
+        //position = startposition.transform.position;
 
         InpuTuserId = GameObject.Find("InputFielUserId").GetComponent<InputField>();
         roomname = roomname. GetComponent<Text>();
@@ -64,7 +69,9 @@ public class GameDirector : MonoBehaviour
 
         rigidbody = GetComponent<Rigidbody>();
 
-        CharacterState characterState;
+        virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
+
+        //CharacterState characterState;
     }
 
     //入室する時に呼び出す関数
@@ -84,7 +91,15 @@ public class GameDirector : MonoBehaviour
     {
         //GameObject randomCharacterPrefab = characterPrefab[UnityEngine.Random.Range(0, characterPrefab.Length)];
 
-        GameObject characterObject = Instantiate(characterPrefab);//Prefabを生成
+        GameObject characterObject = Instantiate(characterPrefab,startposition.transform.position,startposition.transform.rotation);//Prefabを生成
+
+        // 生成されたキャラクターをCinemachineのFollowとLook Atターゲットに設定
+        if (roomHubModel.ConnectionId == user.ConnectionId)
+        {
+            Transform characterTransform = characterObject.transform;
+            virtualCamera.Follow = characterTransform;
+            virtualCamera.LookAt = characterTransform;
+        }
 
         if (roomHubModel.ConnectionId == user.ConnectionId)
         {
@@ -127,41 +142,32 @@ public class GameDirector : MonoBehaviour
     //定期的に呼び出すメソッド
     private async void Move()
     {
-        //自分自身のtransform.position、Quaternion.identityをサーバーに送信
+        //自分自身のtransform.position、Quaternion.identity,アニメーションをサーバーに送信
         await roomHubModel.MoveAsync(characterList[roomHubModel.ConnectionId].gameObject.transform.position,
-            characterList[roomHubModel.ConnectionId].gameObject.transform.rotation,CharacterState.Idel);
+            characterList[roomHubModel.ConnectionId].gameObject.transform.rotation,
+           (CharacterState)characterList[roomHubModel.ConnectionId].GetComponent<Animator>().GetInteger("state"));
     }
 
-    //ユーザーの移動、回転
-    private void OnMoveCharacter(Guid connectionId, Vector3 pos,Quaternion rotaition, CharacterState characterState)
+    //ユーザーの移動、回転、アニメーション
+    private void OnMoveCharacter(Guid connectionId, Vector3 pos,Quaternion rotaition,CharacterState characterState)
     {
         if (characterList.ContainsKey(connectionId))
         {
             GameObject character = characterList[connectionId];
 
-            // キャラクターの位置と回転をサーバーの値に更新
+            // キャラクターの位置と回転をサーバーに更新
             character.transform.DOLocalMove(pos, 0.1f).SetEase(Ease.Linear);
             character.transform.DORotate(rotaition.eulerAngles, 0.1f).SetEase(Ease.Linear);
 
-            /*switch (characterState)
-            {
-                case CharacterState.Idel:
-                    animator.SetBool("", false);
-                    break;
-                case CharacterState.Run:
-                    animator.SetBool("", true);
-                    break;
-                case CharacterState.Magic:
-                    animator.SetBool("", true);
-                    break;
-                case CharacterState.Dead:
-                    animator.SetBool("", true);
-                    break;
-            }*/
+            //キャラクターのアニメーション
+            Animator animator = character.GetComponent<Animator>();
+
+            animator.SetInteger("state",(int)characterState);
+
         }
     }
 
-    //ユーザーが準備完了を押した時のメソッドを
+    //ユーザーが準備完了を押した時のメソッド
     public async void Ready()
     {
         await roomHubModel.ReadyAsync();
@@ -208,7 +214,7 @@ public class GameDirector : MonoBehaviour
         StartCoroutine(CountdownTimer());
     }
 
-
+    //ゲームスタートオブジェクトを一秒後にテキストを非表示にする関数
     private IEnumerator HideGameStartText()
     {
         yield return new WaitForSeconds(1.0f); // 1秒待機

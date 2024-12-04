@@ -9,17 +9,20 @@ public class Character : MonoBehaviour
     public bool isstart = false;
     FixedJoystick joystick;
     Rigidbody rb;
-    [SerializeField]float rotateSpeed = 10f;
+    [SerializeField] float rotateSpeed = 10f;
+    /*[SerializeField] Camera characterCamera;
+    [SerializeField] GameObject character;*/
     Animator animator;
 
     // Start is called before the first frame update
     void Start()
     {
-         rb= GetComponent<Rigidbody>();
+        rb = GetComponent<Rigidbody>();
         joystick = GameObject.Find("Fixed Joystick").GetComponent<FixedJoystick>();
-        Collider characterCollider = GetComponent<Collider>();
-        characterCollider.material = (PhysicMaterial)Resources.Load("CharacterMaterial");
+        /*Collider characterCollider = GetComponent<Collider>();
+        characterCollider.material = (PhysicMaterial)Resources.Load("CharacterMaterial");*/
         animator = GetComponent<Animator>();
+        //animator.GetInteger("state");
 
     }
 
@@ -34,16 +37,31 @@ public class Character : MonoBehaviour
             rb.velocity = move;
             //進む方向に滑らかに向く。
             transform.forward = Vector3.Slerp(transform.forward, move, Time.deltaTime * rotateSpeed);
+
+            // アニメーションの状態を制御する
+            if (rb.velocity.magnitude > 0.01)
+            {
+                // キャラクターが動いている場合
+                animator.SetInteger("state", 1); //Runアニメーション
+            }
+            else
+            {
+                // キャラクターが止まっている場合
+                animator.SetInteger("state", 0); //Idleアニメーション
+            }
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                animator.SetInteger("state", 2);
+            }
+
         }
+
         
-        /*if (rb.velocity.magnitude > 0)
-        {
-            animator.SetBool("Run",true);
-        }
-        else
-        {
-            animator.SetBool("Run", false);
-        }*/
+    }
+
+    public void Animation()
+    {
         
     }
 }
