@@ -28,7 +28,9 @@ public class Inputuser : MonoBehaviour
 
     public async void InputOnButton(string name)
     {
+       
         name = inputField.text;
         await userModel.RegistUserAsync(name);
+        Initiate.Fade("Game",Color.black,1.0f);
     }
 }

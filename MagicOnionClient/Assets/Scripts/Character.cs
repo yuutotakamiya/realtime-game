@@ -1,34 +1,35 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Shared.Interfaces.StreamingHubs.IRoomHubReceiver;
 
 public class Character : MonoBehaviour
 {
     [SerializeField] float speed;
-    public bool isself = false;
-    public bool isstart = false;
+    [SerializeField] float rotateSpeed;
+    //[SerializeField] protected Collider attackCollider;
+    public bool isDead = false;//éÄÇÒÇ≈Ç¢ÇÈÇ«Ç§Ç©
+    public bool isself = false;//é©ï™é©êgÇ©Ç«Ç§Ç©
+    public bool isstart = false;//èÄîıäÆóπÇµÇƒÇ¢ÇÈÇ©Ç«Ç§Ç©
+
     FixedJoystick joystick;
     Rigidbody rb;
-    [SerializeField] float rotateSpeed = 10f;
-    /*[SerializeField] Camera characterCamera;
-    [SerializeField] GameObject character;*/
-    Animator animator;
+    protected Animator animator;
+    RoomHubModel roomHub;
 
     // Start is called before the first frame update
-    void Start()
-    {
+   public virtual void Start()
+   {
         rb = GetComponent<Rigidbody>();
         joystick = GameObject.Find("Fixed Joystick").GetComponent<FixedJoystick>();
-        /*Collider characterCollider = GetComponent<Collider>();
-        characterCollider.material = (PhysicMaterial)Resources.Load("CharacterMaterial");*/
         animator = GetComponent<Animator>();
-        //animator.GetInteger("state");
-
-    }
+        roomHub = GameObject.Find("RoomModel").GetComponent<RoomHubModel>();
+   }
 
     // Update is called once per frame
-    void Update()
-    {
+   public virtual async void Update()
+   {
+
         if (isstart == true)
         {
             Vector3 move = (Camera.main.transform.forward * joystick.Vertical +
@@ -53,15 +54,11 @@ public class Character : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 animator.SetInteger("state", 2);
+                await roomHub.MoveAsync(this.transform.position, this.transform.rotation, CharacterState.Attack);
+                //attackCollider.enabled = true;
             }
 
         }
-
-        
-    }
-
-    public void Animation()
-    {
-        
-    }
+   }
 }
+

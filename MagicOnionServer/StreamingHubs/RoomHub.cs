@@ -32,7 +32,10 @@ namespace StreamingHubs
             var joinedUser = new JoinedUser() { ConnectionId = this.ConnectionId, UserData = user };
             var roomData = new RoomData() { JoinedUser = joinedUser };
             roomStorage.Set(this.ConnectionId, roomData);
-            joinedUser.JoinOrder = roomStorage.AllValues.Count();
+
+
+            //ルーム内の情報を取得
+            joinedUser.JoinOrder = roomStorage.AllValues.Count()-1;
 
             /*ルーム参加者全員に(自分を含む)、ユーザーの入室通知を送信
             this.Broadcast(room).OnJoin(joinedUser);*/

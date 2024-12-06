@@ -12,13 +12,13 @@ using UnityEngine.UI;
 using static Shared.Interfaces.StreamingHubs.IRoomHubReceiver;
 public class GameDirector : MonoBehaviour
 {
-    [SerializeField] GameObject characterPrefab;//キャラクターのPrefab
+    [SerializeField] GameObject[] characterPrefab;//キャラクターのPrefab
     [SerializeField] RoomHubModel roomHubModel;//RoomHubModelのクラスの設定
     [SerializeField] InputField InpuTuserId;//ユーザーのIdを入力
     [SerializeField] InputField roomName;//ルームの名前を入力
     [SerializeField] Text roomname;
     [SerializeField] Text userId;
-    [SerializeField] GameObject startposition;
+    [SerializeField] GameObject[] startposition;
     [SerializeField] Text timerText;
     [SerializeField] public float timeLimit;
     [SerializeField] float currentTime;
@@ -36,7 +36,8 @@ public class GameDirector : MonoBehaviour
     /*private bool isGameStart = false;*/
     Animator animator;
     Rigidbody rigidbody;
-    Dictionary <Guid,GameObject> characterList = new Dictionary<Guid,GameObject>();
+    Character character;
+    Dictionary<Guid, GameObject> characterList = new Dictionary<Guid, GameObject>();
     // Start is called before the first frame update
     public async void Start()
     {
@@ -57,11 +58,11 @@ public class GameDirector : MonoBehaviour
 
         //接続
         await roomHubModel.ConnectionAsync();
-        
+
         //position = startposition.transform.position;
 
         InpuTuserId = GameObject.Find("InputFielUserId").GetComponent<InputField>();
-        roomname = roomname. GetComponent<Text>();
+        roomname = roomname.GetComponent<Text>();
 
         currentTime = timeLimit; // 初期化: 残り時間を設定
 
@@ -70,8 +71,6 @@ public class GameDirector : MonoBehaviour
         rigidbody = GetComponent<Rigidbody>();
 
         virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
-
-        //CharacterState characterState;
     }
 
     //入室する時に呼び出す関数
@@ -82,16 +81,13 @@ public class GameDirector : MonoBehaviour
         await roomHubModel.JoinAsync(roomname.text, int.Parse(userId.text));
 
         InvokeRepeating("Move", 0.1f, 0.1f);
-
-        /*StartCoroutine(StartCountdown());*/
     }
 
     //ユーザーが入室した時の処理
     private void OnJoinedUser(JoinedUser user)
     {
-        //GameObject randomCharacterPrefab = characterPrefab[UnityEngine.Random.Range(0, characterPrefab.Length)];
 
-        GameObject characterObject = Instantiate(characterPrefab,startposition.transform.position,startposition.transform.rotation);//Prefabを生成
+        GameObject characterObject = Instantiate(characterPrefab[user.JoinOrder], startposition[user.JoinOrder].transform.position, startposition[user.JoinOrder].transform.rotation);//Prefabを生成
 
         // 生成されたキャラクターをCinemachineのFollowとLook Atターゲットに設定
         if (roomHubModel.ConnectionId == user.ConnectionId)
@@ -105,7 +101,8 @@ public class GameDirector : MonoBehaviour
         {
             characterObject.GetComponent<Character>().isself = true;
         }
-        characterObject.transform.position = startposition.transform.position;
+
+        characterObject.transform.position = startposition[user.JoinOrder].transform.position;
         characterList[user.ConnectionId] = characterObject;//フィールドで保持
     }
 
@@ -149,7 +146,7 @@ public class GameDirector : MonoBehaviour
     }
 
     //ユーザーの移動、回転、アニメーション
-    private void OnMoveCharacter(Guid connectionId, Vector3 pos,Quaternion rotaition,CharacterState characterState)
+    private void OnMoveCharacter(Guid connectionId, Vector3 pos, Quaternion rotaition, CharacterState characterState)
     {
         if (characterList.ContainsKey(connectionId))
         {
@@ -162,8 +159,7 @@ public class GameDirector : MonoBehaviour
             //キャラクターのアニメーション
             Animator animator = character.GetComponent<Animator>();
 
-            animator.SetInteger("state",(int)characterState);
-
+            animator.SetInteger("state", (int)characterState);
         }
     }
 
@@ -174,7 +170,7 @@ public class GameDirector : MonoBehaviour
     }
 
     //ルーム内のユーザー全員が準備完了を押したらユーザーが準備完了したときの処理
-    private void OnReady(Guid connectionId,bool isReady)
+    private void OnReady(Guid connectionId, bool isReady)
     {
         characterList[roomHubModel.ConnectionId].GetComponent<Character>().isstart = true;
 
@@ -235,9 +231,8 @@ public class GameDirector : MonoBehaviour
     }
 
     //定期的に呼ぶメソッド
-    private void OnTimer(Guid connectionId,float time)
-    { 
-        /*Time = timeLimit;*/
+    private void OnTimer(Guid connectionId, float time)
+    {
         currentTime = time;
 
         StartCoroutine("CountdownTimer");
