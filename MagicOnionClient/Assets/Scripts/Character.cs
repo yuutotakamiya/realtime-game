@@ -15,7 +15,8 @@ public class Character : MonoBehaviour
     FixedJoystick joystick;
     Rigidbody rb;
     protected Animator animator;
-    RoomHubModel roomHub;
+    protected RoomHubModel roomHub;
+    protected GameDirector gameDirector;
 
     // Start is called before the first frame update
    public virtual void Start()
@@ -24,12 +25,12 @@ public class Character : MonoBehaviour
         joystick = GameObject.Find("Fixed Joystick").GetComponent<FixedJoystick>();
         animator = GetComponent<Animator>();
         roomHub = GameObject.Find("RoomModel").GetComponent<RoomHubModel>();
+        gameDirector = GameObject.Find("GameDirector").GetComponent<GameDirector>();
    }
 
     // Update is called once per frame
    public virtual async void Update()
    {
-
         if (isstart == true)
         {
             Vector3 move = (Camera.main.transform.forward * joystick.Vertical +

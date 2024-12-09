@@ -1,7 +1,9 @@
 using Cysharp.Threading.Tasks.Triggers;
+using Shared.Interfaces.StreamingHubs;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Shared.Interfaces.StreamingHubs.IRoomHubReceiver;
 
 public class HumanManager : Character
 {
@@ -9,6 +11,10 @@ public class HumanManager : Character
     //public bool isAttack = false;
     // Start is called before the first frame update
     //Character character;
+    [SerializeField] GameObject HumanGameOverText;
+    [SerializeField] Character character;
+    GameObject weapontag;
+    //RoomHubModel roomHubModel;
     public override void Start()
     {
         base.Start();
@@ -20,12 +26,31 @@ public class HumanManager : Character
         base.Update();
     }
 
-    private void OnTriggerEnter(Collider other)
+    public  void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("weapon"))
+        if (isself == true)
         {
-            Destroy(this.gameObject);
+            // 衝突したオブジェクトが自分ではない場合
+            if (other.gameObject != this.gameObject)
+            {
+                GameObject weapon = GameObject.Find("Mesh_Weapon_01");
+
+                if (weapon != null && weapon.CompareTag("weapon"))
+                {
+                    animator.SetInteger("state", 3);
+
+                    isstart = false;
+                    Destroy(this.gameObject);
+                }
+              
+            }
         }
+    }
+
+    public void DestroyObject()
+    {
+        // オブジェクトを破壊
+        //Destroy(this.gameObject);
     }
 }
 

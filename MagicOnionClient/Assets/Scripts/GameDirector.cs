@@ -14,6 +14,7 @@ public class GameDirector : MonoBehaviour
 {
     [SerializeField] GameObject[] characterPrefab;//キャラクターのPrefab
     [SerializeField] RoomHubModel roomHubModel;//RoomHubModelのクラスの設定
+    [SerializeField] HumanManager humanManager;//HumanManagerのクラスの設定
     [SerializeField] InputField InpuTuserId;//ユーザーのIdを入力
     [SerializeField] InputField roomName;//ルームの名前を入力
     [SerializeField] Text roomname;
@@ -24,14 +25,11 @@ public class GameDirector : MonoBehaviour
     [SerializeField] float currentTime;
     [SerializeField] int countdownTime;
     [SerializeField] Text countdownText;
-    [SerializeField] GameObject GameFinish;
+    [SerializeField] public GameObject GameFinish;
     [SerializeField] GameObject GameStartText;
+    [SerializeField] GameObject Result;
     private CinemachineVirtualCamera virtualCamera; // Cinemachine Virtual Camera
-    private GameObject CurrentCharacter;
 
-
-    //[SerializeField] Transform[] respornpositiontransform;
-    //[SerializeField] float speed = 3.0f;
     Vector3 position;
     /*private bool isGameStart = false;*/
     Animator animator;
@@ -137,7 +135,7 @@ public class GameDirector : MonoBehaviour
     }
 
     //定期的に呼び出すメソッド
-    private async void Move()
+    public async void Move()
     {
         //自分自身のtransform.position、Quaternion.identity,アニメーションをサーバーに送信
         await roomHubModel.MoveAsync(characterList[roomHubModel.ConnectionId].gameObject.transform.position,
@@ -239,7 +237,7 @@ public class GameDirector : MonoBehaviour
     }
 
     // タイマーをカウントダウンするメソッド
-    private IEnumerator CountdownTimer()
+    public IEnumerator CountdownTimer()
     {
         while (currentTime > 0)
         {
@@ -253,7 +251,14 @@ public class GameDirector : MonoBehaviour
             characterList[roomHubModel.ConnectionId].GetComponent<Character>().isstart = false;
             timerText.text = "0"; // 0秒になったら表示
             GameFinish.SetActive(true);
+            Result.SetActive(true);
+            //Initiate.Fade("Result",Color.black,1);
         }
+    }
+
+    public void OnResult()
+    {
+        Initiate.Fade("Result",Color.black,1);
     }
     // Update is called once per frame
     void Update()
