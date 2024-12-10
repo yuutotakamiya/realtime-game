@@ -205,7 +205,10 @@ public class GameDirector : MonoBehaviour
     //キルしたときのメソッド
     public void OnKill(Guid connectionId,int killnum)
     {
-
+        if (roomHubModel.ConnectionId == connectionId)
+        {
+            //WarpPotion = 
+        }
     }
 
     // カウントダウンを行うメソッド

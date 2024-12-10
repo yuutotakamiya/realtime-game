@@ -16,7 +16,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 2c22d296d434cf54380cc9acfb2c7305,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.16
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2c22d296d434cf54380cc9acfb2c7305,
         type: 3}
@@ -146,6 +146,10 @@ MonoBehaviour:
   isDead: 0
   isself: 0
   isstart: 0
+  rb: {fileID: 0}
+  animator: {fileID: 0}
+  roomHub: {fileID: 0}
+  gameDirector: {fileID: 0}
 --- !u!54 &6654727259754533423
 Rigidbody:
   m_ObjectHideFlags: 0
