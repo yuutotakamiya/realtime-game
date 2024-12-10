@@ -1,0 +1,31 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+/'自動マッチング'/
+participant クライアントA
+participant クライアントB
+participant サーバー
+participant DB
+
+クライアントA->サーバー:ロビー入室送信
+note over サーバー:同じ条件の人が集まったかどうか
+クライアントB->サーバー:ロビー入室送信
+サーバー->クライアントA:入室通知送信
+サーバー->クライアントB:入室通知送信
+group 一覧表示更新
+end group
+note over サーバー:同じ条件の人が集まったかどうか
+note over サーバー:ルーム名決定
+group
+サーバー->DB:対戦情報登録
+note over DB:レコード追加
+サーバー->クライアントA:マッチング完了(ルーム名)を送信
+クライアントA->サーバー:ロビーを退室
+クライアントB->サーバー:ロビーを退室
+note over クライアントA:インゲームに遷移
+note over クライアントB:インゲームに遷移
+クライアントA->サーバー:サーバーから受け取ったルーム名に入室
+クライアントB->サーバー:サーバーから受け取ったルーム名に入室
+note over クライアントA:インゲーム開始
+note over クライアントB:インゲーム開始
+end group
+@enduml

@@ -13,7 +13,6 @@ public class HumanManager : Character
     //Character character;
     [SerializeField] GameObject HumanGameOverText;
     [SerializeField] Character character;
-    GameObject weapontag;
     //RoomHubModel roomHubModel;
     public override void Start()
     {

@@ -17,7 +17,7 @@ namespace StreamingHubs
         private IGroup room;
 
         //ユーザー入室
-        public async Task<JoinedUser[]> JoinAsync(string roomName, int userId)
+        public async Task<JoinedUser[]> JoinAsync(string roomName, int userId)//スレッドセーフ
         {
             //ルームに参加&ルーム保持
             this.room = await this.Group.AddAsync(roomName);
@@ -94,7 +94,7 @@ namespace StreamingHubs
         }
 
         //ユーザーの準備
-        public async Task ReadyAsync()
+        public async Task ReadyAsync()//スレッドセーフ
         {
             //準備できたことをRoomDataに保存
             var roomStorage = this.room.GetInMemoryStorage<RoomData>();
