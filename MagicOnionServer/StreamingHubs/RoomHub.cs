@@ -29,31 +29,35 @@ namespace StreamingHubs
 
             //グループストレージにユーザーデータを格納
             var roomStorage = this.room.GetInMemoryStorage<RoomData>();
-            var joinedUser = new JoinedUser() { ConnectionId = this.ConnectionId, UserData = user };
-            var roomData = new RoomData() { JoinedUser = joinedUser };
-            roomStorage.Set(this.ConnectionId, roomData);
 
-
-            //ルーム内の情報を取得
-            joinedUser.JoinOrder = roomStorage.AllValues.Count()-1;
-
-            /*ルーム参加者全員に(自分を含む)、ユーザーの入室通知を送信
-            this.Broadcast(room).OnJoin(joinedUser);*/
-
-            //ルーム参加者全員に(自分以外)、ユーザーの入室通知を送信
-            this.BroadcastExceptSelf(room).OnJoin(joinedUser);
-
-            RoomData[] roomDataList = roomStorage.AllValues.ToArray();
-
-            //参加者中のユーザー情報を返す
-            JoinedUser[] joinedUserList = new JoinedUser[roomDataList.Length];
-
-            for (int i = 0; i < roomDataList.Length; i++)
+            //排他制御(全員で何か共有している時)
+            lock (roomStorage)
             {
-                joinedUserList[i] = roomDataList[i].JoinedUser;
-            }
+                var joinedUser = new JoinedUser() { ConnectionId = this.ConnectionId, UserData = user };
+                var roomData = new RoomData() { JoinedUser = joinedUser };
+                roomStorage.Set(this.ConnectionId, roomData);
 
-            return joinedUserList;
+                //ルーム内の情報を取得
+                joinedUser.JoinOrder = roomStorage.AllValues.Count() - 1;
+
+                /*ルーム参加者全員に(自分を含む)、ユーザーの入室通知を送信
+                this.Broadcast(room).OnJoin(joinedUser);*/
+
+                //ルーム参加者全員に(自分以外)、ユーザーの入室通知を送信
+                this.BroadcastExceptSelf(room).OnJoin(joinedUser);
+
+                RoomData[] roomDataList = roomStorage.AllValues.ToArray();
+
+                //参加者中のユーザー情報を返す
+                JoinedUser[] joinedUserList = new JoinedUser[roomDataList.Length];
+
+                for (int i = 0; i < roomDataList.Length; i++)
+                {
+                    joinedUserList[i] = roomDataList[i].JoinedUser;
+                }
+
+                return joinedUserList;
+            }
         }
 
         //ユーザーの退室
@@ -94,30 +98,35 @@ namespace StreamingHubs
         {
             //準備できたことをRoomDataに保存
             var roomStorage = this.room.GetInMemoryStorage<RoomData>();
-            var roomData = roomStorage.Get(this.ConnectionId);
-            roomData.IsReady = true;
 
-            //準備できたかどうか
-            bool isReady = false;
-            var roomDataList = roomStorage.AllValues.ToArray<RoomData>();
-            foreach (var rData in roomDataList)
+            //排他制御(全員で何か共有しているとき)
+            lock (roomStorage) 
             {
-                if (!rData.IsReady)
-                {
-                    isReady = false;
-                    break;
-                }
-                else
-                {
-                    isReady = true;
+                var roomData = roomStorage.Get(this.ConnectionId);
+                roomData.IsReady = true;
 
-                }
-            }
+                //準備できたかどうか
+                bool isReady = false;
+                var roomDataList = roomStorage.AllValues.ToArray<RoomData>();
+                foreach (var rData in roomDataList)
+                {
+                    if (!rData.IsReady)
+                    {
+                        isReady = false;
+                        break;
+                    }
+                    else
+                    {
+                        isReady = true;
 
-            if (isReady == true)
-            {
-                //ルーム内の全員が準備完了していたら、ゲーム開始を通知
-                this.Broadcast(room).OnReady(this.ConnectionId, isReady);
+                    }
+                }
+
+                if (isReady == true)
+                {
+                    //ルーム内の全員が準備完了していたら、ゲーム開始を通知
+                    this.Broadcast(room).OnReady(this.ConnectionId, isReady);
+                }
             }
             
         }
