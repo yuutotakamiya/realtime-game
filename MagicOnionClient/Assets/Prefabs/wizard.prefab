@@ -117,6 +117,10 @@ MonoBehaviour:
   isDead: 0
   isself: 1
   isstart: 0
+  rb: {fileID: 0}
+  animator: {fileID: 0}
+  roomHub: {fileID: 0}
+  gameDirector: {fileID: 0}
 --- !u!136 &-2767922739876056481
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -22031,7 +22035,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 124
   m_CollisionDetection: 1
 --- !u!1 &1000013821906696
 GameObject:

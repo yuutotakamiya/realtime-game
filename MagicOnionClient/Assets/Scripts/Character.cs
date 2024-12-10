@@ -13,10 +13,10 @@ public class Character : MonoBehaviour
     public bool isstart = false;//èÄîıäÆóπÇµÇƒÇ¢ÇÈÇ©Ç«Ç§Ç©
 
     FixedJoystick joystick;
-    Rigidbody rb;
-    protected Animator animator;
-    protected RoomHubModel roomHub;
-    protected GameDirector gameDirector;
+    public Rigidbody rb;
+    public Animator animator;
+    public RoomHubModel roomHub;
+    public GameDirector gameDirector;
 
     // Start is called before the first frame update
    public virtual void Start()
@@ -26,7 +26,8 @@ public class Character : MonoBehaviour
         animator = GetComponent<Animator>();
         roomHub = GameObject.Find("RoomModel").GetComponent<RoomHubModel>();
         gameDirector = GameObject.Find("GameDirector").GetComponent<GameDirector>();
-   }
+        
+    }
 
     // Update is called once per frame
    public virtual async void Update()
@@ -58,6 +59,8 @@ public class Character : MonoBehaviour
                 await roomHub.MoveAsync(this.transform.position, this.transform.rotation, CharacterState.Attack);
                 //attackCollider.enabled = true;
             }
+
+
 
         }
    }

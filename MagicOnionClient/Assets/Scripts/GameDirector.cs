@@ -54,6 +54,9 @@ public class GameDirector : MonoBehaviour
         //ルーム内にいるユーザーが準備完了して、ゲームが開始されたらOnTimeメソッドを実行するよう、モデルに登録
         roomHubModel.OnTime += this.OnTimer;
 
+        //ルーム内にいるユーザーが鬼にキルされたときにOnKillメソッドを実行するよう、モデルに登録しておく
+        roomHubModel.OnKillNum += this.OnKill;
+
         //接続
         await roomHubModel.ConnectionAsync();
 
@@ -158,6 +161,8 @@ public class GameDirector : MonoBehaviour
             Animator animator = character.GetComponent<Animator>();
 
             animator.SetInteger("state", (int)characterState);
+
+            Debug.Log(characterState);
         }
     }
 
@@ -175,6 +180,32 @@ public class GameDirector : MonoBehaviour
         StartCoroutine(StartCountdown());
 
         StartCoroutine("Text");
+    }
+
+    //ゲーム内制限時間
+    public async void TimeAsync(float time)
+    {
+        await roomHubModel.TimeAsync(time);
+    }
+
+    //定期的に呼ぶメソッド
+    private void OnTimer(Guid connectionId, float time)
+    {
+        currentTime = time;
+
+        StartCoroutine("CountdownTimer");
+    }
+
+    //キルしたときのメソッド
+    public async void KillAsync(Guid connectionId, int killnum)
+    {
+        await roomHubModel.KillAsync(connectionId, killnum);
+    }
+
+    //キルしたときのメソッド
+    public void OnKill(Guid connectionId,int killnum)
+    {
+
     }
 
     // カウントダウンを行うメソッド
@@ -222,20 +253,6 @@ public class GameDirector : MonoBehaviour
         countdownText.text = "";
     }
 
-    //ゲーム内制限時間
-    public async void TimeAsync(float time)
-    {
-        await roomHubModel.TimeAsync(time);
-    }
-
-    //定期的に呼ぶメソッド
-    private void OnTimer(Guid connectionId, float time)
-    {
-        currentTime = time;
-
-        StartCoroutine("CountdownTimer");
-    }
-
     // タイマーをカウントダウンするメソッド
     public IEnumerator CountdownTimer()
     {
@@ -260,6 +277,8 @@ public class GameDirector : MonoBehaviour
     {
         Initiate.Fade("Result",Color.black,1);
     }
+
+   
     // Update is called once per frame
     void Update()
     {

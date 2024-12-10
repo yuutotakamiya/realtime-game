@@ -39,17 +39,18 @@ public class HumanManager : Character
                     animator.SetInteger("state", 3);
 
                     isstart = false;
-                    Destroy(this.gameObject);
+                    rb.velocity = Vector3.zero;
+                    
                 }
               
             }
         }
     }
 
-    public void DestroyObject()
+    public void OnAnimationDestroy()
     {
-        // オブジェクトを破壊
-        //Destroy(this.gameObject);
+        Destroy(this.gameObject);
+       gameDirector. CancelInvoke("Move");
     }
 }
 

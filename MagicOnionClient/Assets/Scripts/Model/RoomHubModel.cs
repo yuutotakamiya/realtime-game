@@ -30,7 +30,9 @@ public class RoomHubModel : BaseModel, IRoomHubReceiver
 
     public Action<Guid,bool> OnReadyUser {  get; set; }
 
-    public Action<Guid, float> OnTime { get; set; } 
+    public Action<Guid, float> OnTime { get; set; }
+
+    public Action<Guid,int> OnKillNum { get; set; }
 
 
     //MagicOnion接続処理
@@ -123,5 +125,18 @@ public class RoomHubModel : BaseModel, IRoomHubReceiver
     public void OnTimer(Guid connectionId,float time)
     {
         OnTime(connectionId,time);
+    }
+
+
+    //鬼が誰をキルしたかの処理
+    public async UniTask KillAsync(Guid connectionId,int killnum)
+    {
+
+    }
+
+    //鬼がだれをキルしたかを通知
+    public void OnKill(Guid connectionId,int killnum)
+    {
+        OnKillNum(connectionId,killnum);
     }
 }

@@ -2013,10 +2013,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.15732919
-  m_Height: 1.5041125
+  m_Radius: 0.13310575
+  m_Height: 1.6176316
   m_Direction: 1
-  m_Center: {x: 0, y: 0.927797, z: 0.016322745}
+  m_Center: {x: 0.012530995, y: 0.8710375, z: 0.025147295}
 --- !u!114 &-5187763242306539007
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2034,6 +2034,10 @@ MonoBehaviour:
   isDead: 0
   isself: 0
   isstart: 0
+  rb: {fileID: 0}
+  animator: {fileID: 0}
+  roomHub: {fileID: 0}
+  gameDirector: {fileID: 0}
   HumanGameOverText: {fileID: 0}
   character: {fileID: 0}
 --- !u!1 &4554040837537248934

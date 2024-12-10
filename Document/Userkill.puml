@@ -1,0 +1,23 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+/'鬼側が他のプレイヤーをキルしたときのシーケンス図'/
+
+participant クライアントA鬼側
+participant サーバー
+participant クライアントB逃げる側
+
+サーバー->クライアントA鬼側:ゲーム開始
+サーバー->クライアントB逃げる側:ゲーム開始
+
+alt
+クライアントA鬼側->クライアントB逃げる側:キル
+note over クライアントB逃げる側:宝箱をドロップ
+クライアントA鬼側->サーバー:1キル
+サーバー->クライアントB逃げる側:誰がキルされたかを通知
+サーバー->クライアントA鬼側:誰がキルされたかを通知
+note over クライアントB逃げる側:ワープ(位置を更新)
+note over クライアントA鬼側:キルした数をUIで更新
+end group
+note over クライアントA鬼側:制限時間が0になったら勝利
+note over クライアントB逃げる側:宝箱を持ったまま脱出or脱出したら勝利
+@enduml

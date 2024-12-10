@@ -26,5 +26,8 @@ namespace Shared.Interfaces.StreamingHubs
 
         //ゲームの制限時間
         Task TimeAsync(float time);
+
+        //鬼のキル数
+        Task KillAsync(int killnum);
     }
 }

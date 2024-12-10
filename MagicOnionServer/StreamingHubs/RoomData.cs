@@ -13,5 +13,6 @@ namespace StreamingHubs
         public Quaternion Rotation { get; set; }
         public bool IsReady {  get; set; }
         public float Timer { get; set; }
+        public int KillNum {  get; set; }
     }
 }

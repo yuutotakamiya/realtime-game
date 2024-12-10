@@ -141,6 +141,16 @@ namespace StreamingHubs
             this.Broadcast(room).OnTimer(this.ConnectionId,time);
         }
 
+        //鬼のキル数処理
+        public async Task KillAsync(int killnum)
+        {
+            var roomStorage = this.room.GetInMemoryStorage<RoomData>();
+            var roomData = roomStorage.Get(this.ConnectionId);
+            roomData.KillNum = killnum;
+
+            this.Broadcast(room).OnKill(this.ConnectionId,killnum);
+        }
+
         //ユーザーが切断したときの処理
         protected override ValueTask OnDisconnected()
         {

@@ -32,5 +32,8 @@ namespace Shared.Interfaces.StreamingHubs
             Attack= 2,
             Dead = 3
         }
+
+        //鬼のキル数
+        void OnKill(Guid connectionId, int killnum);
     }
 }
