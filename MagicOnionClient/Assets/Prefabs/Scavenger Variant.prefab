@@ -94,11 +94,11 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 2c22d296d434cf54380cc9acfb2c7305,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 8724368931333301132}
+      addedObject: {fileID: 6654727259754533423}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 2c22d296d434cf54380cc9acfb2c7305,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 6654727259754533423}
+      addedObject: {fileID: -2643156641802365800}
   m_SourcePrefab: {fileID: 100100000, guid: 2c22d296d434cf54380cc9acfb2c7305, type: 3}
 --- !u!1 &2477273341314294571 stripped
 GameObject:
@@ -113,7 +113,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2477273341314294571}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: a6043f986e29b7241b704cabff6a599d, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -129,27 +129,6 @@ CapsuleCollider:
   m_Height: 1.7
   m_Direction: 1
   m_Center: {x: 0, y: 0.7, z: 0}
---- !u!114 &8724368931333301132
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2477273341314294571}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 314b56f7714f24b4981f0830efe1f0c4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 5
-  rotateSpeed: 10
-  isDead: 0
-  isself: 0
-  isstart: 0
-  rb: {fileID: 0}
-  animator: {fileID: 0}
-  roomHub: {fileID: 0}
-  gameDirector: {fileID: 0}
 --- !u!54 &6654727259754533423
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -177,3 +156,27 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 84
   m_CollisionDetection: 1
+--- !u!114 &-2643156641802365800
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2477273341314294571}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24dfcc5b27a24854bbe0b3bbedc4527c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 20
+  rotateSpeed: 10
+  isDead: 0
+  isself: 0
+  isstart: 0
+  rb: {fileID: 0}
+  animator: {fileID: 0}
+  roomHub: {fileID: 0}
+  gameDirector: {fileID: 0}
+  humanManager: {fileID: 0}
+  HumanGameOverText: {fileID: 0}
+  character: {fileID: 0}

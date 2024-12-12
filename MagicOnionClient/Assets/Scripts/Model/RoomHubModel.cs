@@ -23,16 +23,18 @@ public class RoomHubModel : BaseModel, IRoomHubReceiver
 
     //ユーザー接続通知
     public Action<JoinedUser> OnJoinedUser {  get; set; }//Modelを使うクラスにはActionを使ってサーバーから届いたデータを渡す
-
+    //ユーザー退室通知
     public Action<JoinedUser> OnExitUser { get; set; }
-
+    //ユーザーの移動、回転、アニメーションの通知
     public Action<Guid,Vector3,Quaternion,CharacterState> OnMoveCharacter {  get; set; }
-
+    //ユーザー準備完了通知
     public Action<Guid,bool> OnReadyUser {  get; set; }
-
+    //制限時間の通知
     public Action<Guid, float> OnTime { get; set; }
-
-    public Action<Guid,int> OnKillNum { get; set; }
+    //キル通知
+    public Action<Guid,int,string> OnKillNum { get; set; }
+    //マッチング通知
+    public Action<string> OnMatchi {  get; set; }
 
 
     //MagicOnion接続処理
@@ -129,14 +131,26 @@ public class RoomHubModel : BaseModel, IRoomHubReceiver
 
 
     //鬼が誰をキルしたかの処理
-    public async UniTask KillAsync(Guid connectionId,int killnum)
+    public async UniTask KillAsync()
     {
-
+        await roomHub.KillAsync();
     }
 
     //鬼がだれをキルしたかを通知
-    public void OnKill(Guid connectionId,int killnum)
+    public void OnKill(Guid connectionId, int totalKillNum,string userName)
     {
-        OnKillNum(connectionId,killnum);
+        OnKillNum(connectionId, totalKillNum, userName);
+    }
+
+    //マッチングの同期
+    public async UniTask JoinLobbyAsync(int userId)
+    {
+        await roomHub.JoinLobbyAsync(userId);
+    }
+
+    //マッチング通知
+    public void OnMatching(string roomName)
+    {
+        OnMatchi(roomName);
     }
 }

@@ -2029,7 +2029,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24dfcc5b27a24854bbe0b3bbedc4527c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 15
+  speed: 20
   rotateSpeed: 10
   isDead: 0
   isself: 0
@@ -2038,6 +2038,7 @@ MonoBehaviour:
   animator: {fileID: 0}
   roomHub: {fileID: 0}
   gameDirector: {fileID: 0}
+  humanManager: {fileID: 0}
   HumanGameOverText: {fileID: 0}
   character: {fileID: 0}
 --- !u!1 &4554040837537248934

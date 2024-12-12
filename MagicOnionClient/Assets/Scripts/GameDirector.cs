@@ -28,15 +28,25 @@ public class GameDirector : MonoBehaviour
     [SerializeField] public GameObject GameFinish;
     [SerializeField] GameObject GameStartText;
     [SerializeField] GameObject Result;
+    [SerializeField] Text Crrenttext;//現在のキル数
+    [SerializeField] Text KillNum;//キル数
+    [SerializeField] Text KillLog;//キル通知
+    [SerializeField] GameObject AttackButton1;
+    [SerializeField] GameObject AttackButton2;
     private CinemachineVirtualCamera virtualCamera; // Cinemachine Virtual Camera
 
+    private bool isEnemy = false;//自分が敵かどうか
+
     Vector3 position;
-    /*private bool isGameStart = false;*/
     Animator animator;
     Rigidbody rigidbody;
     Character character;
     Dictionary<Guid, GameObject> characterList = new Dictionary<Guid, GameObject>();
-    // Start is called before the first frame update
+    public bool IsEnemy
+    {
+        get { return isEnemy; }
+        set { isEnemy = value; }
+    }
     public async void Start()
     {
         //ユーザーが入室時にOnJoinedUserメソッドを実行するよう、モデルに登録しておく
@@ -57,6 +67,9 @@ public class GameDirector : MonoBehaviour
         //ルーム内にいるユーザーが鬼にキルされたときにOnKillメソッドを実行するよう、モデルに登録しておく
         roomHubModel.OnKillNum += this.OnKill;
 
+        //マッチングしたとき、OnMachingメソッドを実行するよう、モデルに登録
+        roomHubModel.OnMatchi += this.OnMaching;
+
         //接続
         await roomHubModel.ConnectionAsync();
 
@@ -72,6 +85,8 @@ public class GameDirector : MonoBehaviour
         rigidbody = GetComponent<Rigidbody>();
 
         virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
+
+        KillNum.text = "0";
     }
 
     //入室する時に呼び出す関数
@@ -93,6 +108,24 @@ public class GameDirector : MonoBehaviour
         // 生成されたキャラクターをCinemachineのFollowとLook Atターゲットに設定
         if (roomHubModel.ConnectionId == user.ConnectionId)
         {
+            //JoinOrderが0だったら
+            if (user.JoinOrder == 0)
+            {
+                isEnemy = true;
+                AttackButton1.SetActive(true);
+                AttackButton2.SetActive(true);
+                KillNum.gameObject.SetActive(true);
+                Crrenttext.gameObject.SetActive(true);
+                
+
+            }
+            else
+            {
+                AttackButton1.SetActive(false);
+                AttackButton2.SetActive(false);
+                KillNum.gameObject.SetActive(false);
+                Crrenttext.gameObject.SetActive(false);
+            }
             Transform characterTransform = characterObject.transform;
             virtualCamera.Follow = characterTransform;
             virtualCamera.LookAt = characterTransform;
@@ -197,19 +230,71 @@ public class GameDirector : MonoBehaviour
     }
 
     //キルしたときのメソッド
-    public async void KillAsync(Guid connectionId, int killnum)
+    public async void KillAsync()
     {
-        await roomHubModel.KillAsync(connectionId, killnum);
+        await roomHubModel.KillAsync();
     }
 
-    //キルしたときのメソッド
-    public void OnKill(Guid connectionId,int killnum)
+    //キルしたときの通知
+    public void OnKill(Guid connectionId, int TotalKillNum,string userName)
     {
-        if (roomHubModel.ConnectionId == connectionId)
-        {
-            //WarpPotion = 
-        }
+        KillNum.text = TotalKillNum.ToString();
+
+        AnimateKillLog(userName);
+
     }
+
+    //マッチング同期処理
+    public async void JoinLobbyAsync(int userId)
+    {
+        await roomHubModel.JoinLobbyAsync(userId);
+    }
+
+    //マッチングしたときに通知
+    public void OnMaching(string roomName)
+    {
+
+    }
+
+    //DoTweenを使ったキルログアニメーション
+    private void AnimateKillLog(string userName)
+    {
+        // KillLog テキストの初期位置を保存
+        Vector3 initialPosition = KillLog.transform.localPosition;
+
+        // 名前を色付きで表示（例: 名前を赤色で）
+        string KillMessage = "<color=red>" + userName + "</color>" + "が殺されました";
+
+        // KillLogにメッセージを追加
+        KillLog.text += KillMessage + "\n";
+
+        // KillLog 全体のフェードインアニメーション
+        KillLog.DOFade(1f, 0.5f)  // フェードイン
+            .SetEase(Ease.OutQuad)  // イージングを設定
+            .OnComplete(() =>
+            {
+                // フェードイン後、少し待機してから KillLog 全体をフェードアウト
+                KillLog.DOFade(0f, 1f)  // フェードアウト
+                    .SetDelay(2f)  // 2秒後にフェードアウト開始
+                    .SetEase(Ease.InQuad)
+                    .OnComplete(() =>
+                    {
+                        // フェードアウト後にKillLogをリセット
+                        KillLog.text = ""; // KillLogのテキストを消す
+                    });
+            });
+
+        // KillLog テキストを上にスライドさせるアニメーション
+        KillLog.transform.DOLocalMoveY(initialPosition.y + 50f, 0.5f)
+            .SetEase(Ease.OutQuad)
+            .OnComplete(() =>
+            {
+                // スライドアニメーション後、元の位置に戻す
+                KillLog.transform.DOLocalMoveY(initialPosition.y, 0.5f)
+                    .SetEase(Ease.InQuad);
+            });
+    }
+
 
     // カウントダウンを行うメソッド
     private IEnumerator StartCountdown()
@@ -234,7 +319,7 @@ public class GameDirector : MonoBehaviour
             countdownTime--; // 次の数字に進む  
         }
 
-        GameStartText.SetActive(true); // カウントダウン終了
+        GameStartText.SetActive(true); 
         countdownText.gameObject.SetActive(false);
         StartCoroutine(HideGameStartText());
 
@@ -276,9 +361,16 @@ public class GameDirector : MonoBehaviour
         }
     }
 
+    //リザルトボタンが押された時の処理
     public void OnResult()
     {
         Initiate.Fade("Result",Color.black,1);
+    }
+
+    //ボタンが押された時の処理
+    public void AttackButton()
+    {
+        characterList[roomHubModel.ConnectionId].GetComponent<Character>().AttackButton();
     }
 
    

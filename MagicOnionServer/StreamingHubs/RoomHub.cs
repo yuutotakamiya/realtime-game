@@ -138,17 +138,39 @@ namespace StreamingHubs
             var roomData = roomStorage.Get(this.ConnectionId);
             roomData.Timer = time;
 
+            //ルーム内の全員に現在の制限時間を通知
             this.Broadcast(room).OnTimer(this.ConnectionId,time);
         }
 
-        //鬼のキル数処理
-        public async Task KillAsync(int killnum)
+        //鬼のキル数更新処理
+        public async Task KillAsync()
         {
             var roomStorage = this.room.GetInMemoryStorage<RoomData>();
             var roomData = roomStorage.Get(this.ConnectionId);
-            roomData.KillNum = killnum;
+            roomData.KillNum++;
+            var roomDataList = roomStorage.AllValues.ToArray<RoomData>();
+            int totalKillNum = 0;
+            foreach( var rData in roomDataList)
+            {
+                totalKillNum += rData.KillNum;
+            }
+           
+            //ルーム内の全員に誰をキルしたかを通知
+            this.Broadcast(room).OnKill(this.ConnectionId, totalKillNum, roomData.JoinedUser.UserData.Name);
+        }
 
-            this.Broadcast(room).OnKill(this.ConnectionId,killnum);
+        //自動マッチング処理
+        public async Task<JoinedUser[]> JoinLobbyAsync(int userId)
+        {
+            JoinedUser[] joinedUserList = await JoinAsync("Lobby",userId);
+
+            //最低4人集まっていたら
+            if (joinedUserList.Length == 4)
+            {
+                this.Broadcast(room).OnMatching("Lobby");
+            }
+
+            return joinedUserList;
         }
 
         //ユーザーが切断したときの処理

@@ -34,6 +34,8 @@ namespace Shared.Interfaces.StreamingHubs
         }
 
         //鬼のキル数
-        void OnKill(Guid connectionId, int killnum);
+        void OnKill(Guid connectionId, int killnum,string username);
+
+        void OnMatching(string roomName);
     }
 }

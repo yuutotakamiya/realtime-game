@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks.Triggers;
 using Shared.Interfaces.StreamingHubs;
+//using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,12 +10,12 @@ public class HumanManager : Character
 {
     [SerializeField] GameObject HumanGameOverText;
     [SerializeField] Character character;
+
     //[SerializeField] GameObject[] WarpPotion;
     //RoomHubModel roomHubModel;
     public override void Start()
     {
         base.Start();
-
         
     }
 
@@ -33,7 +34,7 @@ public class HumanManager : Character
             {
                 GameObject weapon = GameObject.Find("Mesh_Weapon_01");
 
-                if (weapon != null && weapon.CompareTag("weapon"))
+                if (isAttack&&other.CompareTag("killer"))
                 {
                     animator.SetInteger("state", 3);
 
@@ -51,10 +52,13 @@ public class HumanManager : Character
     private IEnumerator RespawnAfterDeath()
     {
         // アニメーションの再生時間を待つ
-        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        /*AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
         float animationTime = stateInfo.length;
 
-        yield return new WaitForSeconds(animationTime);
+        yield return new WaitForSeconds(animationTime);*/
+
+        // 死亡アニメーションが再生されている間は処理を中断
+        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
 
         // オブジェクトを削除し、リスポーン処理を呼ぶ
         OnAnimationDestroy();
@@ -64,16 +68,16 @@ public class HumanManager : Character
     //アニメーションイベント用のメソッド
     public void OnAnimationDestroy()
     {
-        //Destroy(this.gameObject);
-        gameDirector. CancelInvoke("Move");
-        
+        //gameDirector. CancelInvoke("Move");
+        gameDirector.KillAsync();
     }
 
+    //プレイヤーが死んだらリスポーンするメソッド
     public void RespawnPlayer()
     {
 
         GameObject respawn;
-        // ランダムにインデックスを選ぶ
+        // ランダムな場所にリスポーン
         int randomIndex = Random.Range(0, 3);
         if (randomIndex == 0)
         {
@@ -96,6 +100,6 @@ public class HumanManager : Character
         animator.SetInteger("state", 0);
         isstart = true;       
     }
-    
+
 }
 

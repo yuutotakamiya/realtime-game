@@ -28,6 +28,9 @@ namespace Shared.Interfaces.StreamingHubs
         Task TimeAsync(float time);
 
         //鬼のキル数
-        Task KillAsync(int killnum);
+        Task KillAsync();
+
+
+        Task<JoinedUser[]> JoinLobbyAsync(int userId);
     }
 }
