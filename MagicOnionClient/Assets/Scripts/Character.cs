@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 using static Shared.Interfaces.StreamingHubs.IRoomHubReceiver;
 
 public class Character : MonoBehaviour
@@ -12,7 +13,7 @@ public class Character : MonoBehaviour
     //[SerializeField] Button AttckButton2;
     //[SerializeField] protected Collider attackCollider;
     public bool isDead = false;//死んでいるどうか
-    public bool isself = false;//自分自身かどうか
+    protected bool isself = false;//自分自身かどうか
     public bool isstart = false;//準備完了しているかどうか
     public bool isAttack = false;//攻撃中かどうか
     public float AttckCoolDown;//攻撃のクールダウン
@@ -23,8 +24,14 @@ public class Character : MonoBehaviour
     public RoomHubModel roomHub;
     public GameDirector gameDirector;
     public HumanManager humanManager;
+    public AN_DoorScript doorScript; // ドアスクリプトの参照
 
-    
+    public bool Isself
+    {
+        set { isself = value; }
+    }
+
+
     public virtual void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -34,6 +41,7 @@ public class Character : MonoBehaviour
         gameDirector = GameObject.Find("GameDirector").GetComponent<GameDirector>();
         humanManager = GameObject.Find("HumanManager").GetComponent<HumanManager>();
 
+        doorScript = GameObject.Find("Door").GetComponent<AN_DoorScript>();
     }
 
     public virtual async void Update()
@@ -87,5 +95,20 @@ public class Character : MonoBehaviour
             StartCoroutine(AttackAnimation());
         }
     }
+
+    //ボタンを押したときの処理
+    /*private void OnTriggerEnter(Collider other)
+    {
+        // プレイヤーが「Player」レイヤーのオブジェクトであれば、openButtonを表示
+        if (other.gameObject.layer == LayerMask.NameToLayer("killer"))
+        {
+            gameDirector.openButton.gameObject.SetActive(true);
+        }
+        else
+        {
+            gameDirector.openButton.gameObject.SetActive(false);
+        }
+    }*/
 }
+
 

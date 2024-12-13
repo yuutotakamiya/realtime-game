@@ -27,14 +27,14 @@ public class HumanManager : Character
 
     public  void OnTriggerEnter(Collider other)
     {
-        if (isself == true)
+        if (isself == true&&animator.GetInteger("state")!=3)
         {
             // 衝突したオブジェクトが自分ではない場合
             if (other.gameObject != this.gameObject)
             {
                 GameObject weapon = GameObject.Find("Mesh_Weapon_01");
 
-                if (isAttack&&other.CompareTag("killer"))
+                if (weapon.CompareTag("weapon"))
                 {
                     animator.SetInteger("state", 3);
 
@@ -70,6 +70,10 @@ public class HumanManager : Character
     {
         //gameDirector. CancelInvoke("Move");
         gameDirector.KillAsync();
+        Debug.Log("aaaaaa");
+
+
+
     }
 
     //プレイヤーが死んだらリスポーンするメソッド

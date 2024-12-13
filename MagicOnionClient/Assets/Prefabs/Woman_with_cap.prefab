@@ -2034,11 +2034,14 @@ MonoBehaviour:
   isDead: 0
   isself: 0
   isstart: 0
+  isAttack: 0
+  AttckCoolDown: 0
   rb: {fileID: 0}
   animator: {fileID: 0}
   roomHub: {fileID: 0}
   gameDirector: {fileID: 0}
   humanManager: {fileID: 0}
+  doorScript: {fileID: 0}
   HumanGameOverText: {fileID: 0}
   character: {fileID: 0}
 --- !u!1 &4554040837537248934

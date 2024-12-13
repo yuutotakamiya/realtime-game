@@ -33,6 +33,8 @@ public class GameDirector : MonoBehaviour
     [SerializeField] Text KillLog;//キル通知
     [SerializeField] GameObject AttackButton1;
     [SerializeField] GameObject AttackButton2;
+    [SerializeField] public GameObject openButton;
+    [SerializeField] public GameObject closeButton;
     private CinemachineVirtualCamera virtualCamera; // Cinemachine Virtual Camera
 
     private bool isEnemy = false;//自分が敵かどうか
@@ -116,8 +118,6 @@ public class GameDirector : MonoBehaviour
                 AttackButton2.SetActive(true);
                 KillNum.gameObject.SetActive(true);
                 Crrenttext.gameObject.SetActive(true);
-                
-
             }
             else
             {
@@ -133,7 +133,7 @@ public class GameDirector : MonoBehaviour
 
         if (roomHubModel.ConnectionId == user.ConnectionId)
         {
-            characterObject.GetComponent<Character>().isself = true;
+            characterObject.GetComponent<Character>().Isself = true;
         }
 
         characterObject.transform.position = startposition[user.JoinOrder].transform.position;
@@ -367,12 +367,11 @@ public class GameDirector : MonoBehaviour
         Initiate.Fade("Result",Color.black,1);
     }
 
-    //ボタンが押された時の処理
+    //攻撃ボタンが押された時の処理
     public void AttackButton()
     {
         characterList[roomHubModel.ConnectionId].GetComponent<Character>().AttackButton();
     }
-
    
     // Update is called once per frame
     void Update()
