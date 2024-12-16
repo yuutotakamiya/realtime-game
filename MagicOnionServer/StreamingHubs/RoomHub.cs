@@ -165,7 +165,7 @@ namespace StreamingHubs
             JoinedUser[] joinedUserList = await JoinAsync("Lobby",userId);
 
             //最低4人集まっていたら
-            if (joinedUserList.Length == 4)
+            if (joinedUserList.Length >= 4)
             {
                 this.Broadcast(room).OnMatching("Lobby");
             }

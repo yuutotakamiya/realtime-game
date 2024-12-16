@@ -1,10 +1,13 @@
 using Cinemachine;
 using DG.Tweening;
+using JetBrains.Annotations;
 using MagicOnionServer.Model.Entity;
 using Shared.Interfaces.StreamingHubs;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
@@ -35,6 +38,12 @@ public class GameDirector : MonoBehaviour
     [SerializeField] GameObject AttackButton2;
     [SerializeField] public GameObject openButton;
     [SerializeField] public GameObject closeButton;
+    [SerializeField] public GameObject holdButton;
+    [SerializeField] public GameObject notholdButton;
+    /*[SerializeField] GameObject nameUIPrefab;
+    public Canvas uiCanvas;
+    public Camera camera;*/
+
     private CinemachineVirtualCamera virtualCamera; // Cinemachine Virtual Camera
 
     private bool isEnemy = false;//自分が敵かどうか
@@ -43,12 +52,13 @@ public class GameDirector : MonoBehaviour
     Animator animator;
     Rigidbody rigidbody;
     Character character;
-    Dictionary<Guid, GameObject> characterList = new Dictionary<Guid, GameObject>();
+    Dictionary <Guid, GameObject> characterList = new Dictionary<Guid, GameObject>();
     public bool IsEnemy
     {
         get { return isEnemy; }
         set { isEnemy = value; }
     }
+    public static GameDirector Instance { get; private set; }
     public async void Start()
     {
         //ユーザーが入室時にOnJoinedUserメソッドを実行するよう、モデルに登録しておく
@@ -105,7 +115,10 @@ public class GameDirector : MonoBehaviour
     private void OnJoinedUser(JoinedUser user)
     {
 
-        GameObject characterObject = Instantiate(characterPrefab[user.JoinOrder], startposition[user.JoinOrder].transform.position, startposition[user.JoinOrder].transform.rotation);//Prefabを生成
+        GameObject characterObject = Instantiate(characterPrefab[user.JoinOrder],
+            startposition[user.JoinOrder].transform.position, 
+            startposition[user.JoinOrder].transform.rotation);//Prefabを生成
+
 
         // 生成されたキャラクターをCinemachineのFollowとLook Atターゲットに設定
         if (roomHubModel.ConnectionId == user.ConnectionId)
@@ -118,6 +131,8 @@ public class GameDirector : MonoBehaviour
                 AttackButton2.SetActive(true);
                 KillNum.gameObject.SetActive(true);
                 Crrenttext.gameObject.SetActive(true);
+                holdButton.gameObject.SetActive(false);
+                notholdButton.gameObject.SetActive(false);
             }
             else
             {
@@ -125,6 +140,7 @@ public class GameDirector : MonoBehaviour
                 AttackButton2.SetActive(false);
                 KillNum.gameObject.SetActive(false);
                 Crrenttext.gameObject.SetActive(false);
+
             }
             Transform characterTransform = characterObject.transform;
             virtualCamera.Follow = characterTransform;
@@ -134,6 +150,7 @@ public class GameDirector : MonoBehaviour
         if (roomHubModel.ConnectionId == user.ConnectionId)
         {
             characterObject.GetComponent<Character>().Isself = true;
+            //Debug.Log(characterObject.GetComponent<Character>().Isself);
         }
 
         characterObject.transform.position = startposition[user.JoinOrder].transform.position;
@@ -195,7 +212,7 @@ public class GameDirector : MonoBehaviour
 
             animator.SetInteger("state", (int)characterState);
 
-            Debug.Log(characterState);
+            //Debug.Log(characterState);
         }
     }
 
@@ -208,10 +225,8 @@ public class GameDirector : MonoBehaviour
     //ルーム内のユーザー全員が準備完了を押したらユーザーが準備完了したときの処理
     private void OnReady(Guid connectionId, bool isReady)
     {
-        characterList[roomHubModel.ConnectionId].GetComponent<Character>().isstart = true;
-
+       
         StartCoroutine(StartCountdown());
-
         StartCoroutine("Text");
     }
 
@@ -319,7 +334,8 @@ public class GameDirector : MonoBehaviour
             countdownTime--; // 次の数字に進む  
         }
 
-        GameStartText.SetActive(true); 
+        GameStartText.SetActive(true);
+        characterList[roomHubModel.ConnectionId].GetComponent<Character>().isstart = true;
         countdownText.gameObject.SetActive(false);
         StartCoroutine(HideGameStartText());
 
@@ -346,6 +362,7 @@ public class GameDirector : MonoBehaviour
     {
         while (currentTime > 0)
         {
+            //characterList[roomHubModel.ConnectionId].GetComponent<Character>().isstart = false;
             timerText.text = currentTime.ToString(); // UIにタイマーを表示
             currentTime -= 1f; // 1秒減らす
             yield return new WaitForSeconds(1f); // 1秒待機
@@ -376,7 +393,7 @@ public class GameDirector : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-
+       
     }
 }
+

@@ -1996,10 +1996,10 @@ MonoBehaviour:
   speed: 15
   rotateSpeed: 10
   isDead: 0
-  isself: 0
   isstart: 0
-  HumanGameOverText: {fileID: 0}
-  character: {fileID: 0}
+  isAttack: 0
+  AttckCoolDown: 0
+  collider: {fileID: 0}
 --- !u!136 &2544693036549298792
 CapsuleCollider:
   m_ObjectHideFlags: 0

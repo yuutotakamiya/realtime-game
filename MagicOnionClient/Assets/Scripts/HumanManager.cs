@@ -8,15 +8,12 @@ using static Shared.Interfaces.StreamingHubs.IRoomHubReceiver;
 
 public class HumanManager : Character
 {
-    [SerializeField] GameObject HumanGameOverText;
-    [SerializeField] Character character;
-
-    //[SerializeField] GameObject[] WarpPotion;
-    //RoomHubModel roomHubModel;
+    //[SerializeField] GameObject Wizard;
+    //GameObject weapon;
     public override void Start()
     {
         base.Start();
-        
+       
     }
 
     // Update is called once per frame
@@ -25,69 +22,65 @@ public class HumanManager : Character
         base.Update();
     }
 
-    public  void OnTriggerEnter(Collider other)
+    public void OnTriggerEnter(Collider other)
     {
-        if (isself == true&&animator.GetInteger("state")!=3)
+        if (isself == true && animator.GetInteger("state") != 3 && !isDead)
         {
-            // 衝突したオブジェクトが自分ではない場合
+           GameObject weapon = GameObject.Find("Mesh_Weapon_01");
+            
             if (other.gameObject != this.gameObject)
             {
-                GameObject weapon = GameObject.Find("Mesh_Weapon_01");
-
-                if (weapon.CompareTag("weapon"))
+                if (other.CompareTag("weapon"))
                 {
+                    isDead = true;
                     animator.SetInteger("state", 3);
 
                     isstart = false;
                     rb.velocity = Vector3.zero;
 
+                    other.enabled = false;
                     StartCoroutine(RespawnAfterDeath());
+                    
                 }
-              
             }
         }
     }
-
-    // アニメーションが終わった後にリスポーンを呼び出す
+   
     private IEnumerator RespawnAfterDeath()
     {
-        // アニメーションの再生時間を待つ
-        /*AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-        float animationTime = stateInfo.length;
-
-        yield return new WaitForSeconds(animationTime);*/
-
-        // 死亡アニメーションが再生されている間は処理を中断
-        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
-
-        // オブジェクトを削除し、リスポーン処理を呼ぶ
+        // アニメーションが開始されてから、その終了を待つ
+        while (animator.GetInteger("state") == 3)
+        {
+            yield return null;  // 死亡アニメーションが終わるまで待機
+        }
         OnAnimationDestroy();
         RespawnPlayer();
+        isDead = false;
     }
 
-    //アニメーションイベント用のメソッド
+
     public void OnAnimationDestroy()
     {
-        //gameDirector. CancelInvoke("Move");
-        gameDirector.KillAsync();
-        Debug.Log("aaaaaa");
-
-
-
+        //Debug.Log("KillAsync called");
+        if (isDead == true)
+        {
+            gameDirector.KillAsync();
+        }
     }
+        
 
-    //プレイヤーが死んだらリスポーンするメソッド
+   
     public void RespawnPlayer()
     {
 
         GameObject respawn;
-        // ランダムな場所にリスポーン
+       
         int randomIndex = Random.Range(0, 3);
         if (randomIndex == 0)
         {
-           respawn= GameObject.Find("WarpPotion");
+            respawn = GameObject.Find("WarpPotion");
         }
-        else if (randomIndex==1)
+        else if (randomIndex == 1)
         {
             respawn = GameObject.Find("WarpPotion (1)");
         }
@@ -97,12 +90,14 @@ public class HumanManager : Character
         }
         Debug.Log(randomIndex);
 
-        // 選ばれた場所にプレイヤーをワープ
+        
         transform.position = respawn.transform.position;
-        transform.rotation = respawn.transform .rotation;
+        transform.rotation = respawn.transform.rotation;
+        isDead = true;
 
         animator.SetInteger("state", 0);
-        isstart = true;       
+        isstart = true;
+        isDead = false;
     }
 
 }

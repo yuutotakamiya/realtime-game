@@ -9,26 +9,25 @@ public class Character : MonoBehaviour
 {
     [SerializeField] float speed;
     [SerializeField] float rotateSpeed;
-    //[SerializeField] Button AttckButton1;
-    //[SerializeField] Button AttckButton2;
-    //[SerializeField] protected Collider attackCollider;
     public bool isDead = false;//死んでいるどうか
     protected bool isself = false;//自分自身かどうか
     public bool isstart = false;//準備完了しているかどうか
     public bool isAttack = false;//攻撃中かどうか
     public float AttckCoolDown;//攻撃のクールダウン
 
-    FixedJoystick joystick;
-    public Rigidbody rb;
-    public Animator animator;
-    public RoomHubModel roomHub;
-    public GameDirector gameDirector;
-    public HumanManager humanManager;
-    public AN_DoorScript doorScript; // ドアスクリプトの参照
+    protected FixedJoystick joystick;
+    protected Rigidbody rb;
+    protected Animator animator;
+    protected RoomHubModel roomHub;
+    protected GameDirector gameDirector;
+    [SerializeField] Collider collider;
+    protected AN_DoorScript doorScript; // ドアスクリプトの参照
+
 
     public bool Isself
     {
         set { isself = value; }
+        get { return isself; }
     }
 
 
@@ -39,9 +38,12 @@ public class Character : MonoBehaviour
         animator = GetComponent<Animator>();
         roomHub = GameObject.Find("RoomModel").GetComponent<RoomHubModel>();
         gameDirector = GameObject.Find("GameDirector").GetComponent<GameDirector>();
-        humanManager = GameObject.Find("HumanManager").GetComponent<HumanManager>();
-
         doorScript = GameObject.Find("Door").GetComponent<AN_DoorScript>();
+        if (collider == null)
+        {
+            return;
+        }
+        collider.enabled = false;
     }
 
     public virtual async void Update()
@@ -75,6 +77,20 @@ public class Character : MonoBehaviour
         }
     }
 
+    //アニメーションイベントを使って特定の場所だけColliderをtrueにする
+    public void StartAttack()
+    {
+        isAttack = true;
+        collider.enabled = true;
+    }
+   
+    public void StopAttack()
+    {
+        isAttack = false;
+        collider.enabled = false;
+        animator.SetInteger("state", 0);
+    }
+
     //攻撃アニメーションが終わるまで
     private IEnumerator AttackAnimation()
     {
@@ -85,6 +101,7 @@ public class Character : MonoBehaviour
         isAttack = false;
         animator.SetInteger("state", 0); // Idleアニメーションに戻す
     }
+   
 
     //デフォルトのアタックボタンの処理
     public void AttackButton()
@@ -96,7 +113,7 @@ public class Character : MonoBehaviour
         }
     }
 
-    //ボタンを押したときの処理
+    //ドアボタンを押したときの処理
     /*private void OnTriggerEnter(Collider other)
     {
         // プレイヤーが「Player」レイヤーのオブジェクトであれば、openButtonを表示

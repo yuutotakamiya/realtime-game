@@ -8,12 +8,27 @@ using Grpc.Net.Client;
 using MagicOnion.Client;
 using Shared.Interfaces.Services;
 using Grpc.Core;
+using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 public class UserModel : BaseModel
 {
     private int userId;//ìoò^ÉÜÅ[ÉUÅ[ID
 
 
+    private static UserModel instance;
+    public static UserModel Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                GameObject gameObject = new GameObject("UserModel");
+                instance = gameObject.AddComponent<UserModel>();
+                DontDestroyOnLoad(gameObject);
+            }
+            return instance;
+        }
+    }
     
     // Start is called before the first frame update
     void Start()
