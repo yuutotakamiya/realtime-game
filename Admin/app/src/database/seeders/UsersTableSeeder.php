@@ -16,13 +16,23 @@ class UsersTableSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory(100)->create();
+
         //
         User::create([
             'name' => '勇者',
-            'level' => 20,
-            'exp' => 30,
-            'life' => 100,
+            'token'=>''
+        ]);
+        User::create([
+            'name' => 'aa',
+            'token'=>''
+        ]);
+        User::create([
+            'name' => 'takamiya',
+            'token'=>''
+        ]);
+        User::create([
+            'name' => 'uuu',
+            'token'=>''
         ]);
     }
 }

@@ -1913,7 +1913,7 @@ GameObject:
   - component: {fileID: 7335063221183576671}
   - component: {fileID: -5187763242306539007}
   m_Layer: 0
-  m_Name: Woman_with_cap
+  m_Name: Woman_with_cap 1
   m_TagString: Human
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
