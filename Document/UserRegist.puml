@@ -1,0 +1,15 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+participant Unity
+participant RPCService
+
+note over Unity:初回起動
+Unity->RPCService:ユーザー登録API
+note over RPCService:DB登録
+RPCService->Unity:レスポンスid
+note over Unity:ユーザーID保存
+
+
+
+@enduml
