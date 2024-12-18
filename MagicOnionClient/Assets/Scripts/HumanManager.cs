@@ -1,6 +1,5 @@
 using Cysharp.Threading.Tasks.Triggers;
 using Shared.Interfaces.StreamingHubs;
-//using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -67,9 +66,8 @@ public class HumanManager : Character
             gameDirector.KillAsync();
         }
     }
-        
 
-   
+
     public void RespawnPlayer()
     {
 

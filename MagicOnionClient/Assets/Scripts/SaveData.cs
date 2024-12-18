@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SaveData : MonoBehaviour
+public class SaveData
 {
     public int UserID { get; set; }
 }

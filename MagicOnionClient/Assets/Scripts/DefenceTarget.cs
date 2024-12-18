@@ -10,9 +10,6 @@ public class DefenceTarget : MonoBehaviour
 {
     [SerializeField] GameDirector gameDirector;
     public float move_speed = 3f;
-    private bool isHolding;//持っているかどうか
-    public float followDistance = 5f;  // 追従する最大距離
-    private float hideDistance = 6f;   // ボタンを非表示にする閾値距離
 
     protected Rigidbody rb;
     protected Transform followTarget;
@@ -20,88 +17,59 @@ public class DefenceTarget : MonoBehaviour
 
     void Start()
     {
-        rb = this.GetComponent<Rigidbody>();
+        rb = GetComponent<Rigidbody>();
         currentMoveMode = MoveMode.Idle;
-        isHolding = false;
-
-        // 初期状態でボタンを非表示
-        gameDirector.holdButton.SetActive(false);
-        gameDirector.notholdButton.SetActive(false);
     }
 
     void Update()
     {
-        if (isHolding && followTarget != null)
-        {
-            Vector3 direction = (followTarget.position - transform.position).normalized;
-            rb.MovePosition(transform.position + direction * move_speed * Time.deltaTime);
-        }
-        CheckDistanceAndUpdateButtons();
+        DoAutoMovement();
     }
 
-    // プレイヤーが近くにいるかどうかをチェックしてボタンを表示/非表示にする
-    private void CheckDistanceAndUpdateButtons()
+    protected void DoAutoMovement()
     {
-        if (followTarget != null)
+        switch (currentMoveMode)
         {
-            float distance = Vector3.Distance(followTarget.position, transform.position);
+            /*case MoveMode.Wait:
+                break;*/
+            case MoveMode.Follow:
+                if (followTarget != null)
+                {
+                    Quaternion move_rotation = Quaternion.LookRotation(followTarget.transform.position - transform.position, Vector3.up);
+                    transform.rotation = Quaternion.Lerp(transform.rotation, move_rotation, 0.1f);
+                    rb.velocity = transform.forward * move_speed;
+                }
 
-            if (distance > hideDistance)
+                break;
+        }
+    }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Human")
+        {
+            followTarget = null;
+            //followTarget = other.transform;
+
+            if (currentMoveMode == MoveMode.Follow)
             {
-                gameDirector.holdButton.SetActive(false);
-                gameDirector.notholdButton.SetActive(false);
+                currentMoveMode = MoveMode.Idle;
             }
-            else
+        }
+    }
+
+    public void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag =="Human")
+        {
+            followTarget = other.transform;
+            //followTarget = null;
+
+            if (currentMoveMode == MoveMode.Idle)
             {
-                UpdateButtonState();
+                currentMoveMode = MoveMode.Follow;
             }
         }
-    }
-
-    private void UpdateButtonState()
-    {
-        if (!isHolding)
-        {
-            // まだ引きずっていない状態なら「引きずる」ボタンを表示
-            gameDirector.holdButton.SetActive(true);
-            gameDirector.notholdButton.SetActive(false);
-        }
-        else
-        {
-            // 引きずっている状態なら「やめる」ボタンを表示
-            gameDirector.holdButton.SetActive(false);
-            gameDirector.notholdButton.SetActive(true);
-        }
-    }
-
-
-    // プレイヤーが接触した時
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Human")&&gameDirector.IsEnemy==false)
-        {
-            followTarget = other.transform;  // 追従対象を設定
-
-            // 初期状態では「引きずる」ボタンを表示し、「やめる」ボタンを非表示にする
-            gameDirector.holdButton.SetActive(true);
-            gameDirector.notholdButton.SetActive(false);
-
-            // 距離に基づいてボタンを更新
-            CheckDistanceAndUpdateButtons();
-        }
-    }
-
-    // 「引きずる」ボタンが押された時
-    public void OnHoldButtonPressed()
-    {
-        isHolding = true;  // 追従を開始
-        UpdateButtonState();
-    }
-
-    // 「やめる」ボタンが押された時
-    public void OnNotHoldButtonPressed()
-    {
-        isHolding = false;  // 追従を停止
-        UpdateButtonState();
+        
     }
 }

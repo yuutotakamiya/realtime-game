@@ -40,9 +40,6 @@ public class GameDirector : MonoBehaviour
     [SerializeField] public GameObject closeButton;
     [SerializeField] public GameObject holdButton;
     [SerializeField] public GameObject notholdButton;
-    /*[SerializeField] GameObject nameUIPrefab;
-    public Canvas uiCanvas;
-    public Camera camera;*/
 
     private CinemachineVirtualCamera virtualCamera; // Cinemachine Virtual Camera
 
@@ -88,7 +85,7 @@ public class GameDirector : MonoBehaviour
         //position = startposition.transform.position;
 
         InpuTuserId = GameObject.Find("InputFielUserId").GetComponent<InputField>();
-        roomname = roomname.GetComponent<Text>();
+        //roomname = roomname.GetComponent<Text>();
 
         currentTime = timeLimit; // 初期化: 残り時間を設定
 
@@ -119,6 +116,12 @@ public class GameDirector : MonoBehaviour
             startposition[user.JoinOrder].transform.position, 
             startposition[user.JoinOrder].transform.rotation);//Prefabを生成
 
+
+        if (roomHubModel.ConnectionId == user.ConnectionId)
+        {
+            characterObject.GetComponent<Character>().Name(user.UserData.Name);
+            Debug.Log(user.UserData.Name);
+        }
 
         // 生成されたキャラクターをCinemachineのFollowとLook Atターゲットに設定
         if (roomHubModel.ConnectionId == user.ConnectionId)

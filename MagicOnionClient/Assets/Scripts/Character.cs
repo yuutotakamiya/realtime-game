@@ -9,6 +9,7 @@ public class Character : MonoBehaviour
 {
     [SerializeField] float speed;
     [SerializeField] float rotateSpeed;
+    [SerializeField] public Text NameText;
     public bool isDead = false;//死んでいるどうか
     protected bool isself = false;//自分自身かどうか
     public bool isstart = false;//準備完了しているかどうか
@@ -102,6 +103,14 @@ public class Character : MonoBehaviour
         animator.SetInteger("state", 0); // Idleアニメーションに戻す
     }
    
+    //名前を生成
+    public void Name(string Name)
+    {
+        if (NameText != null)
+        {
+            NameText.text = Name;
+        }
+    }
 
     //デフォルトのアタックボタンの処理
     public void AttackButton()

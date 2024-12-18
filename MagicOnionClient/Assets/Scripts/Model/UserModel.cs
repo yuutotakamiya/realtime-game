@@ -71,6 +71,7 @@ public class UserModel : BaseModel
         //this.authToken = saveData.AuthToken;
         return true;
     }
+
     /// <summary>
     /// ƒ†[ƒU[“o˜^API
     /// </summary>
@@ -86,6 +87,7 @@ public class UserModel : BaseModel
         {
             //“o˜^¬Œ÷
             userId = await client.RegistUserAsync(name);
+            SaveUserData();
             Debug.Log("“o˜^¬Œ÷");
             return true;
         }
