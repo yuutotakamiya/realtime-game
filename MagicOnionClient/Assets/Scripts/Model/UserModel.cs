@@ -1,19 +1,19 @@
 using Cysharp.Threading.Tasks;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Cysharp.Net.Http;
-using Cysharp.Threading.Tasks;
 using Grpc.Net.Client;
 using MagicOnion.Client;
 using Shared.Interfaces.Services;
 using Grpc.Core;
-using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
+using System.IO;
+using System;
+using UnityEngine.Networking;
+using Newtonsoft.Json;
 
 public class UserModel : BaseModel
 {
-    private int userId;//登録ユーザーID
-
+    private int userId;//ユーザーIDを保存する変数
+    public string authToken;//トークンを保存するための変数
 
     private static UserModel instance;
     public static UserModel Instance
@@ -40,6 +40,36 @@ public class UserModel : BaseModel
     void Update()
     {
         
+    }
+
+    //ユーザーIDをローカルファイルに保存する
+    public void SaveUserData()
+    {
+        SaveData saveData = new SaveData();
+        saveData.UserID = this.userId;
+        //saveData.AuthToken = this.authToken;
+        string json = JsonConvert.SerializeObject(saveData);
+        var writer = new StreamWriter(Application.persistentDataPath + "/saveData.json");
+        writer.Write(json);
+        writer.Flush();
+        writer.Close();
+    }
+
+    //ユーザーIDをローカルファイルから読み込む
+    public bool LoadUserData()
+    {
+        if (!File.Exists(Application.persistentDataPath + "/saveData.json"))
+        {
+            return false;
+        }
+
+        var reader = new StreamReader(Application.persistentDataPath + "/saveData.json");
+        string json = reader.ReadToEnd();
+        reader.Close();
+        SaveData saveData = JsonConvert.DeserializeObject<SaveData>(json);
+        this.userId = saveData.UserID;
+        //this.authToken = saveData.AuthToken;
+        return true;
     }
     /// <summary>
     /// ユーザー登録API

@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using static UnityEngine.Rendering.DebugUI;
 
-public class Inputuser : MonoBehaviour
+public class TitleManager : MonoBehaviour
 {
     [SerializeField] InputField inputField;
 
@@ -26,6 +26,7 @@ public class Inputuser : MonoBehaviour
 
     }
 
+    //ユーザー登録API呼び出し
     public async void InputOnButton(string name)
     {
        
