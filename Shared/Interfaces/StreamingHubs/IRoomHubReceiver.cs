@@ -33,9 +33,13 @@ namespace Shared.Interfaces.StreamingHubs
             Dead = 3
         }
 
-        //鬼のキル数
+        //鬼のキル数通知
         void OnKill(Guid connectionId, int killnum,string username);
 
+        //自動マッチング通知
         void OnMatching(string roomName);
+
+        //宝箱の位置を通知
+        void OnMoveChest(Vector3 pos, Quaternion rotaition, string Namechest);
     }
 }

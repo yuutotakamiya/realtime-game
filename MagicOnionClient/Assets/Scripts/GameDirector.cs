@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEditor.MemoryProfiler;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
@@ -45,6 +46,8 @@ public class GameDirector : MonoBehaviour
 
     private bool isEnemy = false;//自分が敵かどうか
 
+    private bool ishave = false;//宝箱を持っているかどうか
+
     Vector3 position;
     Animator animator;
     Rigidbody rigidbody;
@@ -55,7 +58,6 @@ public class GameDirector : MonoBehaviour
         get { return isEnemy; }
         set { isEnemy = value; }
     }
-    public static GameDirector Instance { get; private set; }
     public async void Start()
     {
         //ユーザーが入室時にOnJoinedUserメソッドを実行するよう、モデルに登録しておく
@@ -77,7 +79,10 @@ public class GameDirector : MonoBehaviour
         roomHubModel.OnKillNum += this.OnKill;
 
         //マッチングしたとき、OnMachingメソッドを実行するよう、モデルに登録
-        roomHubModel.OnMatchi += this.OnMaching;
+        roomHubModel.OnMatch += this.OnMaching;
+
+        //宝箱が移動したときにOnMoveChestメソッドを実行するよう、モデルに登録
+        roomHubModel.OnChest += this.OnMoveChest;
 
         //接続
         await roomHubModel.ConnectionAsync();
@@ -120,7 +125,7 @@ public class GameDirector : MonoBehaviour
         if (roomHubModel.ConnectionId == user.ConnectionId)
         {
             characterObject.GetComponent<Character>().Name(user.UserData.Name);
-            Debug.Log(user.UserData.Name);
+            //Debug.Log(user.UserData.Name);
         }
 
         // 生成されたキャラクターをCinemachineのFollowとLook Atターゲットに設定
@@ -190,7 +195,7 @@ public class GameDirector : MonoBehaviour
         }
     }
 
-    //定期的に呼び出すメソッド
+    //キャラクターの位置を定期的に呼び出すメソッド
     public async void Move()
     {
         //自分自身のtransform.position、Quaternion.identity,アニメーションをサーバーに送信
@@ -272,6 +277,21 @@ public class GameDirector : MonoBehaviour
     public void OnMaching(string roomName)
     {
 
+    }
+
+    //宝箱の位置同期
+    public async void MoveChest(Vector3 pos,Quaternion rotaition, string Namechest)
+    {
+        await roomHubModel.MoveChest(pos, rotaition, Namechest);
+    }
+
+    //宝箱の位置を定期的に通知するメソッド
+    public void OnMoveChest(Vector3 pos,Quaternion rotaition, string Namechest)
+    {
+        GameObject chest = GameObject.Find(Namechest);
+
+        chest.transform.rotation = rotaition;
+        chest.transform.position = pos;
     }
 
     //DoTweenを使ったキルログアニメーション

@@ -30,7 +30,10 @@ namespace Shared.Interfaces.StreamingHubs
         //鬼のキル数
         Task KillAsync();
 
-
+        //自動マッチング同期
         Task<JoinedUser[]> JoinLobbyAsync(int userId);
+
+        //ゲーム内オブジェクトの同期
+        Task MoveChest(Vector3 pos,Quaternion rotaition, string Namechest);
     }
 }

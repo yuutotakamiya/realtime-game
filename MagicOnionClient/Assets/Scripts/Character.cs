@@ -45,6 +45,7 @@ public class Character : MonoBehaviour
             return;
         }
         collider.enabled = false;
+        //rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
     }
 
     public virtual async void Update()
@@ -68,6 +69,7 @@ public class Character : MonoBehaviour
             {
                 // キャラクターが止まっている場合
                 animator.SetInteger("state", 0); //Idleアニメーション
+                rb.velocity = Vector3.zero; 
             }
 
             if (isAttack == true)

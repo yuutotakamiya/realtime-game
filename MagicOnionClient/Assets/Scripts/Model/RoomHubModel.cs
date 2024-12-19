@@ -34,7 +34,10 @@ public class RoomHubModel : BaseModel, IRoomHubReceiver
     //キル通知
     public Action<Guid,int,string> OnKillNum { get; set; }
     //マッチング通知
-    public Action<string> OnMatchi {  get; set; }
+    public Action<string> OnMatch {  get; set; }
+    //宝箱の位置通知
+    public Action<Vector3,Quaternion, string> OnChest { get; set; }
+
 
 
     //MagicOnion接続処理
@@ -151,6 +154,18 @@ public class RoomHubModel : BaseModel, IRoomHubReceiver
     //マッチング通知
     public void OnMatching(string roomName)
     {
-        OnMatchi(roomName);
+        OnMatch(roomName);
+    }
+
+    //宝箱の位置同期
+    public async UniTask MoveChest(Vector3 pos ,Quaternion rotaition, string Namechest)
+    {
+        await roomHub.MoveChest(pos, rotaition, Namechest);
+    }
+
+    //宝箱の位置の通知
+    public void OnMoveChest(Vector3 pos, Quaternion rotaition, string Namechest)
+    {
+        OnChest(pos,rotaition,Namechest);
     }
 }

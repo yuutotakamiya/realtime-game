@@ -173,6 +173,24 @@ namespace StreamingHubs
             return joinedUserList;
         }
 
+
+        //宝箱の位置同期
+        public async Task MoveChest(Vector3 pos , Quaternion rotaition, string Namechest)
+        {
+            //RoomDataの情報を取得
+            var roomStorage = this.room.GetInMemoryStorage<RoomData>();
+            //グループストレージにある自身の接続IDを取得
+            var roomData = roomStorage.Get(this.ConnectionId);
+
+            //宝箱の位置を更新
+            roomData.Position = pos;
+            roomData.Rotation = rotaition;
+            roomStorage.Set(this.ConnectionId, roomData);  // 更新されたデータを保存
+
+            //ルーム参加者全員に(自分以外)、ユーザーの位置、回転、アニメーションを通知
+            this.Broadcast(room).OnMoveChest(pos, rotaition, Namechest);
+        }
+
         //ユーザーが切断したときの処理
         protected override ValueTask OnDisconnected()
         {
