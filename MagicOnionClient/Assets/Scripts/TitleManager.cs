@@ -1,3 +1,4 @@
+using DG.Tweening;
 using MessagePack.Formatters.MagicOnionServer.Model.Entity;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,22 +9,30 @@ using static UnityEngine.Rendering.DebugUI;
 
 public class TitleManager : BaseModel
 {
-    [SerializeField] InputField inputField;
+    [SerializeField] InputField inputField;//名前を入力するフィールド
 
-    [SerializeField] Text InputText;
+    [SerializeField] Text InputText;//名前入力されたテキスト
 
-    [SerializeField] UserModel userModel;
+    [SerializeField] UserModel userModel;//ユーザーモデルクラス定義
 
-    [SerializeField] GameObject StartButton;
+    [SerializeField] GameObject StartButton;//スタートボタン
 
-    [SerializeField] GameObject OKButton;
+    [SerializeField] GameObject OKButton;//完了ボタン
 
-    [SerializeField] Text ErrorText;
+    [SerializeField] Text ErrorText;//エラーテキスト
+
+    [SerializeField] CanvasGroup buttonCanvasGroup; // ボタンに追加したCanvasGroup
+    [SerializeField] float fadeDuration = 0.5f; // フェードの時間
+    [SerializeField] float fadeDelay = 0.5f; // 次のフェードまでの遅延
+
 
     void Start()
     {
-        //inputField = GameObject.Find("InputField"). GetComponent<InputField>();
-        //InputText = InputText.GetComponent<Text>();
+        // ボタンのフェードインとフェードアウトを繰り返す
+        buttonCanvasGroup.DOFade(0, fadeDuration) // フェードアウト
+            .SetLoops(-1, LoopType.Yoyo) // ループ設定。Yoyoは行ったり来たり。
+            .SetEase(Ease.InOutQuad) // イージング効果
+            .SetDelay(fadeDelay); // フェード間の遅延
     }
 
     void Update()

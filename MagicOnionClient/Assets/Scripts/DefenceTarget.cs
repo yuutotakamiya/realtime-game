@@ -9,7 +9,7 @@ public enum MoveMode
 public class DefenceTarget : MonoBehaviour
 {
     [SerializeField] GameDirector gameDirector;
-    public float move_speed;
+    public float move_speed;//宝箱をスピード
 
     protected Rigidbody rb;
     protected Transform followTarget;
@@ -99,7 +99,7 @@ public class DefenceTarget : MonoBehaviour
         
     }
 
-    //定期的に呼ぶメソッド
+    //定期的に呼ぶメソッド(宝箱の位置同期)
     public void Chest()
     {
         gameDirector.MoveChest(this.gameObject.transform.position,this.transform.rotation, this.gameObject.name);

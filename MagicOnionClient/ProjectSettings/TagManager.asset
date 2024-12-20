@@ -8,6 +8,8 @@ TagManager:
   - killer
   - weapon
   - wall
+  - DropArea
+  - Chest
   layers:
   - Default
   - TransparentFX

@@ -7,12 +7,9 @@ using static Shared.Interfaces.StreamingHubs.IRoomHubReceiver;
 
 public class HumanManager : Character
 {
-    //[SerializeField] GameObject Wizard;
-    //GameObject weapon;
     public override void Start()
     {
         base.Start();
-       
     }
 
     // Update is called once per frame
@@ -23,7 +20,7 @@ public class HumanManager : Character
 
     public void OnTriggerEnter(Collider other)
     {
-        if (isself == true && animator.GetInteger("state") != 3 && !isDead)
+        if (Isself == true && animator.GetInteger("state") != 3 && !IsDead)
         {
            GameObject weapon = GameObject.Find("Mesh_Weapon_01");
             
@@ -31,10 +28,10 @@ public class HumanManager : Character
             {
                 if (other.CompareTag("weapon"))
                 {
-                    isDead = true;
+                    IsDead = true;
                     animator.SetInteger("state", 3);
 
-                    isstart = false;
+                    Isstart = false;
                     rb.velocity = Vector3.zero;
 
                     other.enabled = false;
@@ -45,6 +42,7 @@ public class HumanManager : Character
         }
     }
    
+    //死亡アニメーションが終わった後のメソッド
     private IEnumerator RespawnAfterDeath()
     {
         // アニメーションが開始されてから、その終了を待つ
@@ -54,14 +52,14 @@ public class HumanManager : Character
         }
         OnAnimationDestroy();
         RespawnPlayer();
-        isDead = false;
+        IsDead = false;
     }
 
 
     public void OnAnimationDestroy()
     {
         //Debug.Log("KillAsync called");
-        if (isDead == true)
+        if (IsDead == true)
         {
             gameDirector.KillAsync();
         }
@@ -72,7 +70,7 @@ public class HumanManager : Character
     {
 
         GameObject respawn;
-       
+
         int randomIndex = Random.Range(0, 3);
         if (randomIndex == 0)
         {
@@ -88,15 +86,14 @@ public class HumanManager : Character
         }
         Debug.Log(randomIndex);
 
-        
+
         transform.position = respawn.transform.position;
         transform.rotation = respawn.transform.rotation;
-        isDead = true;
+        IsDead = true;
 
         animator.SetInteger("state", 0);
-        isstart = true;
-        isDead = false;
+        Isstart = true;
+        IsDead = false;
     }
-
 }
 

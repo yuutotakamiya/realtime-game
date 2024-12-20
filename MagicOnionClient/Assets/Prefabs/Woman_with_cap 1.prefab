@@ -2030,12 +2030,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24dfcc5b27a24854bbe0b3bbedc4527c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 20
+  speed: 30
   rotateSpeed: 10
   NameText: {fileID: 3253482373030659059}
-  isDead: 0
-  isstart: 0
-  isAttack: 0
+  isInDropArea: 0
   AttckCoolDown: 0
   collider: {fileID: 0}
 --- !u!1 &4554040837537248934

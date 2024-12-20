@@ -41,6 +41,7 @@ public class GameDirector : MonoBehaviour
     [SerializeField] public GameObject closeButton;
     [SerializeField] public GameObject holdButton;
     [SerializeField] public GameObject notholdButton;
+    [SerializeField] public GameObject placeButton;
 
     private CinemachineVirtualCamera virtualCamera; // Cinemachine Virtual Camera
 
@@ -358,7 +359,7 @@ public class GameDirector : MonoBehaviour
         }
 
         GameStartText.SetActive(true);
-        characterList[roomHubModel.ConnectionId].GetComponent<Character>().isstart = true;
+        characterList[roomHubModel.ConnectionId].GetComponent<Character>().Isstart = true;
         countdownText.gameObject.SetActive(false);
         StartCoroutine(HideGameStartText());
 
@@ -393,7 +394,7 @@ public class GameDirector : MonoBehaviour
 
         if (currentTime == 0)
         {
-            characterList[roomHubModel.ConnectionId].GetComponent<Character>().isstart = false;
+            characterList[roomHubModel.ConnectionId].GetComponent<Character>().Isstart = false;
             timerText.text = "0"; // 0•b‚É‚È‚Á‚½‚ç•\Ž¦
             GameFinish.SetActive(true);
             Result.SetActive(true);

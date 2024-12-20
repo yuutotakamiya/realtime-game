@@ -10,10 +10,11 @@ public class Character : MonoBehaviour
     [SerializeField] float speed;
     [SerializeField] float rotateSpeed;
     [SerializeField] public Text NameText;
-    public bool isDead = false;//死んでいるどうか
+    protected bool isDead = false;//死んでいるどうか
     protected bool isself = false;//自分自身かどうか
-    public bool isstart = false;//準備完了しているかどうか
-    public bool isAttack = false;//攻撃中かどうか
+    protected bool isstart = false;//準備完了しているかどうか
+    protected bool isAttack = false;//攻撃中かどうか
+    public bool isInDropArea=false;//宝箱の置くエリアにいるかどうか
     public float AttckCoolDown;//攻撃のクールダウン
 
     protected FixedJoystick joystick;
@@ -23,14 +24,42 @@ public class Character : MonoBehaviour
     protected GameDirector gameDirector;
     [SerializeField] Collider collider;
     protected AN_DoorScript doorScript; // ドアスクリプトの参照
+    protected DefenceTarget defenceTarget;
 
-
+    //自分自身かどうかのフラグのプロパティ
     public bool Isself
     {
         set { isself = value; }
         get { return isself; }
     }
 
+    //死んでいるかどうかのフラグのプロパティ
+    public bool IsDead
+    {
+        get { return isDead; }
+        set { isDead = value; }
+    }
+
+    //攻撃しているかどうかのフラグのプロパティ
+    public bool IsAttack
+    {
+        get { return isAttack; }
+        set { isAttack = value; }
+    }
+
+    //準備完了しているかどうかのフラグのプロパティ
+    public bool Isstart
+    {
+        get { return isstart; }
+        set { isstart = value; }
+    }
+
+    //宝箱を置くエリアにいるかどうかのフラグのプロパティ
+    public bool IsInDropArea
+    {
+        get { return isInDropArea; }
+        set { isInDropArea = value; }
+    }
 
     public virtual void Start()
     {
@@ -40,6 +69,11 @@ public class Character : MonoBehaviour
         roomHub = GameObject.Find("RoomModel").GetComponent<RoomHubModel>();
         gameDirector = GameObject.Find("GameDirector").GetComponent<GameDirector>();
         doorScript = GameObject.Find("Door").GetComponent<AN_DoorScript>();
+        defenceTarget = GameObject.Find("DefenceTarget").GetComponent<DefenceTarget>();
+        if (defenceTarget == null) 
+        {
+            return;
+        }
         if (collider == null)
         {
             return;
@@ -50,7 +84,7 @@ public class Character : MonoBehaviour
 
     public virtual async void Update()
     {
-        if (isstart == true)
+        if (Isstart == true)
         {
             Vector3 move = (Camera.main.transform.forward * joystick.Vertical +
             Camera.main.transform.right * joystick.Horizontal) * speed;
@@ -72,7 +106,7 @@ public class Character : MonoBehaviour
                 rb.velocity = Vector3.zero; 
             }
 
-            if (isAttack == true)
+            if (IsAttack == true)
             {
                 animator.SetInteger("state", 2);
                 await roomHub.MoveAsync(this.transform.position, this.transform.rotation, CharacterState.Attack);
@@ -83,13 +117,13 @@ public class Character : MonoBehaviour
     //アニメーションイベントを使って特定の場所だけColliderをtrueにする
     public void StartAttack()
     {
-        isAttack = true;
+        IsAttack = true;
         collider.enabled = true;
     }
    
     public void StopAttack()
     {
-        isAttack = false;
+        IsAttack = false;
         collider.enabled = false;
         animator.SetInteger("state", 0);
     }
@@ -117,9 +151,9 @@ public class Character : MonoBehaviour
     //デフォルトのアタックボタンの処理
     public void AttackButton()
     {
-        if (gameDirector.IsEnemy == true && isstart == true && isself == true && isAttack == false)
+        if (gameDirector.IsEnemy == true && Isstart == true && Isself == true && IsAttack == false)
         {
-            isAttack = true;
+            IsAttack = true;
             StartCoroutine(AttackAnimation());
         }
     }

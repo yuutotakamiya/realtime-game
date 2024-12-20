@@ -1862,16 +1862,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 223042672}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1960762488}
+  m_Father: {fileID: 1011774278}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 21.99414, y: -71.00156}
+  m_AnchoredPosition: {x: 981.99414, y: -749}
   m_SizeDelta: {x: 350, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &223042674
@@ -5124,6 +5124,7 @@ GameObject:
   - component: {fileID: 626299305}
   - component: {fileID: 626299304}
   - component: {fileID: 626299303}
+  - component: {fileID: 626299306}
   m_Layer: 5
   m_Name: STARTButton
   m_TagString: Untagged
@@ -5244,6 +5245,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 626299301}
   m_CullTransparentMesh: 1
+--- !u!225 &626299306
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 626299301}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &626374153
 GameObject:
   m_ObjectHideFlags: 0
@@ -8655,6 +8668,8 @@ RectTransform:
   - {fileID: 1196836791}
   - {fileID: 985429713}
   - {fileID: 626299302}
+  - {fileID: 1735140944}
+  - {fileID: 223042673}
   m_Father: {fileID: 1960762488}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -10215,6 +10230,9 @@ MonoBehaviour:
   StartButton: {fileID: 0}
   OKButton: {fileID: 0}
   ErrorText: {fileID: 0}
+  buttonCanvasGroup: {fileID: 0}
+  fadeDuration: 0.5
+  fadeDelay: 0.5
 --- !u!1001 &1229782336
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16067,17 +16085,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1735140943}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 974889805}
-  m_Father: {fileID: 1960762488}
+  m_Father: {fileID: 1011774278}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 21.99414, y: -159}
+  m_AnchoredPosition: {x: 981.99414, y: -699}
   m_SizeDelta: {x: 250, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1735140945
@@ -16496,6 +16514,9 @@ MonoBehaviour:
   StartButton: {fileID: 626299301}
   OKButton: {fileID: 1735140943}
   ErrorText: {fileID: 223042674}
+  buttonCanvasGroup: {fileID: 626299306}
+  fadeDuration: 0.5
+  fadeDelay: 0.5
 --- !u!4 &1764139213
 Transform:
   m_ObjectHideFlags: 0
@@ -18364,8 +18385,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1011774278}
-  - {fileID: 1735140944}
-  - {fileID: 223042673}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
