@@ -1909,9 +1909,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3973721326379063914}
   - component: {fileID: 7045128084777467920}
-  - component: {fileID: 4730475075539327817}
   - component: {fileID: 7335063221183576671}
-  - component: {fileID: -5187763242306539007}
   m_Layer: 0
   m_Name: Woman(Copy)
   m_TagString: Human
@@ -1929,7 +1927,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 5, y: 5, z: 5}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 683105420093765563}
@@ -1959,7 +1957,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: d185b258c4624954aa7c066c509fa472, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
-  m_ApplyRootMotion: 0
+  m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
@@ -1967,33 +1965,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!54 &4730475075539327817
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4354610108920463568}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 100
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 84
-  m_CollisionDetection: 1
 --- !u!136 &7335063221183576671
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2017,25 +1988,6 @@ CapsuleCollider:
   m_Height: 1.6176316
   m_Direction: 1
   m_Center: {x: 0.012530995, y: 0.8710375, z: 0.025147295}
---- !u!114 &-5187763242306539007
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4354610108920463568}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24dfcc5b27a24854bbe0b3bbedc4527c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 20
-  rotateSpeed: 10
-  isDead: 0
-  isstart: 0
-  isAttack: 0
-  AttckCoolDown: 0
-  collider: {fileID: 0}
 --- !u!1 &4554040837537248934
 GameObject:
   m_ObjectHideFlags: 0

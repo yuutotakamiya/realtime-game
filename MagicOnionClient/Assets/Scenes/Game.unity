@@ -25078,7 +25078,7 @@ MonoBehaviour:
   characterPrefab:
   - {fileID: 750789406789507350, guid: a75a5eb3a5acb31469126a707ed0a2ef, type: 3}
   - {fileID: 4354610108920463568, guid: f0fd05e8c7d32584191dc0e31e04c324, type: 3}
-  - {fileID: 6236340177881521482, guid: a35ff984dd387c6468f60c5457420d81, type: 3}
+  - {fileID: 5155930874796231646, guid: 63e54f83f727aec499e579668d74cb12, type: 3}
   - {fileID: 7916404086589048163, guid: 92366dbfd9835634f90b5ceb61f91c36, type: 3}
   roomHubModel: {fileID: 1940267059}
   humanManager: {fileID: 1713615542}
@@ -25105,7 +25105,6 @@ MonoBehaviour:
   holdButton: {fileID: 1349496261}
   notholdButton: {fileID: 1124663447}
   placeButton: {fileID: 334002617}
-  lobbyManager: {fileID: 2046442116}
 --- !u!1001 &1587492213
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -32757,55 +32756,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2035475776}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &2046442115
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2046442117}
-  - component: {fileID: 2046442116}
-  m_Layer: 0
-  m_Name: LobbyManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &2046442116
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2046442115}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a216645de029b04468dc74623f05afb6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  roomNameText: {fileID: 0}
-  MachingPrefab: {fileID: 0}
-  roomHubModel: {fileID: 0}
-  userIdText: {fileID: 0}
-  Content: {fileID: 0}
---- !u!4 &2046442117
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2046442115}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1330.3099, y: 458.8916, z: 354.2375}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2046805605
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -34366,4 +34316,3 @@ SceneRoots:
   - {fileID: 1079882957}
   - {fileID: 1472140990}
   - {fileID: 105441639}
-  - {fileID: 2046442117}

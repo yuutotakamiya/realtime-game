@@ -8,7 +8,6 @@ using System;
 
 public class LobbyManager : MonoBehaviour
 {
-    [SerializeField] Text roomNameText;
     [SerializeField] GameObject MachingPrefab;
     [SerializeField] RoomHubModel roomHubModel;
     [SerializeField] InputField userIdText;
@@ -16,6 +15,7 @@ public class LobbyManager : MonoBehaviour
 
     static string roomName;
 
+    //ルーム名をプロパティ
     public static string RoomName
     {
         get { return roomName; }
@@ -77,18 +77,7 @@ public class LobbyManager : MonoBehaviour
     {
         await roomHubModel.LeaveAsync();
 
-        // 全てのキャラクターオブジェクトを削除
-        /*foreach (var entry in GameDirector.Instance.characterList)
-        {
-            //Destroy(entry.Value);  // キャラクターオブジェクトを破棄
-            //CancelInvoke("Move");
-        }*/
-
-        // characterListをクリア
-        //GameDirector.Instance.characterList.Clear();
-
-        // 自分のConnectionIdをリセット
-        //roomHubModel.ConnectionId = Guid.Empty;
+        Initiate.Fade("Title", Color.black, 1.0f);
     }
 
     //ユーザーが退室したときの処理
@@ -101,12 +90,4 @@ public class LobbyManager : MonoBehaviour
             GameDirector.Instance.characterList.Remove(user.ConnectionId);    // リストから削除
         }*/
     }
-    //マッチング同期処理
-    /*public async void JoinLobbyAsync(int userId)
-    {
-        await roomHubModel.JoinLobbyAsync(userId);
-    }*/
-
-   
-
 }

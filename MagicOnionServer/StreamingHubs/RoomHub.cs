@@ -163,13 +163,16 @@ namespace StreamingHubs
         public async Task<JoinedUser[]> JoinLobbyAsync(int userId)
         {
             JoinedUser[] joinedUserList = await JoinAsync("Lobby",userId);
-
-            //最低4人集まっていたら
-            if (joinedUserList.Length == 4)
+            //排他制御
+            lock (joinedUserList) 
             {
-                Guid guid = Guid.NewGuid();
-                string roomName = guid.ToString();
-                this.Broadcast(room).OnMatching(roomName);
+                //最低4人集まっていたら
+                if (joinedUserList.Length == 4)
+                {
+                    Guid guid = Guid.NewGuid();
+                    string roomName = guid.ToString();//ランダムなルーム名を生成
+                    this.Broadcast(room).OnMatching(roomName);
+                }
             }
 
             return joinedUserList;

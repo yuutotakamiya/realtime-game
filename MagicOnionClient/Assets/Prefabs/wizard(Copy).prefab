@@ -221,7 +221,6 @@ GameObject:
   - component: {fileID: 7916341576930185788}
   - component: {fileID: -8325876113465249754}
   - component: {fileID: -6509811580303205364}
-  - component: {fileID: -8782044120882541914}
   m_Layer: 0
   m_Name: wizard(Copy)
   m_TagString: killer
@@ -261,9 +260,9 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: be5995a9158bda9459c22d48acd79a3f, type: 3}
   m_Controller: {fileID: 9100000, guid: c0960fdf46fd5814396181d399054370, type: 2}
-  m_CullingMode: 1
+  m_CullingMode: 0
   m_UpdateMode: 0
-  m_ApplyRootMotion: 0
+  m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
@@ -321,25 +320,6 @@ CapsuleCollider:
   m_Height: 5.8746395
   m_Direction: 1
   m_Center: {x: 0, y: 3.7240963, z: 0.056171298}
---- !u!114 &-8782044120882541914
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 750789406789507350}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 314b56f7714f24b4981f0830efe1f0c4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 20
-  rotateSpeed: 10
-  isDead: 0
-  isstart: 0
-  isAttack: 0
-  AttckCoolDown: 2
-  collider: {fileID: 883200553812552091}
 --- !u!1 &818621159148848640
 GameObject:
   m_ObjectHideFlags: 0

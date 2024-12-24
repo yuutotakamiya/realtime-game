@@ -1,4 +1,5 @@
 using Cinemachine;
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using JetBrains.Annotations;
 using MagicOnionServer.Model.Entity;
@@ -9,7 +10,6 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
-using UnityEditor.MemoryProfiler;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
@@ -38,7 +38,6 @@ public class GameDirector : MonoBehaviour
     [SerializeField] public GameObject holdButton;
     [SerializeField] public GameObject notholdButton;
     [SerializeField] public GameObject placeButton;
-    [SerializeField] LobbyManager lobbyManager;
 
     private CinemachineVirtualCamera virtualCamera; // Cinemachine Virtual Camera
 
@@ -109,13 +108,13 @@ public class GameDirector : MonoBehaviour
 
         KillNum.text = "0";
 
-        JoinRoom();
+       await JoinRoom();
+       await  Ready();
     }
 
     //入室する時に呼び出す関数
-    public async void JoinRoom()
+    public async UniTask JoinRoom()
     {
-        //roomname = InpuTuserId.text;
         //入室
         await roomHubModel.JoinAsync(LobbyManager.RoomName, UserModel.Instance.userId);
 
@@ -234,7 +233,7 @@ public class GameDirector : MonoBehaviour
     }
 
     //ユーザーが準備完了を押した時のメソッド
-    public async void Ready()
+    public async UniTask Ready()
     {
         await roomHubModel.ReadyAsync();
     }
@@ -242,7 +241,7 @@ public class GameDirector : MonoBehaviour
     //ルーム内のユーザー全員が準備完了を押したらユーザーが準備完了したときの処理
     private void OnReady(Guid connectionId, bool isReady)
     {
-       
+        isReady = true;
         StartCoroutine(StartCountdown());
         StartCoroutine("Text");
     }
@@ -275,8 +274,6 @@ public class GameDirector : MonoBehaviour
         AnimateKillLog(userName);
 
     }
-
-    
 
     //宝箱の位置同期
     public async void MoveChest(Vector3 pos,Quaternion rotaition, string Namechest)
