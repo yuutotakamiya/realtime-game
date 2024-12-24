@@ -136,7 +136,7 @@ namespace StreamingHubs
         {
             var roomStorage = this.room.GetInMemoryStorage<RoomData>();
             var roomData = roomStorage.Get(this.ConnectionId);
-            roomData.Timer = time;
+            roomData.Timer = time;//タイマーの更新
 
             //ルーム内の全員に現在の制限時間を通知
             this.Broadcast(room).OnTimer(this.ConnectionId,time);
@@ -165,9 +165,11 @@ namespace StreamingHubs
             JoinedUser[] joinedUserList = await JoinAsync("Lobby",userId);
 
             //最低4人集まっていたら
-            if (joinedUserList.Length >= 4)
+            if (joinedUserList.Length == 4)
             {
-                this.Broadcast(room).OnMatching("Lobby");
+                Guid guid = Guid.NewGuid();
+                string roomName = guid.ToString();
+                this.Broadcast(room).OnMatching(roomName);
             }
 
             return joinedUserList;

@@ -19,10 +19,6 @@ public class GameDirector : MonoBehaviour
     [SerializeField] GameObject[] characterPrefab;//キャラクターのPrefab
     [SerializeField] RoomHubModel roomHubModel;//RoomHubModelのクラスの設定
     [SerializeField] HumanManager humanManager;//HumanManagerのクラスの設定
-    [SerializeField] InputField InpuTuserId;//ユーザーのIdを入力
-    [SerializeField] InputField roomName;//ルームの名前を入力
-    [SerializeField] Text roomname;
-    [SerializeField] Text userId;
     [SerializeField] GameObject[] startposition;
     [SerializeField] Text timerText;
     [SerializeField] public float timeLimit;
@@ -42,6 +38,7 @@ public class GameDirector : MonoBehaviour
     [SerializeField] public GameObject holdButton;
     [SerializeField] public GameObject notholdButton;
     [SerializeField] public GameObject placeButton;
+    [SerializeField] LobbyManager lobbyManager;
 
     private CinemachineVirtualCamera virtualCamera; // Cinemachine Virtual Camera
 
@@ -53,7 +50,22 @@ public class GameDirector : MonoBehaviour
     Animator animator;
     Rigidbody rigidbody;
     Character character;
-    Dictionary <Guid, GameObject> characterList = new Dictionary<Guid, GameObject>();
+   public Dictionary<Guid, GameObject> characterList = new Dictionary<Guid, GameObject>();
+
+    private static GameDirector instance;
+    public static GameDirector Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                GameObject gameObject = new GameObject("GameDirector");
+                instance = gameObject.AddComponent<GameDirector>();
+                DontDestroyOnLoad(gameObject);
+            }
+            return instance;
+        }
+    }
     public bool IsEnemy
     {
         get { return isEnemy; }
@@ -79,9 +91,6 @@ public class GameDirector : MonoBehaviour
         //ルーム内にいるユーザーが鬼にキルされたときにOnKillメソッドを実行するよう、モデルに登録しておく
         roomHubModel.OnKillNum += this.OnKill;
 
-        //マッチングしたとき、OnMachingメソッドを実行するよう、モデルに登録
-        roomHubModel.OnMatch += this.OnMaching;
-
         //宝箱が移動したときにOnMoveChestメソッドを実行するよう、モデルに登録
         roomHubModel.OnChest += this.OnMoveChest;
 
@@ -89,9 +98,6 @@ public class GameDirector : MonoBehaviour
         await roomHubModel.ConnectionAsync();
 
         //position = startposition.transform.position;
-
-        InpuTuserId = GameObject.Find("InputFielUserId").GetComponent<InputField>();
-        //roomname = roomname.GetComponent<Text>();
 
         currentTime = timeLimit; // 初期化: 残り時間を設定
 
@@ -102,6 +108,8 @@ public class GameDirector : MonoBehaviour
         virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
 
         KillNum.text = "0";
+
+        JoinRoom();
     }
 
     //入室する時に呼び出す関数
@@ -109,7 +117,7 @@ public class GameDirector : MonoBehaviour
     {
         //roomname = InpuTuserId.text;
         //入室
-        await roomHubModel.JoinAsync(roomname.text, int.Parse(userId.text));
+        await roomHubModel.JoinAsync(LobbyManager.RoomName, UserModel.Instance.userId);
 
         InvokeRepeating("Move", 0.1f, 0.1f);
     }
@@ -117,12 +125,12 @@ public class GameDirector : MonoBehaviour
     //ユーザーが入室した時の処理
     private void OnJoinedUser(JoinedUser user)
     {
-
+        //キャラクターを生成
         GameObject characterObject = Instantiate(characterPrefab[user.JoinOrder],
             startposition[user.JoinOrder].transform.position, 
             startposition[user.JoinOrder].transform.rotation);//Prefabを生成
 
-
+        //自分自身のIDが同じだったら
         if (roomHubModel.ConnectionId == user.ConnectionId)
         {
             characterObject.GetComponent<Character>().Name(user.UserData.Name);
@@ -268,17 +276,7 @@ public class GameDirector : MonoBehaviour
 
     }
 
-    //マッチング同期処理
-    public async void JoinLobbyAsync(int userId)
-    {
-        await roomHubModel.JoinLobbyAsync(userId);
-    }
-
-    //マッチングしたときに通知
-    public void OnMaching(string roomName)
-    {
-
-    }
+    
 
     //宝箱の位置同期
     public async void MoveChest(Vector3 pos,Quaternion rotaition, string Namechest)

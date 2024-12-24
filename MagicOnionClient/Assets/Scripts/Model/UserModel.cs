@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 
 public class UserModel : BaseModel
 {
-    private int userId;//ユーザーIDを保存する変数
+    public int userId;//ユーザーIDを保存する変数
     public string authToken;//トークンを保存するための変数
 
     private static UserModel instance;

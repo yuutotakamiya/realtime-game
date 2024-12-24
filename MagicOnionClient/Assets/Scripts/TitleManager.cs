@@ -21,6 +21,8 @@ public class TitleManager : BaseModel
 
     [SerializeField] Text ErrorText;//エラーテキスト
 
+    [SerializeField] InputField InputFieldUserID;//Debug用ユーザーのID入力フィールド
+
     [SerializeField] CanvasGroup buttonCanvasGroup; // ボタンに追加したCanvasGroup
     [SerializeField] float fadeDuration = 0.5f; // フェードの時間
     [SerializeField] float fadeDelay = 0.5f; // 次のフェードまでの遅延
@@ -43,11 +45,18 @@ public class TitleManager : BaseModel
     //スタートボタンが押されたら呼び出す
     public void OnStart()
     {
+        if (!string.IsNullOrEmpty(InputFieldUserID.text))
+        {
+            UserModel.Instance.userId = int.Parse(InputFieldUserID.text);
+            Initiate.Fade("MachingScene", Color.black, 1.0f);
+            return;
+        }
+
         bool isSuccess = UserModel.Instance.LoadUserData();
 
         if (isSuccess == true)
         {
-            Initiate.Fade("Game", Color.black, 1.0f);
+            Initiate.Fade("MachingScene", Color.black, 1.0f);
         }
         else
         {
@@ -64,7 +73,7 @@ public class TitleManager : BaseModel
         if (!string.IsNullOrEmpty(name))
         {
             await userModel.RegistUserAsync(name);
-            Initiate.Fade("Game", Color.black, 1.0f);
+            Initiate.Fade("MachingScene", Color.black, 1.0f);
         }
         else
         {

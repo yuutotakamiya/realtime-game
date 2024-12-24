@@ -132,7 +132,6 @@ public class RoomHubModel : BaseModel, IRoomHubReceiver
         OnTime(connectionId,time);
     }
 
-
     //鬼が誰をキルしたかの処理
     public async UniTask KillAsync()
     {
@@ -148,7 +147,15 @@ public class RoomHubModel : BaseModel, IRoomHubReceiver
     //マッチングの同期
     public async UniTask JoinLobbyAsync(int userId)
     {
-        await roomHub.JoinLobbyAsync(userId);
+        JoinedUser[] users = await roomHub.JoinLobbyAsync(userId);
+        foreach (var user in users)
+        {
+            if (user.UserData.Id == userId)
+            {
+                this.ConnectionId = user.ConnectionId;
+            }
+            OnJoinedUser(user);
+        }
     }
 
     //マッチング通知
