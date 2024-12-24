@@ -167,7 +167,7 @@ namespace StreamingHubs
             lock (joinedUserList) 
             {
                 //最低4人集まっていたら
-                if (joinedUserList.Length == 4)
+                if (joinedUserList.Length >= 4)
                 {
                     Guid guid = Guid.NewGuid();
                     string roomName = guid.ToString();//ランダムなルーム名を生成
