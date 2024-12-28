@@ -63,8 +63,6 @@ public class LobbyManager : MonoBehaviour
         Text MachingText = TextObject.GetComponent<Text>();
 
         MachingText.text = $"ID:{user.UserData.Id},名前:{user.UserData.Name}";
-
-
     }
 
     //マッチングしたときに通知

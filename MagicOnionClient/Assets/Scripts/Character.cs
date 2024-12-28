@@ -11,7 +11,6 @@ public class Character : MonoBehaviour
     [SerializeField] float speed;
     [SerializeField] float rotateSpeed;
     [SerializeField] public Text NameText;
-    [SerializeField] Camera mainCamera;
     protected bool isDead = false;//死んでいるどうか
     protected bool isself = false;//自分自身かどうか
     protected bool isstart = false;//準備完了しているかどうか
@@ -28,6 +27,9 @@ public class Character : MonoBehaviour
     //protected AN_DoorScript doorScript; // ドアスクリプトの参照
     protected DefenceTarget defenceTarget;
     protected CinemachineVirtualCamera virtualCamera;
+    public Renderer objectRenderer;
+    public Color newColor = Color.yellow;
+
 
     //自分自身かどうかのフラグのプロパティ
     public bool Isself
@@ -73,11 +75,7 @@ public class Character : MonoBehaviour
         gameDirector = GameObject.Find("GameDirector").GetComponent<GameDirector>();
         //doorScript = GameObject.Find("Door").GetComponent<AN_DoorScript>();
         defenceTarget = GameObject.Find("DefenceTarget").GetComponent<DefenceTarget>();
-
-        if (mainCamera == null)
-        {
-            mainCamera = Camera.main; // メインカメラを自動で取得
-        }
+        objectRenderer = GetComponent<Renderer>();
         if (defenceTarget == null) 
         {
             return;
@@ -119,31 +117,36 @@ public class Character : MonoBehaviour
                 animator.SetInteger("state", 2);
                 await roomHub.MoveAsync(this.transform.position, this.transform.rotation, CharacterState.Attack);
             }
-
-            if (mainCamera != null)
-            {
-                // テキストをカメラの方向に回転させる
-                transform.LookAt(mainCamera.transform);
-
-                // カメラの上下反転を防ぐため、Y軸の回転のみを適用
-                Vector3 eulerRotation = transform.rotation.eulerAngles;
-                transform.rotation = Quaternion.Euler(0f, eulerRotation.y, 0f);
-            }
         }
     }
 
     //アニメーションイベントを使って特定の場所だけColliderをtrueにする
     public void StartAttack()
     {
-        IsAttack = true;
+        IsAttack  =true;
         collider.enabled = true;
     }
    
+    //コライダーの判定をfalseにする
     public void StopAttack()
     {
         IsAttack = false;
         collider.enabled = false;
         animator.SetInteger("state", 0);
+    }
+
+    //別の攻撃のコライダーの判定をtrueにする
+    public void StartAttackAnimation()
+    {
+        IsAttack =true;
+        collider.enabled = true;
+        objectRenderer.material.color = newColor;
+    }
+
+    public void StopAttackAnimation()
+    {
+        IsAttack = false;
+        collider.enabled = false;
     }
 
     //攻撃アニメーションが終わるまで
@@ -168,6 +171,16 @@ public class Character : MonoBehaviour
 
     //デフォルトのアタックボタンの処理
     public void AttackButton()
+    {
+        if (gameDirector.IsEnemy == true && Isstart == true && Isself == true && IsAttack == false)
+        {
+            IsAttack = true;
+            StartCoroutine(AttackAnimation());
+        }
+    }
+
+    //雷攻撃アニメーション処理
+    public void LightningAttack()
     {
         if (gameDirector.IsEnemy == true && Isstart == true && Isself == true && IsAttack == false)
         {

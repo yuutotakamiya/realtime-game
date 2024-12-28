@@ -48,7 +48,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2012327847312794205
 Transform:
   m_ObjectHideFlags: 0
@@ -81,7 +81,7 @@ Animation:
   - {fileID: 7400000, guid: 4029d7b370757f849aeebc2fe714cffa, type: 2}
   m_WrapMode: 0
   m_PlayAutomatically: 1
-  m_AnimatePhysics: 1
+  m_AnimatePhysics: 0
   m_CullingType: 0
 --- !u!1 &467583473785724997
 GameObject:
@@ -419,6 +419,8 @@ MonoBehaviour:
   isInDropArea: 0
   AttckCoolDown: 2
   collider: {fileID: 883200553812552091}
+  objectRenderer: {fileID: 0}
+  newColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!1 &818621159148848640
 GameObject:
   m_ObjectHideFlags: 0

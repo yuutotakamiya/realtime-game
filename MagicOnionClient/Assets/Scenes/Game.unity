@@ -1034,39 +1034,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6930566743765582368, guid: d2b67af396bfa6940a00740de263da1e,
         type: 3}
-      propertyPath: move_speed
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 6930566743765582368, guid: d2b67af396bfa6940a00740de263da1e,
-        type: 3}
       propertyPath: gameDirector
       value: 
       objectReference: {fileID: 1571008282}
-    - target: {fileID: 7269347836744094840, guid: d2b67af396bfa6940a00740de263da1e,
-        type: 3}
-      propertyPath: m_TagString
-      value: Chest
-      objectReference: {fileID: 0}
-    - target: {fileID: 8685545876569720244, guid: d2b67af396bfa6940a00740de263da1e,
-        type: 3}
-      propertyPath: m_Radius
-      value: 0.6510455
-      objectReference: {fileID: 0}
-    - target: {fileID: 8685545876569720244, guid: d2b67af396bfa6940a00740de263da1e,
-        type: 3}
-      propertyPath: m_Center.x
-      value: -0.1713219
-      objectReference: {fileID: 0}
-    - target: {fileID: 8685545876569720244, guid: d2b67af396bfa6940a00740de263da1e,
-        type: 3}
-      propertyPath: m_Center.y
-      value: 0.7808661
-      objectReference: {fileID: 0}
-    - target: {fileID: 8685545876569720244, guid: d2b67af396bfa6940a00740de263da1e,
-        type: 3}
-      propertyPath: m_Center.z
-      value: -0.01731096
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6398,7 +6368,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 286096457}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1571008282}
+        m_TargetAssemblyTypeName: GameDirector, Assembly-CSharp
+        m_MethodName: LightningAttak
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &286096457
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16712,6 +16694,8 @@ MonoBehaviour:
   isInDropArea: 0
   AttckCoolDown: 2
   collider: {fileID: 0}
+  objectRenderer: {fileID: 0}
+  newColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!4 &989157179
 Transform:
   m_ObjectHideFlags: 0
@@ -27458,6 +27442,8 @@ MonoBehaviour:
   isInDropArea: 0
   AttckCoolDown: 0
   collider: {fileID: 0}
+  objectRenderer: {fileID: 0}
+  newColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!4 &1713615543
 Transform:
   m_ObjectHideFlags: 0
@@ -32923,11 +32909,6 @@ PrefabInstance:
       propertyPath: gameDirector
       value: 
       objectReference: {fileID: 1571008282}
-    - target: {fileID: 7269347836744094840, guid: d2b67af396bfa6940a00740de263da1e,
-        type: 3}
-      propertyPath: m_Name
-      value: Chest Variation 002
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -33420,6 +33401,78 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
+--- !u!1 &2077929592
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2077929595}
+  - component: {fileID: 2077929594}
+  - component: {fileID: 2077929593}
+  m_Layer: 0
+  m_Name: chestPoint
+  m_TagString: DropArea
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2077929593
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2077929592}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ce6a91c38e3bec4a95a63ac00616cda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameDirector: {fileID: 1571008282}
+  character: {fileID: 989157178}
+  WinText: {fileID: 658141625}
+  WinText2: {fileID: 1303877542}
+--- !u!136 &2077929594
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2077929592}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 6.720435
+  m_Height: 14.066265
+  m_Direction: 1
+  m_Center: {x: -1.0528631, y: -2.1218414, z: -0.25837898}
+--- !u!4 &2077929595
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2077929592}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -29.8, y: 8.43, z: 216.3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2088851946
 GameObject:
   m_ObjectHideFlags: 0
@@ -34316,3 +34369,4 @@ SceneRoots:
   - {fileID: 1079882957}
   - {fileID: 1472140990}
   - {fileID: 105441639}
+  - {fileID: 2077929595}

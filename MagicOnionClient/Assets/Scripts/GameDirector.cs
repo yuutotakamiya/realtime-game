@@ -393,10 +393,15 @@ public class GameDirector : MonoBehaviour
         Initiate.Fade("Result",Color.black,1);
     }
 
-    //攻撃ボタンが押された時の処理
+    //デフォルト攻撃ボタンが押された時の処理
     public void AttackButton()
     {
         characterList[roomHubModel.ConnectionId].GetComponent<Character>().AttackButton();
+    }
+
+    public void LightningAttak()
+    {
+        characterList[roomHubModel.ConnectionId].GetComponent<Character>().LightningAttack();
     }
    
     // Update is called once per frame

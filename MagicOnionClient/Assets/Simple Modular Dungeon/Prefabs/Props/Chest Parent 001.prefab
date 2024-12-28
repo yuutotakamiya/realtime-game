@@ -48,8 +48,8 @@ GameObject:
   - component: {fileID: 6930566743765582368}
   - component: {fileID: 8685545876569720244}
   m_Layer: 0
-  m_Name: Chest Variation 001
-  m_TagString: Untagged
+  m_Name: Chest Variation 002
+  m_TagString: Chest
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -181,7 +181,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameDirector: {fileID: 0}
-  move_speed: 20
+  move_speed: 100
 --- !u!135 &8685545876569720244
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -201,5 +201,5 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.8145834
-  m_Center: {x: -0.18531705, y: 0.5813459, z: 0.0054340367}
+  m_Radius: 0.6510455
+  m_Center: {x: -0.1713219, y: 0.7808661, z: -0.01731096}
