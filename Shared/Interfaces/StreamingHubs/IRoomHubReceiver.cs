@@ -22,7 +22,7 @@ namespace Shared.Interfaces.StreamingHubs
         void OnReady(Guid connectionId,bool isReady);
 
         //制限時間
-        void OnTimer(Guid connectionId, float time);
+        void OnTimer(JoinedUser user, float time);
 
         //アニメーションの宣言
         public enum CharacterState

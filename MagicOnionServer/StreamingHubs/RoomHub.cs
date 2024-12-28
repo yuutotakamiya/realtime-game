@@ -136,10 +136,11 @@ namespace StreamingHubs
         {
             var roomStorage = this.room.GetInMemoryStorage<RoomData>();
             var roomData = roomStorage.Get(this.ConnectionId);
+            var joinedUser = new JoinedUser() { ConnectionId = this.ConnectionId };
             roomData.Timer = time;//タイマーの更新
 
             //ルーム内の全員に現在の制限時間を通知
-            this.Broadcast(room).OnTimer(this.ConnectionId,time);
+            this.Broadcast(room).OnTimer(joinedUser, time);
         }
 
         //鬼のキル数更新処理

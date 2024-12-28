@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,7 @@ public class Character : MonoBehaviour
     [SerializeField] float speed;
     [SerializeField] float rotateSpeed;
     [SerializeField] public Text NameText;
+    [SerializeField] Camera mainCamera;
     protected bool isDead = false;//死んでいるどうか
     protected bool isself = false;//自分自身かどうか
     protected bool isstart = false;//準備完了しているかどうか
@@ -23,8 +25,9 @@ public class Character : MonoBehaviour
     protected RoomHubModel roomHub;
     protected GameDirector gameDirector;
     [SerializeField] Collider collider;
-    protected AN_DoorScript doorScript; // ドアスクリプトの参照
+    //protected AN_DoorScript doorScript; // ドアスクリプトの参照
     protected DefenceTarget defenceTarget;
+    protected CinemachineVirtualCamera virtualCamera;
 
     //自分自身かどうかのフラグのプロパティ
     public bool Isself
@@ -68,8 +71,13 @@ public class Character : MonoBehaviour
         animator = GetComponent<Animator>();
         roomHub = GameObject.Find("RoomModel").GetComponent<RoomHubModel>();
         gameDirector = GameObject.Find("GameDirector").GetComponent<GameDirector>();
-        doorScript = GameObject.Find("Door").GetComponent<AN_DoorScript>();
+        //doorScript = GameObject.Find("Door").GetComponent<AN_DoorScript>();
         defenceTarget = GameObject.Find("DefenceTarget").GetComponent<DefenceTarget>();
+
+        if (mainCamera == null)
+        {
+            mainCamera = Camera.main; // メインカメラを自動で取得
+        }
         if (defenceTarget == null) 
         {
             return;
@@ -111,6 +119,16 @@ public class Character : MonoBehaviour
                 animator.SetInteger("state", 2);
                 await roomHub.MoveAsync(this.transform.position, this.transform.rotation, CharacterState.Attack);
             }
+
+            if (mainCamera != null)
+            {
+                // テキストをカメラの方向に回転させる
+                transform.LookAt(mainCamera.transform);
+
+                // カメラの上下反転を防ぐため、Y軸の回転のみを適用
+                Vector3 eulerRotation = transform.rotation.eulerAngles;
+                transform.rotation = Quaternion.Euler(0f, eulerRotation.y, 0f);
+            }
         }
     }
 
@@ -139,7 +157,7 @@ public class Character : MonoBehaviour
         animator.SetInteger("state", 0); // Idleアニメーションに戻す
     }
    
-    //名前を生成
+    //名前を表示
     public void Name(string Name)
     {
         if (NameText != null)

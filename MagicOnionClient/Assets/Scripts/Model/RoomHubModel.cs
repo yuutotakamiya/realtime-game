@@ -30,7 +30,7 @@ public class RoomHubModel : BaseModel, IRoomHubReceiver
     //ユーザー準備完了通知
     public Action<Guid,bool> OnReadyUser {  get; set; }
     //制限時間の通知
-    public Action<Guid, float> OnTime { get; set; }
+    public Action<JoinedUser, float> OnTime { get; set; }
     //キル通知
     public Action<Guid,int,string> OnKillNum { get; set; }
     //マッチング通知
@@ -127,9 +127,9 @@ public class RoomHubModel : BaseModel, IRoomHubReceiver
     }
 
     //ルーム内全員に制限時間を通知
-    public void OnTimer(Guid connectionId,float time)
+    public void OnTimer(JoinedUser user,float time)
     {
-        OnTime(connectionId,time);
+        OnTime(user,time);
     }
 
     //鬼が誰をキルしたかの処理

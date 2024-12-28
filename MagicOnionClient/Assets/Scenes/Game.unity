@@ -1035,7 +1035,7 @@ PrefabInstance:
     - target: {fileID: 6930566743765582368, guid: d2b67af396bfa6940a00740de263da1e,
         type: 3}
       propertyPath: move_speed
-      value: 60
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 6930566743765582368, guid: d2b67af396bfa6940a00740de263da1e,
         type: 3}
@@ -25088,7 +25088,7 @@ MonoBehaviour:
   - {fileID: 750585994}
   - {fileID: 285205482}
   timerText: {fileID: 1975581420}
-  timeLimit: 360
+  timeLimit: 60
   currentTime: 0
   countdownTime: 3
   countdownText: {fileID: 1483545394}

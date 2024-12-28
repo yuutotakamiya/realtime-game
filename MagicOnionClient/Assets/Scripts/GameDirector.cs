@@ -51,20 +51,7 @@ public class GameDirector : MonoBehaviour
     Character character;
    public Dictionary<Guid, GameObject> characterList = new Dictionary<Guid, GameObject>();
 
-    private static GameDirector instance;
-    public static GameDirector Instance
-    {
-        get
-        {
-            if (instance == null)
-            {
-                GameObject gameObject = new GameObject("GameDirector");
-                instance = gameObject.AddComponent<GameDirector>();
-                DontDestroyOnLoad(gameObject);
-            }
-            return instance;
-        }
-    }
+    public static GameDirector Instance;
     public bool IsEnemy
     {
         get { return isEnemy; }
@@ -108,8 +95,9 @@ public class GameDirector : MonoBehaviour
 
         KillNum.text = "0";
 
-       await JoinRoom();
-       await  Ready();
+        await JoinRoom();
+        await UniTask.Delay(TimeSpan.FromSeconds(4.0f));  // 非同期で4秒待機
+        await Ready();
     }
 
     //入室する時に呼び出す関数
@@ -238,7 +226,7 @@ public class GameDirector : MonoBehaviour
         await roomHubModel.ReadyAsync();
     }
 
-    //ルーム内のユーザー全員が準備完了を押したらユーザーが準備完了したときの処理
+    //ルーム内のユーザー全員が準備完了していたらの処理
     private void OnReady(Guid connectionId, bool isReady)
     {
         isReady = true;
@@ -247,17 +235,19 @@ public class GameDirector : MonoBehaviour
     }
 
     //ゲーム内制限時間
-    public async void TimeAsync(float time)
+    public async void Time(float time)
     {
         await roomHubModel.TimeAsync(time);
     }
 
     //定期的に呼ぶメソッド
-    private void OnTimer(Guid connectionId, float time)
+    private async void OnTimer(JoinedUser user, float time)
     {
-        currentTime = time;
-
-        StartCoroutine("CountdownTimer");
+        if (user.JoinOrder == 0)
+        {
+            currentTime = time;
+            await Ready();
+        }
     }
 
     //キルしたときのメソッド

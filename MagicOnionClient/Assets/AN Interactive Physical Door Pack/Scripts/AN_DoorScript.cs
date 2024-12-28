@@ -49,7 +49,7 @@ public class AN_DoorScript : MonoBehaviour
         hingeLim.min = -90f; // 閉じる最小角度を設定
         hinge.limits = hingeLim;
 
-       gameDirecter = GameObject.Find("GameDirector").GetComponent<GameDirector>();
+       //gameDirecter = GameObject.Find("GameDirector").GetComponent<GameDirector>();
 
     }
 
