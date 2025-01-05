@@ -11,6 +11,7 @@ public class Character : MonoBehaviour
     [SerializeField] float speed;
     [SerializeField] float rotateSpeed;
     [SerializeField] public Text NameText;
+    [SerializeField] GameObject EffectPrefab;
     protected bool isDead = false;//死んでいるどうか
     protected bool isself = false;//自分自身かどうか
     protected bool isstart = false;//準備完了しているかどうか
@@ -30,6 +31,7 @@ public class Character : MonoBehaviour
     public Renderer objectRenderer;
     public Color newColor = Color.yellow;
 
+    public static Character instance;
 
     //自分自身かどうかのフラグのプロパティ
     public bool Isself
@@ -76,11 +78,21 @@ public class Character : MonoBehaviour
         //doorScript = GameObject.Find("Door").GetComponent<AN_DoorScript>();
         defenceTarget = GameObject.Find("DefenceTarget").GetComponent<DefenceTarget>();
         objectRenderer = GetComponent<Renderer>();
+
+        //defenceTargetがnullだったとき何もしない
         if (defenceTarget == null) 
         {
             return;
         }
+
+        //コライダーがnullなら何もしない
         if (collider == null)
+        {
+            return;
+        }
+
+        //joystickがnullなら何もしない
+        if (joystick == null)
         {
             return;
         }
@@ -135,7 +147,7 @@ public class Character : MonoBehaviour
         animator.SetInteger("state", 0);
     }
 
-    //別の攻撃のコライダーの判定をtrueにする
+    //雷攻撃のコライダーの判定をtrueにする
     public void StartAttackAnimation()
     {
         IsAttack =true;
@@ -143,9 +155,11 @@ public class Character : MonoBehaviour
         objectRenderer.material.color = newColor;
     }
 
+    //雷攻撃のコライダーの判定をfalseにする
     public void StopAttackAnimation()
     {
         IsAttack = false;
+        Destroy(EffectPrefab,4);
         collider.enabled = false;
     }
 
@@ -185,9 +199,11 @@ public class Character : MonoBehaviour
         if (gameDirector.IsEnemy == true && Isstart == true && Isself == true && IsAttack == false)
         {
             IsAttack = true;
+            Instantiate(EffectPrefab, transform.position, Quaternion.identity);
             StartCoroutine(AttackAnimation());
         }
     }
+
 
     //ドアボタンを押したときの処理
     /*private void OnTriggerEnter(Collider other)

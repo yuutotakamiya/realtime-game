@@ -52,6 +52,8 @@ public class GameDirector : MonoBehaviour
    public Dictionary<Guid, GameObject> characterList = new Dictionary<Guid, GameObject>();
 
     public static GameDirector Instance;
+
+    //自分自身が敵かどうかのプロパティ
     public bool IsEnemy
     {
         get { return isEnemy; }
@@ -115,9 +117,9 @@ public class GameDirector : MonoBehaviour
         //キャラクターを生成
         GameObject characterObject = Instantiate(characterPrefab[user.JoinOrder],
             startposition[user.JoinOrder].transform.position, 
-            startposition[user.JoinOrder].transform.rotation);//Prefabを生成
+            startposition[user.JoinOrder].transform.rotation);
 
-        //自分自身のIDが同じだったら
+        //自分自身の接続IDが同じだったら
         if (roomHubModel.ConnectionId == user.ConnectionId)
         {
             characterObject.GetComponent<Character>().Name(user.UserData.Name);

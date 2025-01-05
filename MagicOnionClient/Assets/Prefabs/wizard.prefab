@@ -48,7 +48,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2012327847312794205
 Transform:
   m_ObjectHideFlags: 0
@@ -416,10 +416,12 @@ MonoBehaviour:
   speed: 30
   rotateSpeed: 10
   NameText: {fileID: 2500626390243427628}
+  EffectPrefab: {fileID: 4705672878289474989, guid: 70743d648313b974ab15db1a9cbaf2b1,
+    type: 3}
   isInDropArea: 0
   AttckCoolDown: 2
   collider: {fileID: 883200553812552091}
-  objectRenderer: {fileID: 0}
+  objectRenderer: {fileID: 4627006897725000499}
   newColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!1 &818621159148848640
 GameObject:
@@ -6111,7 +6113,7 @@ ParticleSystem:
         m_RotationOrder: 4
     startSizeY:
       serializedVersion: 2
-      minMaxState: 0
+      minMaxState: 3
       scalar: 1
       minScalar: 1
       maxCurve:
@@ -6164,7 +6166,7 @@ ParticleSystem:
         m_RotationOrder: 4
     startSizeZ:
       serializedVersion: 2
-      minMaxState: 0
+      minMaxState: 3
       scalar: 1
       minScalar: 1
       maxCurve:

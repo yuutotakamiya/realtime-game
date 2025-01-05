@@ -10,6 +10,7 @@ TagManager:
   - wall
   - DropArea
   - Chest
+  - Effect
   layers:
   - Default
   - TransparentFX

@@ -13,18 +13,22 @@ public class LobbyManager : MonoBehaviour
     [SerializeField] RoomHubModel roomHubModel;
     [SerializeField] InputField userIdText;
     [SerializeField] Transform Content;
+    [SerializeField] GameObject MachingText;
+    [SerializeField] GameObject MachingIcon;
+    [SerializeField] GameObject[] MachingStartPositon;
+    [SerializeField] GameObject[] characterPrefab;
 
     static string roomName;
-    GameObject MachingIcon;
-    //ルーム名をプロパティ
+
+    //ルーム名をプロパティ化
     public static string RoomName
     {
         get { return roomName; }
     }
 
     // Start is called before the first frame update
-   public async void Start()
-   {
+    public async void Start()
+    {
         //接続
         await roomHubModel.ConnectionAsync();
 
@@ -37,15 +41,13 @@ public class LobbyManager : MonoBehaviour
         //ユーザーが退出時にOnLeaveメソッドを実行するよう、モデルに登録しておく
         roomHubModel.OnExitUser += this.OnExitUser;
 
-         MachingIcon = GameObject.Find("Spinner 1");
-
-       await JoinRoom();
-   }
+        await JoinRoom();
+    }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     //入室する時に呼び出す関数
@@ -58,14 +60,22 @@ public class LobbyManager : MonoBehaviour
     //ユーザーが入室した時の処理
     private void OnJoinedUser(JoinedUser user)
     {
-        GameObject TextObject = Instantiate(MachingPrefab, Content);
+        //GameObject TextObject = Instantiate(MachingPrefab, Content);
 
-        Text MachingText = TextObject.GetComponent<Text>();
+        //Text MachingText = TextObject.GetComponent<Text>();
 
-        MachingText.text = $"ID:{user.UserData.Id},名前:{user.UserData.Name}";
+        //MachingText.text = $"ID:{user.UserData.Id},名前:{user.UserData.Name}";
+
+        if (roomHubModel.ConnectionId == user.ConnectionId)
+        {
+            GameObject Character = Instantiate(characterPrefab[user.JoinOrder],
+           MachingStartPositon[user.JoinOrder].transform.position,
+           MachingStartPositon[user.JoinOrder].transform.rotation);
+
+        }
     }
 
-    //マッチングしたときに通知
+    //マッチングしたときに通知を出す処理
     public async void OnMaching(string roomName)
     {
         LobbyManager.roomName = roomName;
@@ -73,6 +83,7 @@ public class LobbyManager : MonoBehaviour
         await UniTask.Delay(TimeSpan.FromSeconds(1.0f));  // 非同期で1秒待機
 
         MachingIcon.SetActive(false);
+        MachingText.SetActive(false);
         Initiate.Fade("Game", Color.black, 1.0f);
     }
 
@@ -82,29 +93,24 @@ public class LobbyManager : MonoBehaviour
     {
         await roomHubModel.LeaveAsync();
 
-        // クライアント側のUIやオブジェクトをクリア
-        foreach (Transform child in Content)
-        {
-            Destroy(child.gameObject); // プレイヤーの表示を削除
-        }
-
         Initiate.Fade("Title", Color.black, 1.0f);
     }
 
     //ユーザーが退室したときの処理
     private void OnExitUser(JoinedUser user)
     {
-        // 退室したユーザーに対応するオブジェクトを削除
-        if (user.ConnectionId == roomHubModel.ConnectionId)
+        // 退室したユーザーのオブジェクトやUIを探して削除
+        foreach (Transform child in Content)
         {
-            foreach (Transform child in Content)
+            Text matchingText = child.GetComponent<Text>();
+            if (roomHubModel.ConnectionId == user.ConnectionId)
             {
-                if (child.GetComponent<Text>().text.Contains(user.UserData.Name))
+                if (matchingText != null && matchingText.text.Contains(UserModel.Instance.userId.ToString())) ;
                 {
-                    Destroy(child.gameObject); // プレイヤーの表示を削除
-                    break;
+                    Destroy(child.gameObject); // UI要素を削除
                 }
             }
         }
+
     }
 }

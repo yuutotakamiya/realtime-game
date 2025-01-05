@@ -16691,6 +16691,7 @@ MonoBehaviour:
   speed: 0
   rotateSpeed: 10
   NameText: {fileID: 0}
+  EffectPrefab: {fileID: 0}
   isInDropArea: 0
   AttckCoolDown: 2
   collider: {fileID: 0}
@@ -27439,6 +27440,7 @@ MonoBehaviour:
   speed: 10
   rotateSpeed: 10
   NameText: {fileID: 0}
+  EffectPrefab: {fileID: 0}
   isInDropArea: 0
   AttckCoolDown: 0
   collider: {fileID: 0}

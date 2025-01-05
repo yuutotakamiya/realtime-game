@@ -26,7 +26,7 @@ public class HumanManager : Character
             
             if (other.gameObject != this.gameObject)
             {
-                if (other.CompareTag("weapon"))
+                if (other.CompareTag("weapon")||other.CompareTag("Effect"))
                 {
                     IsDead = true;
                     animator.SetInteger("state", 3);
