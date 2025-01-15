@@ -41,6 +41,8 @@ public class LobbyManager : MonoBehaviour
         //ユーザーが退出時にOnLeaveメソッドを実行するよう、モデルに登録しておく
         roomHubModel.OnExitUser += this.OnExitUser;
 
+        MachingIcon.SetActive(true);
+        MachingText.SetActive(true);
         await JoinRoom();
     }
 
@@ -60,20 +62,11 @@ public class LobbyManager : MonoBehaviour
     //ユーザーが入室した時の処理
     private void OnJoinedUser(JoinedUser user)
     {
-        //GameObject TextObject = Instantiate(MachingPrefab, Content);
-
-        //Text MachingText = TextObject.GetComponent<Text>();
-
-        //MachingText.text = $"ID:{user.UserData.Id},名前:{user.UserData.Name}";
 
         GameObject Character = Instantiate(characterPrefab[user.JoinOrder],
           MachingStartPositon[user.JoinOrder].transform.position,
           MachingStartPositon[user.JoinOrder].transform.rotation);
 
-        /*if (roomHubModel.ConnectionId == user.ConnectionId)
-        {
-           
-        }*/
     }
 
     //マッチングしたときに通知を出す処理

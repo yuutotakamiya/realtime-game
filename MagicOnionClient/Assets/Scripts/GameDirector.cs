@@ -276,6 +276,9 @@ public class GameDirector : MonoBehaviour
     {
         GameObject chest = GameObject.Find(Namechest);
 
+        //chest.transform.DOLocalMove(pos, 0.1f).SetEase(Ease.Linear);
+        //chest.transform.Rotate(rotaition.eulerAngles,0.1f);
+
         chest.transform.rotation = rotaition;
         chest.transform.position = pos;
     }
@@ -381,7 +384,7 @@ public class GameDirector : MonoBehaviour
             timerText.text = "0"; // 0•b‚É‚È‚Á‚½‚ç•\Ž¦
             GameFinish.SetActive(true);
             Result.SetActive(true);
-            DefenceTarget.followTarget = null;
+            //DefenceTarget.followTarget = null;
             //Initiate.Fade("Result",Color.black,1);
         }
     }

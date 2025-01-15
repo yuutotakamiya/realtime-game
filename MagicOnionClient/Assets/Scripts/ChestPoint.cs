@@ -9,6 +9,7 @@ public class ChestPoint : MonoBehaviour
     [SerializeField] Character character;
     [SerializeField] GameObject WinText;
     [SerializeField] GameObject WinText2;
+    [SerializeField] DefenceTarget defenceTarget;
     public void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Chest"))
@@ -17,6 +18,7 @@ public class ChestPoint : MonoBehaviour
             WinText2.SetActive(true);
             gameDirector.StopCoroutine("CountdownTimer");
             character.Isstart = false;
+            defenceTarget.move_speed = 0;
             Invoke("LoadResult", 3.0f);
         }
     }

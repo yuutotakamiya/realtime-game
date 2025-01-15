@@ -12,6 +12,7 @@ public class Character : MonoBehaviour
     [SerializeField] float rotateSpeed;
     [SerializeField] public Text NameText;
     [SerializeField] GameObject EffectPrefab;
+    [SerializeField] AudioClip AttackSE;
     protected bool isDead = false;//éÄÇÒÇ≈Ç¢ÇÈÇ«Ç§Ç©
     protected bool isself = false;//é©ï™é©êgÇ©Ç«Ç§Ç©
     protected bool isstart = false;//èÄîıäÆóπÇµÇƒÇ¢ÇÈÇ©Ç«Ç§Ç©
@@ -30,6 +31,8 @@ public class Character : MonoBehaviour
     protected CinemachineVirtualCamera virtualCamera;
     public Renderer objectRenderer;
     public Color newColor = Color.yellow;
+
+    AudioSource audioSource;
 
     public static Character instance;
 
@@ -70,6 +73,7 @@ public class Character : MonoBehaviour
 
     public virtual void Start()
     {
+        audioSource = GetComponent<AudioSource>();
         rb = GetComponent<Rigidbody>();
         joystick = GameObject.Find("Fixed Joystick").GetComponent<FixedJoystick>();
         animator = GetComponent<Animator>();
@@ -127,6 +131,7 @@ public class Character : MonoBehaviour
             if (IsAttack == true)
             {
                 animator.SetInteger("state", 2);
+                audioSource.PlayOneShot(AttackSE);
                 await roomHub.MoveAsync(this.transform.position, this.transform.rotation, CharacterState.Attack);
             }
         }

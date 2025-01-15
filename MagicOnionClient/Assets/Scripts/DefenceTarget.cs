@@ -102,6 +102,6 @@ public class DefenceTarget : MonoBehaviour
     //定期的に呼ぶメソッド(宝箱の位置同期)
     public void Chest()
     {
-        gameDirector.MoveChest(this.gameObject.transform.position,this.transform.rotation, this.gameObject.name);
+        gameDirector.MoveChest(this.gameObject.transform.position,this.gameObject.transform.rotation, this.gameObject.name);
     }
 }

@@ -25,9 +25,13 @@ public class TitleManager : BaseModel
     [SerializeField] float fadeDuration = 0.5f; // フェードの時間
     [SerializeField] float fadeDelay = 0.5f; // 次のフェードまでの遅延
 
+    [SerializeField]AudioClip startbuttonSE;
+    AudioSource audioSource;
+
 
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
         // ボタンのフェードインとフェードアウトを繰り返す
         buttonCanvasGroup.DOFade(0, fadeDuration) // フェードアウト
             .SetLoops(-1, LoopType.Yoyo) // ループ設定。Yoyoは行ったり来たり。
@@ -46,6 +50,7 @@ public class TitleManager : BaseModel
         if (!string.IsNullOrEmpty(InputFieldUserID.text))
         {
             UserModel.Instance.userId = int.Parse(InputFieldUserID.text);
+            audioSource.PlayOneShot(startbuttonSE);
             Initiate.Fade("MachingScene", Color.black, 1.0f);
             return;
         }
@@ -55,6 +60,7 @@ public class TitleManager : BaseModel
 
         if (isSuccess == true)
         {
+            audioSource.PlayOneShot(startbuttonSE);
             Initiate.Fade("MachingScene", Color.black, 1.0f);
         }
         else
@@ -72,6 +78,7 @@ public class TitleManager : BaseModel
         if (!string.IsNullOrEmpty(name))
         {
             await userModel.RegistUserAsync(name);
+            audioSource.PlayOneShot(startbuttonSE);
             Initiate.Fade("MachingScene", Color.black, 1.0f);
         }
         else
