@@ -5122,11 +5122,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1960762488}
+  m_Father: {fileID: 1011774278}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -3, y: -129}
+  m_AnchoredPosition: {x: 957, y: -669}
   m_SizeDelta: {x: 700, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &626299303
@@ -8647,6 +8647,8 @@ RectTransform:
   - {fileID: 985429713}
   - {fileID: 1735140944}
   - {fileID: 223042673}
+  - {fileID: 626299302}
+  - {fileID: 1333241603}
   m_Father: {fileID: 1960762488}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -11938,11 +11940,11 @@ RectTransform:
   m_Children:
   - {fileID: 1963604010}
   - {fileID: 2101921883}
-  m_Father: {fileID: 1960762488}
+  m_Father: {fileID: 1011774278}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 22, y: 44}
+  m_AnchoredPosition: {x: 982, y: -496}
   m_SizeDelta: {x: 800, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1333241604
@@ -18425,7 +18427,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1960762488}
   - component: {fileID: 1960762487}
-  - component: {fileID: 1960762486}
   - component: {fileID: 1960762485}
   m_Layer: 5
   m_Name: Canvas
@@ -18451,29 +18452,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &1960762486
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1960762484}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_UiScaleMode: 1
-  m_ReferencePixelsPerUnit: 100
-  m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 1920, y: 1080}
-  m_ScreenMatchMode: 1
-  m_MatchWidthOrHeight: 0
-  m_PhysicalUnit: 3
-  m_FallbackScreenDPI: 96
-  m_DefaultSpriteDPI: 96
-  m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
 --- !u!223 &1960762487
 Canvas:
   m_ObjectHideFlags: 0
@@ -18509,8 +18487,6 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 626299302}
-  - {fileID: 1333241603}
   - {fileID: 1011774278}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

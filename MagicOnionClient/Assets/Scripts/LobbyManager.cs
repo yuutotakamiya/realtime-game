@@ -66,13 +66,14 @@ public class LobbyManager : MonoBehaviour
 
         //MachingText.text = $"ID:{user.UserData.Id},名前:{user.UserData.Name}";
 
-        if (roomHubModel.ConnectionId == user.ConnectionId)
-        {
-            GameObject Character = Instantiate(characterPrefab[user.JoinOrder],
-           MachingStartPositon[user.JoinOrder].transform.position,
-           MachingStartPositon[user.JoinOrder].transform.rotation);
+        GameObject Character = Instantiate(characterPrefab[user.JoinOrder],
+          MachingStartPositon[user.JoinOrder].transform.position,
+          MachingStartPositon[user.JoinOrder].transform.rotation);
 
-        }
+        /*if (roomHubModel.ConnectionId == user.ConnectionId)
+        {
+           
+        }*/
     }
 
     //マッチングしたときに通知を出す処理

@@ -20,10 +20,10 @@ public class GameDirector : MonoBehaviour
     [SerializeField] RoomHubModel roomHubModel;//RoomHubModelのクラスの設定
     [SerializeField] HumanManager humanManager;//HumanManagerのクラスの設定
     [SerializeField] GameObject[] startposition;
-    [SerializeField] Text timerText;
+    [SerializeField] Text timerText;//タイマーを設定する
     [SerializeField] public float timeLimit;
-    [SerializeField] float currentTime;
-    [SerializeField] int countdownTime;
+    [SerializeField] float currentTime;//現在のタイム
+    [SerializeField] int countdownTime;//カウントダウンText
     [SerializeField] Text countdownText;
     [SerializeField] public GameObject GameFinish;
     [SerializeField] GameObject GameStartText;
@@ -49,7 +49,7 @@ public class GameDirector : MonoBehaviour
     Animator animator;
     Rigidbody rigidbody;
     Character character;
-   public Dictionary<Guid, GameObject> characterList = new Dictionary<Guid, GameObject>();
+    public Dictionary<Guid, GameObject> characterList = new Dictionary<Guid, GameObject>();
 
     public static GameDirector Instance;
 
@@ -116,7 +116,7 @@ public class GameDirector : MonoBehaviour
     {
         //キャラクターを生成
         GameObject characterObject = Instantiate(characterPrefab[user.JoinOrder],
-            startposition[user.JoinOrder].transform.position, 
+            startposition[user.JoinOrder].transform.position,
             startposition[user.JoinOrder].transform.rotation);
 
         //自分自身の接続IDが同じだったら
@@ -242,14 +242,11 @@ public class GameDirector : MonoBehaviour
         await roomHubModel.TimeAsync(time);
     }
 
-    //定期的に呼ぶメソッド
+    //定期的に呼ぶメソッド(ゲーム内制限時間)
     private async void OnTimer(JoinedUser user, float time)
     {
-        if (user.JoinOrder == 0)
-        {
-            currentTime = time;
-            await Ready();
-        }
+        currentTime = time;
+        await Ready();
     }
 
     //キルしたときのメソッド
@@ -259,7 +256,7 @@ public class GameDirector : MonoBehaviour
     }
 
     //キルしたときの通知
-    public void OnKill(Guid connectionId, int TotalKillNum,string userName)
+    public void OnKill(Guid connectionId, int TotalKillNum, string userName)
     {
         KillNum.text = TotalKillNum.ToString();
 
@@ -268,13 +265,13 @@ public class GameDirector : MonoBehaviour
     }
 
     //宝箱の位置同期
-    public async void MoveChest(Vector3 pos,Quaternion rotaition, string Namechest)
+    public async void MoveChest(Vector3 pos, Quaternion rotaition, string Namechest)
     {
         await roomHubModel.MoveChest(pos, rotaition, Namechest);
     }
 
     //宝箱の位置を定期的に通知するメソッド
-    public void OnMoveChest(Vector3 pos,Quaternion rotaition, string Namechest)
+    public void OnMoveChest(Vector3 pos, Quaternion rotaition, string Namechest)
     {
         GameObject chest = GameObject.Find(Namechest);
 
@@ -364,7 +361,6 @@ public class GameDirector : MonoBehaviour
     private IEnumerator Text()
     {
         yield return new WaitForSeconds(1.0f);
-
         countdownText.text = "";
     }
 
@@ -373,7 +369,6 @@ public class GameDirector : MonoBehaviour
     {
         while (currentTime > 0)
         {
-            //characterList[roomHubModel.ConnectionId].GetComponent<Character>().isstart = false;
             timerText.text = currentTime.ToString(); // UIにタイマーを表示
             currentTime -= 1f; // 1秒減らす
             yield return new WaitForSeconds(1f); // 1秒待機
@@ -392,7 +387,7 @@ public class GameDirector : MonoBehaviour
     //リザルトボタンが押された時の処理
     public void OnResult()
     {
-        Initiate.Fade("Result",Color.black,1);
+        Initiate.Fade("Result", Color.black, 1);
     }
 
     //デフォルト攻撃ボタンが押された時の処理
@@ -405,11 +400,11 @@ public class GameDirector : MonoBehaviour
     {
         characterList[roomHubModel.ConnectionId].GetComponent<Character>().LightningAttack();
     }
-   
+
     // Update is called once per frame
     void Update()
     {
-       
+
     }
 }
 
