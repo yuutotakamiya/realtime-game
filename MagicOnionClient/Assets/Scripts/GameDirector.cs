@@ -35,9 +35,10 @@ public class GameDirector : MonoBehaviour
     [SerializeField] GameObject AttackButton2;
     [SerializeField] public GameObject openButton;
     [SerializeField] public GameObject closeButton;
-    [SerializeField] public GameObject holdButton;
+    [SerializeField] DefenceTarget DefenceTarget;
+    /*[SerializeField] public GameObject holdButton;
     [SerializeField] public GameObject notholdButton;
-    [SerializeField] public GameObject placeButton;
+    [SerializeField] public GameObject placeButton;*/
 
     private CinemachineVirtualCamera virtualCamera; // Cinemachine Virtual Camera
 
@@ -137,8 +138,8 @@ public class GameDirector : MonoBehaviour
                 AttackButton2.SetActive(true);
                 KillNum.gameObject.SetActive(true);
                 Crrenttext.gameObject.SetActive(true);
-                holdButton.gameObject.SetActive(false);
-                notholdButton.gameObject.SetActive(false);
+                /*holdButton.gameObject.SetActive(false);
+                notholdButton.gameObject.SetActive(false);*/
             }
             else
             {
@@ -380,6 +381,7 @@ public class GameDirector : MonoBehaviour
             timerText.text = "0"; // 0•b‚É‚È‚Á‚½‚ç•\Ž¦
             GameFinish.SetActive(true);
             Result.SetActive(true);
+            DefenceTarget.followTarget = null;
             //Initiate.Fade("Result",Color.black,1);
         }
     }

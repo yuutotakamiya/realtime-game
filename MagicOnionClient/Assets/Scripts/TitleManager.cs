@@ -17,8 +17,6 @@ public class TitleManager : BaseModel
 
     [SerializeField] GameObject StartButton;//スタートボタン
 
-    [SerializeField] GameObject OKButton;//完了ボタン
-
     [SerializeField] Text ErrorText;//エラーテキスト
 
     [SerializeField] InputField InputFieldUserID;//Debug用ユーザーのID入力フィールド
@@ -52,6 +50,7 @@ public class TitleManager : BaseModel
             return;
         }
 
+        //ユーザーのデータを読み込む
         bool isSuccess = UserModel.Instance.LoadUserData();
 
         if (isSuccess == true)
@@ -62,7 +61,7 @@ public class TitleManager : BaseModel
         {
             inputField.gameObject.SetActive(true);
             StartButton.SetActive(false);
-            OKButton.SetActive(true);
+            //OKButton.SetActive(true);
         }
     }
 

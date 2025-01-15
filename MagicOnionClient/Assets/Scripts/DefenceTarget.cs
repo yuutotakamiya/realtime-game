@@ -12,7 +12,7 @@ public class DefenceTarget : MonoBehaviour
     public float move_speed;//宝箱をスピード
 
     protected Rigidbody rb;
-    protected Transform followTarget;
+    public Transform followTarget;
     protected MoveMode currentMoveMode;
 
     void Start()
