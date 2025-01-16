@@ -369,7 +369,7 @@ public class GameDirector : MonoBehaviour
     }
 
     // タイマーをカウントダウンするメソッド
-    public IEnumerator CountdownTimer()
+    public  IEnumerator CountdownTimer()
     {
         while (currentTime > 0)
         {
@@ -384,6 +384,8 @@ public class GameDirector : MonoBehaviour
             timerText.text = "0"; // 0秒になったら表示
             GameFinish.SetActive(true);
             Result.SetActive(true);
+            yield return new WaitForSeconds(3f); // 3秒待機
+            Initiate.Fade("Result", Color.black, 1);
             //DefenceTarget.followTarget = null;
             //Initiate.Fade("Result",Color.black,1);
         }
