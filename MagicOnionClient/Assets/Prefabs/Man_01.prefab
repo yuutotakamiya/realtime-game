@@ -1973,10 +1973,13 @@ MonoBehaviour:
   speed: 30
   rotateSpeed: 10
   NameText: {fileID: 4254325030733061381}
-  mainCamera: {fileID: 0}
+  EffectPrefab: {fileID: 0}
+  AttackSE: {fileID: 0}
   isInDropArea: 0
   AttckCoolDown: 0
   collider: {fileID: 0}
+  objectRenderer: {fileID: 0}
+  newColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!1 &5327206689088496978
 GameObject:
   m_ObjectHideFlags: 0
@@ -2801,6 +2804,7 @@ GameObject:
   - component: {fileID: 3771690854987354104}
   - component: {fileID: 9221727780343035368}
   - component: {fileID: 4254325030733061381}
+  - component: {fileID: 2586800002573997107}
   m_Layer: 5
   m_Name: NameText
   m_TagString: Untagged
@@ -2869,6 +2873,18 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 
+--- !u!114 &2586800002573997107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7430619599189141390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53dbd97dd553ace43ae61587ed04c6cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7500241714538050724
 GameObject:
   m_ObjectHideFlags: 0

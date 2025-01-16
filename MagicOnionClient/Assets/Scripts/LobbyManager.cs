@@ -67,6 +67,7 @@ public class LobbyManager : MonoBehaviour
           MachingStartPositon[user.JoinOrder].transform.position,
           MachingStartPositon[user.JoinOrder].transform.rotation);
 
+        Character.GetComponent<Character>().Name(user.UserData.Name);
     }
 
     //マッチングしたときに通知を出す処理
@@ -93,18 +94,10 @@ public class LobbyManager : MonoBehaviour
     //ユーザーが退室したときの処理
     private void OnExitUser(JoinedUser user)
     {
-        // 退室したユーザーのオブジェクトやUIを探して削除
-        foreach (Transform child in Content)
+        // 退室したユーザーのキャラクターオブジェクトを削除
+        if (user.ConnectionId==roomHubModel.ConnectionId)
         {
-            Text matchingText = child.GetComponent<Text>();
-            if (roomHubModel.ConnectionId == user.ConnectionId)
-            {
-                if (matchingText != null && matchingText.text.Contains(UserModel.Instance.userId.ToString())) ;
-                {
-                    Destroy(child.gameObject); // UI要素を削除
-                }
-            }
+            Destroy(this.gameObject);  // オブジェクトを破棄
         }
-
     }
 }

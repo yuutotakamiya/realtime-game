@@ -88,18 +88,32 @@ public class Character : MonoBehaviour
         {
             return;
         }
-
         //コライダーがnullなら何もしない
-        if (collider == null)
-        {
+       else if (collider == null)
+       {
             return;
-        }
-
+       }
         //joystickがnullなら何もしない
-        if (joystick == null)
-        {
+       else if (joystick == null)
+       {
             return;
-        }
+       }
+       else if (rb==null)
+       {
+            return;
+       }
+       else if (gameDirector == null)
+       {
+           return;
+       }
+       else if (defenceTarget==null)
+       {
+            return;
+       }
+       else if (objectRenderer==null)
+       {
+            return;
+       }
         collider.enabled = false;
         //rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
     }
