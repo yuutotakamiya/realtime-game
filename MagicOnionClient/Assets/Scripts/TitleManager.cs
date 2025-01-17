@@ -9,7 +9,7 @@ using static UnityEngine.Rendering.DebugUI;
 
 public class TitleManager : BaseModel
 {
-    [SerializeField] InputField inputField;//名前を入力するフィールド
+    [SerializeField] InputField inputFieldName;//名前を入力するフィールド
 
     [SerializeField] Text InputText;//名前入力されたテキスト
 
@@ -65,7 +65,7 @@ public class TitleManager : BaseModel
         }
         else
         {
-            inputField.gameObject.SetActive(true);
+            inputFieldName.gameObject.SetActive(true);
             StartButton.SetActive(false);
             //OKButton.SetActive(true);
         }
@@ -74,7 +74,7 @@ public class TitleManager : BaseModel
     //ユーザー登録API呼び出し
     public async void OnSubmitButton(string name)
     {
-        name = inputField.text;
+        name = inputFieldName.text;
         if (!string.IsNullOrEmpty(name))
         {
             await userModel.RegistUserAsync(name);

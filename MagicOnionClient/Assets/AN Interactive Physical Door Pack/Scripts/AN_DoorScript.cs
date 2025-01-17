@@ -76,7 +76,7 @@ public class AN_DoorScript : MonoBehaviour
         float distance = Vector3.Distance(transform.position, Camera.main.transform.position);
         if (distance < 3f) // 近づいているかどうかだけチェック
         { 
-            gameDirecter.openButton.gameObject.SetActive(true);
+            //gameDirecter.openButton.gameObject.SetActive(true);
             return true;
         }
         return false;

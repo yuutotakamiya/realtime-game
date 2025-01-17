@@ -16,26 +16,35 @@ using UnityEngine.UI;
 using static Shared.Interfaces.StreamingHubs.IRoomHubReceiver;
 public class GameDirector : MonoBehaviour
 {
+    //キャラクター関係
     [SerializeField] GameObject[] characterPrefab;//キャラクターのPrefab
+    [SerializeField] GameObject[] startposition;//最初のスタートポジション
+
+    //クラスの設定
     [SerializeField] RoomHubModel roomHubModel;//RoomHubModelのクラスの設定
     [SerializeField] HumanManager humanManager;//HumanManagerのクラスの設定
-    [SerializeField] GameObject[] startposition;
-    [SerializeField] Text timerText;//タイマーを設定する
-    [SerializeField] public float timeLimit;
+    [SerializeField] DefenceTarget DefenceTarget;
+
+    //タイム
+    [SerializeField] public float timeLimit;//制限時間を設定
     [SerializeField] float currentTime;//現在のタイム
-    [SerializeField] int countdownTime;//カウントダウンText
-    [SerializeField] Text countdownText;
-    [SerializeField] public GameObject GameFinish;
-    [SerializeField] GameObject GameStartText;
-    [SerializeField] GameObject Result;
+    [SerializeField] int countdownTime;//ゲームが始まる前のカウントダウン設定
+
+    //UI
+    [SerializeField] Text timerText;//タイマーText
+    [SerializeField] Text countdownText;//カウントダウンText
     [SerializeField] Text Crrenttext;//現在のキル数
     [SerializeField] Text KillNum;//キル数
     [SerializeField] Text KillLog;//キル通知
-    [SerializeField] GameObject AttackButton1;
-    [SerializeField] GameObject AttackButton2;
-    [SerializeField] public GameObject openButton;
+    [SerializeField] public GameObject GameFinish;//ゲーム終了Text
+    [SerializeField] GameObject GameStartText;//ゲームスタートText
+    [SerializeField] GameObject Result;//リザルト画面に行くためのボタン
+    [SerializeField] GameObject AttackButton1;//デフォルトの攻撃ボタン
+    [SerializeField] GameObject AttackButton2;//
+   
+
+    /*[SerializeField] public GameObject openButton;
     [SerializeField] public GameObject closeButton;
-    [SerializeField] DefenceTarget DefenceTarget;
     /*[SerializeField] public GameObject holdButton;
     [SerializeField] public GameObject notholdButton;
     [SerializeField] public GameObject placeButton;*/
@@ -62,6 +71,9 @@ public class GameDirector : MonoBehaviour
     }
     public async void Start()
     {
+        //接続
+        await roomHubModel.ConnectionAsync();
+
         //ユーザーが入室時にOnJoinedUserメソッドを実行するよう、モデルに登録しておく
         roomHubModel.OnJoinedUser += this.OnJoinedUser;
 
@@ -83,17 +95,10 @@ public class GameDirector : MonoBehaviour
         //宝箱が移動したときにOnMoveChestメソッドを実行するよう、モデルに登録
         roomHubModel.OnChest += this.OnMoveChest;
 
-        //接続
-        await roomHubModel.ConnectionAsync();
-
-        //position = startposition.transform.position;
-
         currentTime = timeLimit; // 初期化: 残り時間を設定
 
         animator = GetComponent<Animator>();
-
         rigidbody = GetComponent<Rigidbody>();
-
         virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
 
         KillNum.text = "0";
@@ -138,8 +143,7 @@ public class GameDirector : MonoBehaviour
                 AttackButton2.SetActive(true);
                 KillNum.gameObject.SetActive(true);
                 Crrenttext.gameObject.SetActive(true);
-                /*holdButton.gameObject.SetActive(false);
-                notholdButton.gameObject.SetActive(false);*/
+
             }
             else
             {
@@ -149,15 +153,15 @@ public class GameDirector : MonoBehaviour
                 Crrenttext.gameObject.SetActive(false);
 
             }
+
             Transform characterTransform = characterObject.transform;
-            virtualCamera.Follow = characterTransform;
-            virtualCamera.LookAt = characterTransform;
+            virtualCamera.Follow = characterTransform;//キャラクターにカメラをフォロー
+            virtualCamera.LookAt = characterTransform;//キャラクターにカメラをロック
         }
 
         if (roomHubModel.ConnectionId == user.ConnectionId)
         {
             characterObject.GetComponent<Character>().Isself = true;
-            //Debug.Log(characterObject.GetComponent<Character>().Isself);
         }
 
         characterObject.transform.position = startposition[user.JoinOrder].transform.position;
@@ -383,11 +387,8 @@ public class GameDirector : MonoBehaviour
             characterList[roomHubModel.ConnectionId].GetComponent<Character>().Isstart = false;
             timerText.text = "0"; // 0秒になったら表示
             GameFinish.SetActive(true);
-            Result.SetActive(true);
             yield return new WaitForSeconds(3f); // 3秒待機
             Initiate.Fade("Result", Color.black, 1);
-            //DefenceTarget.followTarget = null;
-            //Initiate.Fade("Result",Color.black,1);
         }
     }
 
