@@ -1844,6 +1844,7 @@ GameObject:
   - component: {fileID: 743144681062556256}
   - component: {fileID: 4615265845218670641}
   - component: {fileID: 3846623687423895002}
+  - component: {fileID: -6400946579406279287}
   - component: {fileID: 8743825522492322106}
   m_Layer: 0
   m_Name: Man_01(Copy)
@@ -1930,7 +1931,7 @@ CapsuleCollider:
   m_Height: 1.7205982
   m_Direction: 1
   m_Center: {x: 0, y: 0.98645544, z: -0.03230861}
---- !u!114 &8743825522492322106
+--- !u!114 &-6400946579406279287
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1939,12 +1940,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 5155930874796231646}
   m_Enabled: 1
   m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e247bdf5b646be48ac0541e822f47fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  NameText: {fileID: 4254325030733061381}
+--- !u!114 &8743825522492322106
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5155930874796231646}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 24dfcc5b27a24854bbe0b3bbedc4527c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 0
   rotateSpeed: 0
-  NameText: {fileID: 4254325030733061381}
+  NameText: {fileID: 0}
   EffectPrefab: {fileID: 0}
   AttackSE: {fileID: 0}
   isInDropArea: 0
@@ -2799,8 +2813,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 2.88}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: 0, y: 2.4}
+  m_SizeDelta: {x: 100, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9221727780343035368
 CanvasRenderer:
@@ -2831,8 +2845,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 14
+    m_Font: {fileID: 12800000, guid: e3265ab4bf004d28a9537516768c1c75, type: 3}
+    m_FontSize: 10
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0

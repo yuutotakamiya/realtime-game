@@ -44,9 +44,9 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5778406573754477521}
   serializedVersion: 4
-  m_Mass: 80
-  m_Drag: 80
-  m_AngularDrag: 100000
+  m_Mass: 40
+  m_Drag: 40
+  m_AngularDrag: 1000
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -61,7 +61,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 84
+  m_Constraints: 116
   m_CollisionDetection: 1
 --- !u!65 &7819644586589999732
 BoxCollider:
@@ -82,8 +82,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.6779896, y: 0.7899092, z: 1}
-  m_Center: {x: 0.27100524, y: 0.47495452, z: 1.97185e-15}
+  m_Size: {x: 1.6779896, y: 0.7899092, z: 1.8361095}
+  m_Center: {x: 0.27100524, y: 0.47495452, z: 0.0082881935}
 --- !u!114 &3903227786985743023
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -97,7 +97,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameDirector: {fileID: 0}
-  move_speed: 80
+  move_speed: 170
   followTarget: {fileID: 0}
 --- !u!135 &8576423110436555451
 SphereCollider:

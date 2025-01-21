@@ -1909,6 +1909,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3973721326379063914}
   - component: {fileID: 7045128084777467920}
+  - component: {fileID: 8374071295579961612}
   - component: {fileID: 4401530128473128285}
   m_Layer: 0
   m_Name: Woman(Copy)
@@ -1966,7 +1967,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &4401530128473128285
+--- !u!114 &8374071295579961612
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1975,12 +1976,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 4354610108920463568}
   m_Enabled: 1
   m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e247bdf5b646be48ac0541e822f47fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  NameText: {fileID: 4159514775785252161}
+--- !u!114 &4401530128473128285
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4354610108920463568}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 24dfcc5b27a24854bbe0b3bbedc4527c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 0
   rotateSpeed: 0
-  NameText: {fileID: 4159514775785252161}
+  NameText: {fileID: 0}
   EffectPrefab: {fileID: 0}
   AttackSE: {fileID: 0}
   isInDropArea: 0
@@ -2055,8 +2069,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.68, y: 7.9}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: 0, y: 6.5}
+  m_SizeDelta: {x: 100, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2248783401152780902
 CanvasRenderer:
@@ -2088,10 +2102,10 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: e3265ab4bf004d28a9537516768c1c75, type: 3}
-    m_FontSize: 14
+    m_FontSize: 10
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 10
+    m_MinSize: 0
     m_MaxSize: 40
     m_Alignment: 4
     m_AlignByGeometry: 0

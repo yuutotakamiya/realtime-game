@@ -114,7 +114,8 @@ public class LobbyManager : MonoBehaviour
         if (roomHubModel.ConnectionId == user.ConnectionId)
         {
             //Ž©•ª‚Ì–¼‘O‚ð•\Ž¦
-            Character.GetComponent<Character>().Name(user.UserData.Name);
+            //Character.GetComponent<Character>().Name(user.UserData.Name);
+            Character.GetComponent<NameManager>().Name(user.UserData.Name);
         }
 
         Character.transform.position = MachingStartPositon[user.JoinOrder].transform.position;

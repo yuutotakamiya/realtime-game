@@ -1053,58 +1053,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3903227786985743023, guid: d2b67af396bfa6940a00740de263da1e,
         type: 3}
-      propertyPath: move_speed
-      value: 160
-      objectReference: {fileID: 0}
-    - target: {fileID: 3903227786985743023, guid: d2b67af396bfa6940a00740de263da1e,
-        type: 3}
       propertyPath: gameDirector
       value: 
       objectReference: {fileID: 1571008282}
-    - target: {fileID: 4329400584582618855, guid: d2b67af396bfa6940a00740de263da1e,
-        type: 3}
-      propertyPath: m_Drag
-      value: 40
-      objectReference: {fileID: 0}
-    - target: {fileID: 4329400584582618855, guid: d2b67af396bfa6940a00740de263da1e,
-        type: 3}
-      propertyPath: m_Mass
-      value: 40
-      objectReference: {fileID: 0}
-    - target: {fileID: 4329400584582618855, guid: d2b67af396bfa6940a00740de263da1e,
-        type: 3}
-      propertyPath: m_AngularDrag
-      value: 1000
-      objectReference: {fileID: 0}
-    - target: {fileID: 4329400584582618855, guid: d2b67af396bfa6940a00740de263da1e,
-        type: 3}
-      propertyPath: m_Constraints
-      value: 116
-      objectReference: {fileID: 0}
-    - target: {fileID: 4329400584582618855, guid: d2b67af396bfa6940a00740de263da1e,
-        type: 3}
-      propertyPath: m_CollisionDetection
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5778406573754477521, guid: d2b67af396bfa6940a00740de263da1e,
         type: 3}
       propertyPath: m_Name
       value: Chest Parent 002
-      objectReference: {fileID: 0}
-    - target: {fileID: 7819644586589999732, guid: d2b67af396bfa6940a00740de263da1e,
-        type: 3}
-      propertyPath: m_Size.z
-      value: 1.8361095
-      objectReference: {fileID: 0}
-    - target: {fileID: 7819644586589999732, guid: d2b67af396bfa6940a00740de263da1e,
-        type: 3}
-      propertyPath: m_Center.x
-      value: 0.27100524
-      objectReference: {fileID: 0}
-    - target: {fileID: 7819644586589999732, guid: d2b67af396bfa6940a00740de263da1e,
-        type: 3}
-      propertyPath: m_Center.z
-      value: 0.0082881935
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -33383,6 +33338,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3903227786985743023, guid: d2b67af396bfa6940a00740de263da1e,
+        type: 3}
+      propertyPath: gameDirector
+      value: 
+      objectReference: {fileID: 1571008282}
     - target: {fileID: 5778406573754477521, guid: d2b67af396bfa6940a00740de263da1e,
         type: 3}
       propertyPath: m_Name

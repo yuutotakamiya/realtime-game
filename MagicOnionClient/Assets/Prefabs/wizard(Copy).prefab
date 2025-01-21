@@ -219,6 +219,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5871655484369404760}
   - component: {fileID: 7916341576930185788}
+  - component: {fileID: 3182232147783451141}
   - component: {fileID: -7218306156051135678}
   m_Layer: 0
   m_Name: wizard(Copy)
@@ -270,6 +271,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &3182232147783451141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 750789406789507350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e247bdf5b646be48ac0541e822f47fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  NameText: {fileID: 1736252235966234884}
 --- !u!114 &-7218306156051135678
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -284,7 +298,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 0
   rotateSpeed: 0
-  NameText: {fileID: 1736252235966234884}
+  NameText: {fileID: 0}
   EffectPrefab: {fileID: 0}
   AttackSE: {fileID: 0}
   isInDropArea: 0
@@ -31705,10 +31719,10 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: e3265ab4bf004d28a9537516768c1c75, type: 3}
-    m_FontSize: 14
+    m_FontSize: 10
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 10
+    m_MinSize: 0
     m_MaxSize: 40
     m_Alignment: 4
     m_AlignByGeometry: 0
