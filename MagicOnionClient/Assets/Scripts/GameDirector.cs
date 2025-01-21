@@ -25,7 +25,7 @@ public class GameDirector : MonoBehaviour
     [SerializeField] HumanManager humanManager;//HumanManagerのクラスの設定
     [SerializeField] DefenceTarget DefenceTarget;
 
-    //タイム
+    //カウントダウン
     [SerializeField] public float timeLimit;//制限時間を設定
     [SerializeField] float currentTime;//現在のタイム
     [SerializeField] int countdownTime;//ゲームが始まる前のカウントダウン設定
@@ -59,7 +59,7 @@ public class GameDirector : MonoBehaviour
     Animator animator;
     Rigidbody rigidbody;
     Character character;
-    public Dictionary<Guid, GameObject> characterList = new Dictionary<Guid, GameObject>();
+    Dictionary<Guid, GameObject> characterList = new Dictionary<Guid, GameObject>();
 
     public static GameDirector Instance;
 
@@ -129,10 +129,9 @@ public class GameDirector : MonoBehaviour
         if (roomHubModel.ConnectionId == user.ConnectionId)
         {
             characterObject.GetComponent<Character>().Name(user.UserData.Name);
-            //Debug.Log(user.UserData.Name);
         }
 
-        // 生成されたキャラクターをCinemachineのFollowとLook Atターゲットに設定
+       //roomHubModelの接続IDと自分自身の接続IDが同じだったら
         if (roomHubModel.ConnectionId == user.ConnectionId)
         {
             //JoinOrderが0だったら
@@ -154,6 +153,7 @@ public class GameDirector : MonoBehaviour
 
             }
 
+            // 生成されたキャラクターをCinemachineのFollowとLook Atターゲットに設定
             Transform characterTransform = characterObject.transform;
             virtualCamera.Follow = characterTransform;//キャラクターにカメラをフォロー
             virtualCamera.LookAt = characterTransform;//キャラクターにカメラをロック

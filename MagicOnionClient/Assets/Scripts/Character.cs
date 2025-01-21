@@ -1,6 +1,7 @@
 using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
@@ -89,28 +90,28 @@ public class Character : MonoBehaviour
             return;
         }
         //コライダーがnullなら何もしない
-       else if (collider == null)
+       if (collider == null)
        {
             return;
        }
         //joystickがnullなら何もしない
-       else if (joystick == null)
+       if (joystick == null)
        {
             return;
        }
-       else if (rb==null)
+       if (rb==null)
        {
             return;
        }
-       else if (gameDirector == null)
+       if (gameDirector == null)
        {
            return;
        }
-       else if (defenceTarget==null)
+       if (defenceTarget==null)
        {
             return;
        }
-       else if (objectRenderer==null)
+       if (objectRenderer==null)
        {
             return;
        }
@@ -139,7 +140,6 @@ public class Character : MonoBehaviour
             {
                 // キャラクターが止まっている場合
                 animator.SetInteger("state", 0); //Idleアニメーション
-                rb.velocity = Vector3.zero; 
             }
 
             if (IsAttack == true)
@@ -222,21 +222,6 @@ public class Character : MonoBehaviour
             StartCoroutine(AttackAnimation());
         }
     }
-
-
-    //ドアボタンを押したときの処理
-    /*private void OnTriggerEnter(Collider other)
-    {
-        // プレイヤーが「Player」レイヤーのオブジェクトであれば、openButtonを表示
-        if (other.gameObject.layer == LayerMask.NameToLayer("killer"))
-        {
-            gameDirector.openButton.gameObject.SetActive(true);
-        }
-        else
-        {
-            gameDirector.openButton.gameObject.SetActive(false);
-        }
-    }*/
 }
 
 
