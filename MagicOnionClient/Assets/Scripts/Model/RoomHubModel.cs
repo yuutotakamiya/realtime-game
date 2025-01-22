@@ -141,7 +141,7 @@ public class RoomHubModel : BaseModel, IRoomHubReceiver
     //鬼がだれをキルしたかを通知
     public void OnKill(Guid connectionId, int totalKillNum,string userName)
     {
-        OnKillNum(connectionId, totalKillNum, userName);
+        OnKillNum(connectionId, totalKillNum,userName);
     }
 
     //マッチングの同期

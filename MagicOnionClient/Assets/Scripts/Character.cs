@@ -87,7 +87,6 @@ public class Character : MonoBehaviour
         animator = GetComponent<Animator>();
         roomHub = GameObject.Find("RoomModel").GetComponent<RoomHubModel>();
         gameDirector = GameObject.Find("GameDirector").GetComponent<GameDirector>();
-        //doorScript = GameObject.Find("Door").GetComponent<AN_DoorScript>();
         defenceTarget = GameObject.Find("DefenceTarget").GetComponent<DefenceTarget>();
         objectRenderer = GetComponent<Renderer>();
 
@@ -96,34 +95,37 @@ public class Character : MonoBehaviour
         {
             return;
         }
-        //コライダーがnullなら何もしない
-       if (collider == null)
-       {
-            return;
-       }
         //joystickがnullなら何もしない
-       if (joystick == null)
-       {
+        if (joystick == null)
+        {
             return;
-       }
-       if (rb==null)
-       {
+        }
+        //コライダーがnullなら何もしない
+        if (collider == null)
+        {
             return;
-       }
-       if (gameDirector == null)
-       {
+        }
+        //rigidbodyがnullだったら何もしない
+        if (rb==null)
+        {
+            return;
+        }
+        //gameDirecterがnullだったら何もしない
+        if (gameDirector == null)
+        {
            return;
-       }
-       if (defenceTarget==null)
-       {
+        }
+        //defenceTargetがnullだったら何もしない
+        if (defenceTarget==null)
+        {
             return;
-       }
-       if (objectRenderer==null)
-       {
+        }
+        //Rendererがnullだったら何もしない
+        if (objectRenderer==null)
+        {
             return;
-       }
+        }
         collider.enabled = false;
-        //rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
     }
 
     public virtual async void Update()
@@ -155,20 +157,23 @@ public class Character : MonoBehaviour
                 animator.SetInteger("state", 0); //Idleアニメーション
             }
 
+            //攻撃中だったら
             if (IsAttack == true)
             {
-                animator.SetInteger("state", 2);
-                audioSource.PlayOneShot(AttackSE);
-                await roomHub.MoveAsync(this.transform.position, this.transform.rotation, CharacterState.Attack);
+                animator.SetInteger("state", 2);//攻撃アニメーション
+                audioSource.PlayOneShot(AttackSE);//攻撃SE
+                await roomHub.MoveAsync(this.transform.position, this.transform.rotation, CharacterState.Attack);//攻撃アニメーションの同期
             }
         }
     }
 
+    //宝箱を所持している
     public void PickUpTreasure()
     {
         hasTreasure = true; // 宝箱を拾った状態に設定
     }
 
+    //宝箱を置いた状態
     public void DropTreasure()
     {
         hasTreasure = false; // 宝箱を置いた状態に設定

@@ -22,7 +22,6 @@ public class GameDirector : MonoBehaviour
 
     //クラスの設定
     [SerializeField] RoomHubModel roomHubModel;//RoomHubModelのクラスの設定
-    [SerializeField] HumanManager humanManager;//HumanManagerのクラスの設定
     [SerializeField] DefenceTarget DefenceTarget;
 
     //カウントダウン
@@ -36,6 +35,7 @@ public class GameDirector : MonoBehaviour
     [SerializeField] Text Crrenttext;//現在のキル数
     [SerializeField] Text KillNum;//キル数
     [SerializeField] Text KillLog;//キル通知
+    [SerializeField] Image skullIamge;
     [SerializeField] public GameObject GameFinish;//ゲーム終了Text
     [SerializeField] GameObject GameStartText;//ゲームスタートText
     [SerializeField] GameObject Result;//リザルト画面に行くためのボタン
@@ -141,8 +141,8 @@ public class GameDirector : MonoBehaviour
                 AttackButton1.SetActive(true);
                 AttackButton2.SetActive(true);
                 KillNum.gameObject.SetActive(true);
-                Crrenttext.gameObject.SetActive(true);
-
+                //Crrenttext.gameObject.SetActive(true);
+                skullIamge.gameObject.SetActive(true);
             }
             else
             {
@@ -150,7 +150,7 @@ public class GameDirector : MonoBehaviour
                 AttackButton2.SetActive(false);
                 KillNum.gameObject.SetActive(false);
                 Crrenttext.gameObject.SetActive(false);
-
+                skullIamge.gameObject .SetActive(false);
             }
 
             // 生成されたキャラクターをCinemachineのFollowとLook Atターゲットに設定
@@ -261,7 +261,7 @@ public class GameDirector : MonoBehaviour
     }
 
     //キルしたときの通知
-    public void OnKill(Guid connectionId, int TotalKillNum, string userName)
+    public void OnKill(Guid connectionId, int TotalKillNum,string userName)
     {
         KillNum.text = TotalKillNum.ToString();
 

@@ -63,63 +63,24 @@ public class LobbyManager : MonoBehaviour
         await roomHubModel.JoinLobbyAsync(UserModel.Instance.userId);
     }
 
-    // 空いているJoinOrderを探す関数
-    private int FindAvailableJoinOrder()
-    {
-        // JoinOrder が空いているかを確認するために、現在の `characterList` を確認
-        for (int i = 0; i < maxPlayers; i++)
-        {
-            bool isJoinOrderUsed = false;
-
-            // `characterList` 内の全キャラクターを確認し、既に使用中の JoinOrder があるかチェック
-            foreach (var character in characterList.Values)
-            {
-                // キャラクターの名前が "Character_{JoinOrder}" になっているため、JoinOrder を解析
-                if (character.name == $"Character_{i}")
-                {
-                    isJoinOrderUsed = true;
-                    break; // 使用中なら次のJoinOrderを確認
-                }
-            }
-
-            // 使用されていない JoinOrder を発見
-            if (!isJoinOrderUsed)
-            {
-                return i; // 空いている番号を返す
-            }
-        }
-        return -1;  // もし空きがない場合
-    }
-
 
     //ユーザーが入室した時の処理
     private void OnJoinedUser(JoinedUser user)
     {
-
-        int availableJoinOrder = FindAvailableJoinOrder();
-        if (availableJoinOrder == -1)
-        {
-            Debug.LogWarning("No available JoinOrder found!");
-            return;
-        }
-
         //キャラクターの生成
         GameObject Character = Instantiate(characterPrefab[user.JoinOrder],
           MachingStartPositon[user.JoinOrder].transform.position,
           MachingStartPositon[user.JoinOrder].transform.rotation);
 
-        // キャラクターのオブジェクト名を "Character_JoinOrder" に設定
-        Character.name = $"Character_{availableJoinOrder}";
-
         if (roomHubModel.ConnectionId == user.ConnectionId)
         {
             //自分の名前を表示
-            //Character.GetComponent<Character>().Name(user.UserData.Name);
             Character.GetComponent<NameManager>().Name(user.UserData.Name);
         }
 
         Character.transform.position = MachingStartPositon[user.JoinOrder].transform.position;
         characterList[user.ConnectionId] = Character;//フィールドで保持
+
     }
 
     //マッチングしたときに通知を出す処理

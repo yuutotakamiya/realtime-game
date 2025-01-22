@@ -3,7 +3,6 @@ using Shared.Interfaces.StreamingHubs;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static Shared.Interfaces.StreamingHubs.IRoomHubReceiver;
 
 public class HumanManager : Character
 {
@@ -18,6 +17,7 @@ public class HumanManager : Character
         base.Update();
     }
 
+    //鬼の攻撃アニメーションが当たったときの処理
     public void OnTriggerEnter(Collider other)
     {
         if (Isself == true && animator.GetInteger("state") != 3 && !IsDead)
@@ -55,20 +55,18 @@ public class HumanManager : Character
         IsDead = false;
     }
 
-
+    //死亡アニメーション関数
     public void OnAnimationDestroy()
     {
-        //Debug.Log("KillAsync called");
         if (IsDead == true)
         {
             gameDirector.KillAsync();
         }
     }
 
-
+    //逃げる側が死んだ時にリスポーンする関数
     public void RespawnPlayer()
     {
-
         GameObject respawn;
 
         int randomIndex = Random.Range(0, 3);

@@ -151,18 +151,23 @@ namespace StreamingHubs
             roomData.KillNum++;
             var roomDataList = roomStorage.AllValues.ToArray<RoomData>();
             int totalKillNum = 0;
-            foreach( var rData in roomDataList)
+
+            // 鬼の名前を取得
+            string killerName = roomData.JoinedUser.UserData.Name;
+
+            foreach ( var rData in roomDataList)
             {
                 totalKillNum += rData.KillNum;
             }
            
             //ルーム内の全員に誰をキルしたかを通知
-            this.Broadcast(room).OnKill(this.ConnectionId, totalKillNum, roomData.JoinedUser.UserData.Name);
+            this.Broadcast(room).OnKill(this.ConnectionId, totalKillNum,roomData.JoinedUser.UserData.Name);
         }
 
         //自動マッチング処理
         public async Task<JoinedUser[]> JoinLobbyAsync(int userId)
         {
+            
             JoinedUser[] joinedUserList = await JoinAsync("Lobby",userId);
             //排他制御
             lock (joinedUserList) 
