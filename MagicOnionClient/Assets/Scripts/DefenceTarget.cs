@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 public enum MoveMode
 {
     Idle = 1,
@@ -9,6 +10,7 @@ public enum MoveMode
 public class DefenceTarget : MonoBehaviour
 {
     [SerializeField] GameDirector gameDirector;
+    [SerializeField] Character character;
     public float move_speed;//宝箱をスピード
 
     protected Rigidbody rb;
@@ -79,8 +81,16 @@ public class DefenceTarget : MonoBehaviour
             InvokeRepeating("Chest",0.1f,0.1f);
             if (currentMoveMode == MoveMode.Follow)
             {
+                character.PickUpTreasure(); // 宝箱を持っていることをプレイヤーに伝える
                 currentMoveMode = MoveMode.Idle;
             }
+
+            /*if (character != null && !character.HasTreasure)
+            {
+                followTarget = other.transform;
+                currentMoveMode = MoveMode.Follow;
+                
+            }*/
         }
     }
 
@@ -94,7 +104,15 @@ public class DefenceTarget : MonoBehaviour
             if (currentMoveMode == MoveMode.Idle)
             {
                 currentMoveMode = MoveMode.Follow;
+                character.DropTreasure(); // 宝箱を離れたら、持っていない状態に戻す
             }
+
+            /*followTarget = null;
+            currentMoveMode = MoveMode.Idle;
+            if (character != null)
+            {
+                
+            }*/
         }
         
     }

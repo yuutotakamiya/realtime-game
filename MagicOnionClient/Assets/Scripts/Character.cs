@@ -20,14 +20,14 @@ public class Character : MonoBehaviour
     protected bool isAttack = false;//攻撃中かどうか
     public bool isInDropArea=false;//宝箱の置くエリアにいるかどうか
     public float AttckCoolDown;//攻撃のクールダウン
+    private bool hasTreasure = false;//宝箱を持っているかどうかのフラグ
 
     protected FixedJoystick joystick;
     protected Rigidbody rb;
     protected Animator animator;
     protected RoomHubModel roomHub;
     protected GameDirector gameDirector;
-    [SerializeField] Collider collider;
-    //protected AN_DoorScript doorScript; // ドアスクリプトの参照
+    [SerializeField] Collider collider;//攻撃の当たり判定
     protected DefenceTarget defenceTarget;
     protected CinemachineVirtualCamera virtualCamera;
     public Renderer objectRenderer;
@@ -70,6 +70,13 @@ public class Character : MonoBehaviour
     {
         get { return isInDropArea; }
         set { isInDropArea = value; }
+    }
+
+    //宝箱を既に持っているかどうかのフラグのプロパティ
+    public bool HasTreasure
+    {
+        get { return hasTreasure; }
+        set { hasTreasure = value; }
     }
 
     public virtual void Start()
@@ -127,8 +134,14 @@ public class Character : MonoBehaviour
             Camera.main.transform.right * joystick.Horizontal) * speed;
             move.y = rb.velocity.y;
             rb.velocity = move;
+            move.y = 0;
+
             //進む方向に滑らかに向く。
             transform.forward = Vector3.Slerp(transform.forward, move, Time.deltaTime * rotateSpeed);
+
+            rb.AddForce(Physics.gravity * 3f, ForceMode.Acceleration); // 3倍の重力を適用
+            //坂を上る
+            //rb. velocity = Vector3.up * 2f + transform.forward * speed;
 
             // アニメーションの状態を制御する
             if (rb.velocity.magnitude > 0.01)
@@ -149,6 +162,16 @@ public class Character : MonoBehaviour
                 await roomHub.MoveAsync(this.transform.position, this.transform.rotation, CharacterState.Attack);
             }
         }
+    }
+
+    public void PickUpTreasure()
+    {
+        hasTreasure = true; // 宝箱を拾った状態に設定
+    }
+
+    public void DropTreasure()
+    {
+        hasTreasure = false; // 宝箱を置いた状態に設定
     }
 
     //アニメーションイベントを使って特定の場所だけColliderをtrueにする
