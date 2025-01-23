@@ -9,16 +9,14 @@ using Cysharp.Threading.Tasks;
 
 public class LobbyManager : MonoBehaviour
 {
-    [SerializeField] GameObject MachingPrefab;
-    [SerializeField] RoomHubModel roomHubModel;
-    [SerializeField] InputField userIdText;
-    [SerializeField] Transform Content;
-    [SerializeField] GameObject MachingText;
-    [SerializeField] GameObject MachingIcon;
-    [SerializeField] GameObject[] MachingStartPositon;
-    [SerializeField] GameObject[] characterPrefab;
+    //[SerializeField] GameObject MachingPrefab;//
+    [SerializeField] RoomHubModel roomHubModel;//roomHubModelクラスの設定
+    [SerializeField] GameObject MachingText;//マッチングText;
+    [SerializeField] GameObject MachingIcon;//マッチング中のIcon
+    [SerializeField] GameObject[] MachingStartPositon;//マッチングスタートポジション
+    [SerializeField] GameObject[] characterPrefab;//キャラクターのPrefab
 
-    static string roomName;
+    static string roomName;//ルーム名を入れるための変数
 
     Dictionary<Guid, GameObject> characterList = new Dictionary<Guid, GameObject>();
 
@@ -72,6 +70,7 @@ public class LobbyManager : MonoBehaviour
           MachingStartPositon[user.JoinOrder].transform.position,
           MachingStartPositon[user.JoinOrder].transform.rotation);
 
+        //自分の接続IDとroomHubModelの接続IDが同じなら
         if (roomHubModel.ConnectionId == user.ConnectionId)
         {
             //自分の名前を表示

@@ -36,9 +36,33 @@ namespace StreamingHubs
                 var joinedUser = new JoinedUser() { ConnectionId = this.ConnectionId, UserData = user };
                 var roomData = new RoomData() { JoinedUser = joinedUser };
                 roomStorage.Set(this.ConnectionId, roomData);
+                bool isOrderUsed = false;
 
                 //ルーム内の情報を取得
                 joinedUser.JoinOrder = roomStorage.AllValues.Count() - 1;
+
+
+                for (int i = 0; i < 4; ++i)
+                {
+                    // 既に使われている JoinOrder があるかチェック
+                    foreach (var roomItem in roomStorage.AllValues)
+                    {
+                        if (roomItem.JoinedUser.JoinOrder == i)
+                        {
+                            isOrderUsed = true;
+                            break;
+                        }
+                    }
+
+                    if (!isOrderUsed)
+                    {
+                        joinedUser.JoinOrder = i; // 空いている JoinOrder を割り当て
+                        break;
+                    }
+                }
+
+
+
 
                 /*ルーム参加者全員に(自分を含む)、ユーザーの入室通知を送信
                 this.Broadcast(room).OnJoin(joinedUser);*/
@@ -77,7 +101,7 @@ namespace StreamingHubs
         }
 
         //ユーザーの移動、回転、アニメーション
-        public async Task MoveAsync(Vector3 pos, Quaternion rotaition,CharacterState characterState)
+        public async Task MoveAsync(Vector3 pos, Quaternion rotaition, CharacterState characterState)
         {
             //RoomDataの情報を取得
             var roomStorage = this.room.GetInMemoryStorage<RoomData>();
@@ -90,7 +114,7 @@ namespace StreamingHubs
             roomStorage.Set(this.ConnectionId, roomData);  // 更新されたデータを保存
 
             //ルーム参加者全員に(自分以外)、ユーザーの位置、回転、アニメーションを通知
-            this.BroadcastExceptSelf(room).OnMove(this.ConnectionId, pos, rotaition,characterState);
+            this.BroadcastExceptSelf(room).OnMove(this.ConnectionId, pos, rotaition, characterState);
         }
 
         //ユーザーの準備
@@ -100,7 +124,7 @@ namespace StreamingHubs
             var roomStorage = this.room.GetInMemoryStorage<RoomData>();
 
             //排他制御(全員で何か共有しているとき)
-            lock (roomStorage) 
+            lock (roomStorage)
             {
                 var roomData = roomStorage.Get(this.ConnectionId);
                 roomData.IsReady = true;
@@ -128,7 +152,7 @@ namespace StreamingHubs
                     this.Broadcast(room).OnReady(this.ConnectionId, isReady);
                 }
             }
-            
+
         }
 
         //ゲームの制限時間処理
@@ -155,22 +179,22 @@ namespace StreamingHubs
             // 鬼の名前を取得
             string killerName = roomData.JoinedUser.UserData.Name;
 
-            foreach ( var rData in roomDataList)
+            foreach (var rData in roomDataList)
             {
                 totalKillNum += rData.KillNum;
             }
-           
+
             //ルーム内の全員に誰をキルしたかを通知
-            this.Broadcast(room).OnKill(this.ConnectionId, totalKillNum,roomData.JoinedUser.UserData.Name);
+            this.Broadcast(room).OnKill(this.ConnectionId, totalKillNum, roomData.JoinedUser.UserData.Name);
         }
 
         //自動マッチング処理
         public async Task<JoinedUser[]> JoinLobbyAsync(int userId)
         {
-            
-            JoinedUser[] joinedUserList = await JoinAsync("Lobby",userId);
+
+            JoinedUser[] joinedUserList = await JoinAsync("Lobby", userId);
             //排他制御
-            lock (joinedUserList) 
+            lock (joinedUserList)
             {
                 //最低4人集まっていたら
                 if (joinedUserList.Length >= 4)
@@ -186,7 +210,7 @@ namespace StreamingHubs
 
 
         //宝箱の位置同期
-        public async Task MoveChest(Vector3 pos , Quaternion rotaition, string Namechest)
+        public async Task MoveChest(Vector3 pos, Quaternion rotaition, string Namechest)
         {
             //RoomDataの情報を取得
             var roomStorage = this.room.GetInMemoryStorage<RoomData>();
