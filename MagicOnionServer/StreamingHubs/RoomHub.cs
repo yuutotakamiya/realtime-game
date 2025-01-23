@@ -36,34 +36,34 @@ namespace StreamingHubs
                 var joinedUser = new JoinedUser() { ConnectionId = this.ConnectionId, UserData = user };
                 var roomData = new RoomData() { JoinedUser = joinedUser };
                 roomStorage.Set(this.ConnectionId, roomData);
-                bool isOrderUsed = false;
 
                 //ルーム内の情報を取得
-                joinedUser.JoinOrder = roomStorage.AllValues.Count() - 1;
+                joinedUser.JoinOrder = roomStorage.AllValues.Count();
 
+                bool isOrderAssigned = false;
 
+                //最大の人数分ループ
                 for (int i = 0; i < 4; ++i)
                 {
+                    bool isOrderUsed = false;
                     // 既に使われている JoinOrder があるかチェック
-                    foreach (var roomItem in roomStorage.AllValues)
+                    foreach (var roomJoinedUser in roomStorage.AllValues)
                     {
-                        if (roomItem.JoinedUser.JoinOrder == i)
+                        if (roomJoinedUser.JoinedUser.JoinOrder == i)
                         {
                             isOrderUsed = true;
                             break;
                         }
                     }
-
+                     // 空いているJoinOrderを見つけた場合
                     if (!isOrderUsed)
                     {
-                        joinedUser.JoinOrder = i; // 空いている JoinOrder を割り当て
+                        joinedUser.JoinOrder = i; // 空いているJoinOrderを割り当て
+                        isOrderAssigned = true;
                         break;
                     }
+
                 }
-
-
-
-
                 /*ルーム参加者全員に(自分を含む)、ユーザーの入室通知を送信
                 this.Broadcast(room).OnJoin(joinedUser);*/
 

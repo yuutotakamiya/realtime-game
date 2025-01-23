@@ -35,7 +35,8 @@ public class GameDirector : MonoBehaviour
     [SerializeField] Text Crrenttext;//現在のキル数
     [SerializeField] Text KillNum;//キル数
     [SerializeField] Text KillLog;//キル通知
-    [SerializeField] Image skullIamge;
+    [SerializeField] Image skullIamge;//頭蓋骨の画像
+    //[SerializeField] Text Kakeru;
     [SerializeField] public GameObject GameFinish;//ゲーム終了Text
     [SerializeField] GameObject GameStartText;//ゲームスタートText
     [SerializeField] GameObject Result;//リザルト画面に行くためのボタン
