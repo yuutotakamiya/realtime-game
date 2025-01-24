@@ -37,7 +37,8 @@ public class RoomHubModel : BaseModel, IRoomHubReceiver
     public Action<string> OnMatch {  get; set; }
     //宝箱の位置通知
     public Action<Vector3,Quaternion, string> OnChest { get; set; }
-
+    //宝箱の取得数通知
+    public Action<Guid,int> OnChestN {  get; set; }
 
 
     //MagicOnion接続処理
@@ -174,5 +175,17 @@ public class RoomHubModel : BaseModel, IRoomHubReceiver
     public void OnMoveChest(Vector3 pos, Quaternion rotaition, string Namechest)
     {
         OnChest(pos,rotaition,Namechest);
+    }
+
+    //宝箱の取得数同期
+    public async UniTask GainChest()
+    {
+        await roomHub.GainChest();
+    }
+
+    //宝箱の取得数合計の通知
+    public void OnChestNum(Guid connectionId, int GainChestNum)
+    {
+        OnChestN(connectionId,GainChestNum);
     }
 }

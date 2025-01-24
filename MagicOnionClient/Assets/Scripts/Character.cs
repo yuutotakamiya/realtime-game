@@ -20,7 +20,7 @@ public class Character : MonoBehaviour
     protected bool isAttack = false;//攻撃中かどうか
     public bool isInDropArea=false;//宝箱の置くエリアにいるかどうか
     public float AttckCoolDown;//攻撃のクールダウン
-    private bool hasTreasure = false;//宝箱を持っているかどうかのフラグ
+    protected bool hasTreasure = false;//宝箱を持っているかどうかのフラグ
 
     protected FixedJoystick joystick;
     protected Rigidbody rb;
@@ -142,8 +142,6 @@ public class Character : MonoBehaviour
             transform.forward = Vector3.Slerp(transform.forward, move, Time.deltaTime * rotateSpeed);
 
             rb.AddForce(Physics.gravity * 3f, ForceMode.Acceleration); // 3倍の重力を適用
-            //坂を上る
-            //rb. velocity = Vector3.up * 2f + transform.forward * speed;
 
             // アニメーションの状態を制御する
             if (rb.velocity.magnitude > 0.01)
@@ -157,32 +155,28 @@ public class Character : MonoBehaviour
                 animator.SetInteger("state", 0); //Idleアニメーション
             }
 
+            //宝箱を引きずっている時だったら
+            if (HasTreasure == true)
+            {
+                animator.SetInteger("state", 4);
+            }
+
             //攻撃中だったら
             if (IsAttack == true)
             {
                 animator.SetInteger("state", 2);//攻撃アニメーション
-                audioSource.PlayOneShot(AttackSE);//攻撃SE
                 await roomHub.MoveAsync(this.transform.position, this.transform.rotation, CharacterState.Attack);//攻撃アニメーションの同期
             }
         }
     }
 
-    //宝箱を所持している
-    public void PickUpTreasure()
-    {
-        hasTreasure = true; // 宝箱を拾った状態に設定
-    }
-
-    //宝箱を置いた状態
-    public void DropTreasure()
-    {
-        hasTreasure = false; // 宝箱を置いた状態に設定
-    }
+    
 
     //アニメーションイベントを使って特定の場所だけColliderをtrueにする
     public void StartAttack()
     {
         IsAttack  =true;
+        audioSource.PlayOneShot(AttackSE);//攻撃SE
         collider.enabled = true;
     }
    

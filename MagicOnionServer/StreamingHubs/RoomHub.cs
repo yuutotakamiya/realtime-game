@@ -188,6 +188,24 @@ namespace StreamingHubs
             this.Broadcast(room).OnKill(this.ConnectionId, totalKillNum, roomData.JoinedUser.UserData.Name);
         }
 
+        //宝箱の合計同期
+        public async Task GainChest()
+        {
+            var roomStorage = this.room.GetInMemoryStorage<RoomData>();
+            var roomData = roomStorage.Get(this.ConnectionId);
+            roomData.ChestNum++;
+            var roomDataList = roomStorage.AllValues.ToArray<RoomData>();
+            int totalChestNum = 0;
+
+            foreach(var rData in roomDataList)
+            {
+                totalChestNum += rData.ChestNum;
+            }
+
+            //ルーム内の全員に宝箱の獲得数を通知
+            this.Broadcast(room).OnChestNum(this.ConnectionId, totalChestNum);
+        }
+
         //自動マッチング処理
         public async Task<JoinedUser[]> JoinLobbyAsync(int userId)
         {

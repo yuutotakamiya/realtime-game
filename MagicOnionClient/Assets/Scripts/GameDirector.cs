@@ -36,12 +36,13 @@ public class GameDirector : MonoBehaviour
     [SerializeField] Text KillNum;//キル数
     [SerializeField] Text KillLog;//キル通知
     [SerializeField] Image skullIamge;//頭蓋骨の画像
-    //[SerializeField] Text Kakeru;
+    [SerializeField] Text Kakeru;//×Text;
     [SerializeField] public GameObject GameFinish;//ゲーム終了Text
     [SerializeField] GameObject GameStartText;//ゲームスタートText
     [SerializeField] GameObject Result;//リザルト画面に行くためのボタン
     [SerializeField] GameObject AttackButton1;//デフォルトの攻撃ボタン
-    [SerializeField] GameObject AttackButton2;//
+    [SerializeField] GameObject AttackButton2;//雷攻撃
+    [SerializeField] Image MiniMap;//ミニマップ
    
 
     /*[SerializeField] public GameObject openButton;
@@ -60,7 +61,7 @@ public class GameDirector : MonoBehaviour
     Animator animator;
     Rigidbody rigidbody;
     Character character;
-    Dictionary<Guid, GameObject> characterList = new Dictionary<Guid, GameObject>();
+   public Dictionary<Guid, GameObject> characterList = new Dictionary<Guid, GameObject>();
 
     public static GameDirector Instance;
 
@@ -75,10 +76,10 @@ public class GameDirector : MonoBehaviour
         //接続
         await roomHubModel.ConnectionAsync();
 
-        //ユーザーが入室時にOnJoinedUserメソッドを実行するよう、モデルに登録しておく
+        //ユーザーが入室時にOnJoinedUserメソッドを実行するよう、モデルに登録
         roomHubModel.OnJoinedUser += this.OnJoinedUser;
 
-        //ユーザーが退出時にOnLeaveメソッドを実行するよう、モデルに登録しておく
+        //ユーザーが退出時にOnLeaveメソッドを実行するよう、モデルに登録
         roomHubModel.OnExitUser += this.OnExitUser;
 
         //ユーザーが移動したときにOnMoveCharacterメソッドを実行するよう、モデルに登録
@@ -90,11 +91,14 @@ public class GameDirector : MonoBehaviour
         //ルーム内にいるユーザーが準備完了して、ゲームが開始されたらOnTimeメソッドを実行するよう、モデルに登録
         roomHubModel.OnTime += this.OnTimer;
 
-        //ルーム内にいるユーザーが鬼にキルされたときにOnKillメソッドを実行するよう、モデルに登録しておく
+        //ルーム内にいるユーザーが鬼にキルされたときにOnKillメソッドを実行するよう、モデルに登録
         roomHubModel.OnKillNum += this.OnKill;
 
         //宝箱が移動したときにOnMoveChestメソッドを実行するよう、モデルに登録
         roomHubModel.OnChest += this.OnMoveChest;
+
+        //宝箱を全て取得したときにOnGainChestメソッドを実行するよう、モデルに登録
+        roomHubModel.OnChestN += this.OnChestNum;
 
         currentTime = timeLimit; // 初期化: 残り時間を設定
 
@@ -144,6 +148,9 @@ public class GameDirector : MonoBehaviour
                 KillNum.gameObject.SetActive(true);
                 //Crrenttext.gameObject.SetActive(true);
                 skullIamge.gameObject.SetActive(true);
+                MiniMap.gameObject.SetActive(true);
+                Kakeru.gameObject.SetActive(true);
+
             }
             else
             {
@@ -152,6 +159,8 @@ public class GameDirector : MonoBehaviour
                 KillNum.gameObject.SetActive(false);
                 Crrenttext.gameObject.SetActive(false);
                 skullIamge.gameObject .SetActive(false);
+                MiniMap.gameObject .SetActive(false);
+                Kakeru.gameObject .SetActive(false);
             }
 
             // 生成されたキャラクターをCinemachineのFollowとLook Atターゲットに設定
@@ -287,6 +296,20 @@ public class GameDirector : MonoBehaviour
         chest.transform.rotation = rotaition;
         chest.transform.position = pos;
     }
+
+    //宝箱の取得数同期
+    public async void GainChest()
+    {
+        await roomHubModel.GainChest();
+    }
+
+    //宝箱の取得数通知
+    public void OnChestNum(Guid connectionId,int ChestNum)
+    {
+
+    
+    }
+
 
     //DoTweenを使ったキルログアニメーション
     private void AnimateKillLog(string userName)

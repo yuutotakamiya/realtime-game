@@ -11,6 +11,8 @@ public class DefenceTarget : MonoBehaviour
 {
     [SerializeField] GameDirector gameDirector;
     [SerializeField] Character character;
+    [SerializeField] RoomHubModel roomHubModel;
+    [SerializeField] HumanManager humanManager;
     public float move_speed;//宝箱をスピード
 
     protected Rigidbody rb;
@@ -72,6 +74,7 @@ public class DefenceTarget : MonoBehaviour
         }
     }
 
+    //逃げる人がトリガーに触れたら
     public void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Human")
@@ -81,19 +84,14 @@ public class DefenceTarget : MonoBehaviour
             InvokeRepeating("Chest",0.1f,0.1f);
             if (currentMoveMode == MoveMode.Follow)
             {
-                character.PickUpTreasure(); // 宝箱を持っていることをプレイヤーに伝える
+                //humanManager.PickUpTreasure(); // 宝箱を持っていることをプレイヤーに伝える
+                gameDirector.characterList[roomHubModel.ConnectionId].GetComponent<HumanManager>().PickUpTreasure();
                 currentMoveMode = MoveMode.Idle;
             }
-
-            /*if (character != null && !character.HasTreasure)
-            {
-                followTarget = other.transform;
-                currentMoveMode = MoveMode.Follow;
-                
-            }*/
         }
     }
 
+    //逃げる人が宝箱から離れたら
     public void OnTriggerExit(Collider other)
     {
         if (other.gameObject.tag =="Human")
@@ -103,16 +101,10 @@ public class DefenceTarget : MonoBehaviour
             CancelInvoke("Chest");
             if (currentMoveMode == MoveMode.Idle)
             {
+                gameDirector.characterList[roomHubModel.ConnectionId].GetComponent<HumanManager>().DropTreasure();
                 currentMoveMode = MoveMode.Follow;
-                character.DropTreasure(); // 宝箱を離れたら、持っていない状態に戻す
+                //humanManager. DropTreasure(); // 宝箱を離れたら、持っていない状態に戻す
             }
-
-            /*followTarget = null;
-            currentMoveMode = MoveMode.Idle;
-            if (character != null)
-            {
-                
-            }*/
         }
         
     }

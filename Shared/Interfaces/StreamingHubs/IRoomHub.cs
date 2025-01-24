@@ -35,5 +35,8 @@ namespace Shared.Interfaces.StreamingHubs
 
         //ゲーム内オブジェクトの同期
         Task MoveChest(Vector3 pos,Quaternion rotaition, string Namechest);
+
+        //宝箱の取得合計の同期
+        Task GainChest();
     }
 }

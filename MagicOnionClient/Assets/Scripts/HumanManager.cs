@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class HumanManager : Character
 {
+  
     public override void Start()
     {
         base.Start();
@@ -92,6 +93,20 @@ public class HumanManager : Character
         animator.SetInteger("state", 0);
         Isstart = true;
         IsDead = false;
+    }
+
+    //•ó” ‚ğŠ‚µ‚Ä‚¢‚é
+    public void PickUpTreasure()
+    {
+        HasTreasure = true; // •ó” ‚ğE‚Á‚½ó‘Ô
+        //animator.SetInteger("state", 2);
+    }
+
+    //•ó” ‚ğ’u‚¢‚½ó‘Ô
+    public void DropTreasure()
+    {
+        HasTreasure = false; // •ó” ‚ğ’u‚¢‚½ó‘Ô
+        //animator.SetInteger("state", 0);
     }
 }
 
