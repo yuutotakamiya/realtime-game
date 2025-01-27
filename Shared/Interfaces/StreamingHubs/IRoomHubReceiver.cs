@@ -43,6 +43,6 @@ namespace Shared.Interfaces.StreamingHubs
         void OnMoveChest(Vector3 pos, Quaternion rotaition, string Namechest);
 
         //宝箱の獲得数を通知
-        void OnChestNum(Guid connectionId,int ChestNum);
+        void OnChestNum(int TotalChestNum,Dictionary<string,int> keyValuePairs);
     }
 }

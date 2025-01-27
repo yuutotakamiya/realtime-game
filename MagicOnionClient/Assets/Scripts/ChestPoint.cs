@@ -7,19 +7,28 @@ public class ChestPoint : MonoBehaviour
 {
     [SerializeField] GameDirector gameDirector;
     [SerializeField] Character character;
-    [SerializeField] GameObject WinText;
-    [SerializeField] GameObject WinText2;
     [SerializeField] DefenceTarget defenceTarget;
-    public void OnTriggerEnter(Collider other)
+    [SerializeField] RoomHubModel roomHubModel;
+    public async void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Chest"))
         {
-            WinText.SetActive(true);
+            /*WinText.SetActive(true);
             WinText2.SetActive(true);
             gameDirector.StopCoroutine("CountdownTimer");
             character.Isstart = false;
             defenceTarget.move_speed = 0;
-            Invoke("LoadResult", 3.0f);
+            Invoke("LoadResult", 3.0f);*/
+
+            /*if ()
+            {
+
+            }*/
+
+            await gameDirector.GainChest();//•ó” Žæ“¾“¯Šú
+
+            defenceTarget.currentMoveMode = MoveMode.Idle;
+            gameDirector.characterList[roomHubModel.ConnectionId].GetComponent<HumanManager>().DropTreasure();
         }
     }
 

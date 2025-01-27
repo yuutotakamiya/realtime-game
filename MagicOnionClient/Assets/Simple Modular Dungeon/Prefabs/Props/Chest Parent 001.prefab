@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5001775635858026854
 Transform:
   m_ObjectHideFlags: 0
@@ -145,7 +145,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 112
   m_CollisionDetection: 1
 --- !u!65 &7819644586589999732
 BoxCollider:
@@ -166,8 +166,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.6779896, y: 0.7899092, z: 1.8361095}
-  m_Center: {x: 0.27100524, y: 0.47495452, z: 0.0082881935}
+  m_Size: {x: 1.6449895, y: 0.7899092, z: 1.8361095}
+  m_Center: {x: 0.25450802, y: 0.47495452, z: 0.0082881935}
 --- !u!114 &3903227786985743023
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -182,8 +182,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameDirector: {fileID: 0}
   character: {fileID: 0}
+  roomHubModel: {fileID: 0}
+  humanManager: {fileID: 0}
   move_speed: 170
   followTarget: {fileID: 0}
+  currentMoveMode: 0
 --- !u!135 &8576423110436555451
 SphereCollider:
   m_ObjectHideFlags: 0

@@ -22,7 +22,7 @@ public class GameDirector : MonoBehaviour
 
     //クラスの設定
     [SerializeField] RoomHubModel roomHubModel;//RoomHubModelのクラスの設定
-    [SerializeField] DefenceTarget DefenceTarget;
+    [SerializeField] DefenceTarget defenceTarget;
 
     //カウントダウン
     [SerializeField] public float timeLimit;//制限時間を設定
@@ -36,14 +36,19 @@ public class GameDirector : MonoBehaviour
     [SerializeField] Text KillNum;//キル数
     [SerializeField] Text KillLog;//キル通知
     [SerializeField] Image skullIamge;//頭蓋骨の画像
-    [SerializeField] Text Kakeru;//×Text;
+    [SerializeField] Text killerKakeru;//×Text;
+    [SerializeField] Text humanKakeru;//×Text;
     [SerializeField] public GameObject GameFinish;//ゲーム終了Text
     [SerializeField] GameObject GameStartText;//ゲームスタートText
     [SerializeField] GameObject Result;//リザルト画面に行くためのボタン
     [SerializeField] GameObject AttackButton1;//デフォルトの攻撃ボタン
     [SerializeField] GameObject AttackButton2;//雷攻撃
     [SerializeField] Image MiniMap;//ミニマップ
-   
+    [SerializeField] Text ChestNumText;//宝箱の取得した数を入れるText
+    [SerializeField] GameObject WinText;
+    [SerializeField] GameObject WinText2;
+    [SerializeField] Image ChestImage;
+
 
     /*[SerializeField] public GameObject openButton;
     [SerializeField] public GameObject closeButton;
@@ -54,16 +59,19 @@ public class GameDirector : MonoBehaviour
     private CinemachineVirtualCamera virtualCamera; // Cinemachine Virtual Camera
 
     private bool isEnemy = false;//自分が敵かどうか
-
     private bool ishave = false;//宝箱を持っているかどうか
 
     Vector3 position;
     Animator animator;
     Rigidbody rigidbody;
     Character character;
-   public Dictionary<Guid, GameObject> characterList = new Dictionary<Guid, GameObject>();
+    public Dictionary<Guid, GameObject> characterList = new Dictionary<Guid, GameObject>();
 
     public static GameDirector Instance;
+
+    public static Dictionary<string,int> keyValuePairs;//名前と宝箱の名前をフィールドに保存
+
+    private JoinedUser MyName; //自分自身の名前をフィールドに保存
 
     //自分自身が敵かどうかのプロパティ
     public bool IsEnemy
@@ -133,6 +141,7 @@ public class GameDirector : MonoBehaviour
         //自分自身の接続IDが同じだったら
         if (roomHubModel.ConnectionId == user.ConnectionId)
         {
+            MyName=user;
             characterObject.GetComponent<Character>().Name(user.UserData.Name);
         }
 
@@ -149,7 +158,10 @@ public class GameDirector : MonoBehaviour
                 //Crrenttext.gameObject.SetActive(true);
                 skullIamge.gameObject.SetActive(true);
                 MiniMap.gameObject.SetActive(true);
-                Kakeru.gameObject.SetActive(true);
+                killerKakeru.gameObject.SetActive(true);
+                ChestNumText.gameObject.SetActive(false);
+                ChestImage.gameObject.SetActive(false);
+                humanKakeru.gameObject.SetActive (false);
 
             }
             else
@@ -160,7 +172,10 @@ public class GameDirector : MonoBehaviour
                 Crrenttext.gameObject.SetActive(false);
                 skullIamge.gameObject .SetActive(false);
                 MiniMap.gameObject .SetActive(false);
-                Kakeru.gameObject .SetActive(false);
+                killerKakeru.gameObject .SetActive(false);
+                ChestNumText.gameObject .SetActive(true);
+                ChestImage.gameObject .SetActive(true);
+                humanKakeru.gameObject.SetActive (true);
             }
 
             // 生成されたキャラクターをCinemachineのFollowとLook Atターゲットに設定
@@ -276,7 +291,6 @@ public class GameDirector : MonoBehaviour
         KillNum.text = TotalKillNum.ToString();
 
         AnimateKillLog(userName);
-
     }
 
     //宝箱の位置同期
@@ -290,24 +304,34 @@ public class GameDirector : MonoBehaviour
     {
         GameObject chest = GameObject.Find(Namechest);
 
-        //chest.transform.DOLocalMove(pos, 0.1f).SetEase(Ease.Linear);
-        //chest.transform.Rotate(rotaition.eulerAngles,0.1f);
-
         chest.transform.rotation = rotaition;
         chest.transform.position = pos;
     }
 
     //宝箱の取得数同期
-    public async void GainChest()
+    public async UniTask GainChest()
     {
         await roomHubModel.GainChest();
     }
 
     //宝箱の取得数通知
-    public void OnChestNum(Guid connectionId,int ChestNum)
+    public void OnChestNum(int TotalChestNum,Dictionary<string,int> keyValuePairs)
     {
+        ChestNumText.text = keyValuePairs[MyName.UserData.Name].ToString();
 
-    
+        if (TotalChestNum == 2)
+        {
+            WinText.SetActive(true);
+            WinText2.SetActive(true);
+            StopCoroutine("CountdownTimer");
+            characterList[roomHubModel.ConnectionId].GetComponent<Character>().Isstart = false;
+            Invoke("LoadResult",3);
+        }
+    }
+
+    public void LoadResult()
+    {
+        Initiate.Fade("Result", Color.black, 1);
     }
 
 

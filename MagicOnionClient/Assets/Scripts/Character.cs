@@ -18,7 +18,7 @@ public class Character : MonoBehaviour
     protected bool isself = false;//自分自身かどうか
     protected bool isstart = false;//準備完了しているかどうか
     protected bool isAttack = false;//攻撃中かどうか
-    public bool isInDropArea=false;//宝箱の置くエリアにいるかどうか
+    public bool isInDropArea = false;//宝箱の置くエリアにいるかどうか
     public float AttckCoolDown;//攻撃のクールダウン
     protected bool hasTreasure = false;//宝箱を持っているかどうかのフラグ
 
@@ -91,7 +91,7 @@ public class Character : MonoBehaviour
         objectRenderer = GetComponent<Renderer>();
 
         //defenceTargetがnullだったとき何もしない
-        if (defenceTarget == null) 
+        if (defenceTarget == null)
         {
             return;
         }
@@ -106,22 +106,22 @@ public class Character : MonoBehaviour
             return;
         }
         //rigidbodyがnullだったら何もしない
-        if (rb==null)
+        if (rb == null)
         {
             return;
         }
         //gameDirecterがnullだったら何もしない
         if (gameDirector == null)
         {
-           return;
+            return;
         }
         //defenceTargetがnullだったら何もしない
-        if (defenceTarget==null)
+        if (defenceTarget == null)
         {
             return;
         }
         //Rendererがnullだったら何もしない
-        if (objectRenderer==null)
+        if (objectRenderer == null)
         {
             return;
         }
@@ -143,11 +143,21 @@ public class Character : MonoBehaviour
 
             rb.AddForce(Physics.gravity * 3f, ForceMode.Acceleration); // 3倍の重力を適用
 
+           
             // アニメーションの状態を制御する
             if (rb.velocity.magnitude > 0.01)
             {
-                // キャラクターが動いている場合
-                animator.SetInteger("state", 1); //Runアニメーション
+                //宝箱を引きずっている時だったら
+                if (HasTreasure == true)
+                {
+                    animator.SetInteger("state", 4);
+                }
+                else
+                {
+                    // キャラクターが動いている場合
+                    animator.SetInteger("state", 1); //Runアニメーション
+                }
+
             }
             else
             {
@@ -155,11 +165,7 @@ public class Character : MonoBehaviour
                 animator.SetInteger("state", 0); //Idleアニメーション
             }
 
-            //宝箱を引きずっている時だったら
-            if (HasTreasure == true)
-            {
-                animator.SetInteger("state", 4);
-            }
+
 
             //攻撃中だったら
             if (IsAttack == true)
@@ -170,16 +176,16 @@ public class Character : MonoBehaviour
         }
     }
 
-    
+
 
     //アニメーションイベントを使って特定の場所だけColliderをtrueにする
     public void StartAttack()
     {
-        IsAttack  =true;
+        IsAttack = true;
         audioSource.PlayOneShot(AttackSE);//攻撃SE
         collider.enabled = true;
     }
-   
+
     //コライダーの判定をfalseにする
     public void StopAttack()
     {
@@ -191,7 +197,7 @@ public class Character : MonoBehaviour
     //雷攻撃のコライダーの判定をtrueにする
     public void StartAttackAnimation()
     {
-        IsAttack =true;
+        IsAttack = true;
         collider.enabled = true;
         objectRenderer.material.color = newColor;
     }
@@ -200,7 +206,7 @@ public class Character : MonoBehaviour
     public void StopAttackAnimation()
     {
         IsAttack = false;
-        Destroy(EffectPrefab,4);
+        Destroy(EffectPrefab, 4);
         collider.enabled = false;
     }
 
@@ -214,7 +220,7 @@ public class Character : MonoBehaviour
         isAttack = false;
         animator.SetInteger("state", 0); // Idleアニメーションに戻す
     }
-   
+
     //名前を表示
     public void Name(string Name)
     {

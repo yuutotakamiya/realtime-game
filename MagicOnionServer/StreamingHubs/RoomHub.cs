@@ -5,6 +5,7 @@ using Shared.Interfaces.StreamingHubs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.Xml;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -55,7 +56,7 @@ namespace StreamingHubs
                             break;
                         }
                     }
-                     // 空いているJoinOrderを見つけた場合
+                    // 空いているJoinOrderを見つけた場合
                     if (!isOrderUsed)
                     {
                         joinedUser.JoinOrder = i; // 空いているJoinOrderを割り当て
@@ -188,7 +189,7 @@ namespace StreamingHubs
             this.Broadcast(room).OnKill(this.ConnectionId, totalKillNum, roomData.JoinedUser.UserData.Name);
         }
 
-        //宝箱の合計同期
+        //宝箱の獲得合計数同期
         public async Task GainChest()
         {
             var roomStorage = this.room.GetInMemoryStorage<RoomData>();
@@ -197,13 +198,17 @@ namespace StreamingHubs
             var roomDataList = roomStorage.AllValues.ToArray<RoomData>();
             int totalChestNum = 0;
 
-            foreach(var rData in roomDataList)
+            Dictionary<string,int> keyValuePairs = new Dictionary<string,int>();
+
+            foreach (var rData in roomDataList)
             {
+                keyValuePairs[rData.JoinedUser.UserData.Name]= roomData.ChestNum;
                 totalChestNum += rData.ChestNum;
             }
 
-            //ルーム内の全員に宝箱の獲得数を通知
-            this.Broadcast(room).OnChestNum(this.ConnectionId, totalChestNum);
+            //ルーム内の全員に宝箱の獲得合計数を通知
+            this.Broadcast(room).OnChestNum(totalChestNum,keyValuePairs);
+
         }
 
         //自動マッチング処理
@@ -241,7 +246,7 @@ namespace StreamingHubs
             roomStorage.Set(this.ConnectionId, roomData);  // 更新されたデータを保存
 
             //ルーム参加者全員に(自分以外)、ユーザーの位置、回転、アニメーションを通知
-            this.Broadcast(room).OnMoveChest(pos, rotaition, Namechest);
+            this.BroadcastExceptSelf(room).OnMoveChest(pos, rotaition, Namechest);
         }
 
         //ユーザーが切断したときの処理

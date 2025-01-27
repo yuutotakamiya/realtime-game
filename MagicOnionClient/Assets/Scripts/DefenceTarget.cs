@@ -1,7 +1,9 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
+using static UnityEditor.PlayerSettings;
 public enum MoveMode
 {
     Idle = 1,
@@ -17,7 +19,7 @@ public class DefenceTarget : MonoBehaviour
 
     protected Rigidbody rb;
     public Transform followTarget;
-    protected MoveMode currentMoveMode;
+    public MoveMode currentMoveMode;
 
     void Start()
     {
@@ -39,16 +41,37 @@ public class DefenceTarget : MonoBehaviour
             case MoveMode.Follow:
                 if (followTarget != null)
                 {
-                    Quaternion move_rotation = Quaternion.LookRotation(followTarget.transform.position - transform.position, Vector3.up);
-                    transform.rotation = Quaternion.Lerp(transform.rotation, move_rotation, 0.1f);
-                    rb.velocity = transform.forward * move_speed;
+                    //character.transform.DOLocalMove(pos, 0.1f).SetEase(Ease.Linear);
+                    //character.transform.DORotate(rotaition.eulerAngles, 0.1f).SetEase(Ease.Linear);
+
+                    //transform.DORotateQuaternion(move_rotation, 0.1f).SetEase(Ease.Linear);
+
+                    /* ターゲットとプレイヤーの距離を取得 */
+                    float dis = Vector3.Distance(followTarget.transform.position, this.transform.position);
+
+                    //transform.DOComplete();
+                    
+                    if (dis > 3f)
+                    {
+                        Quaternion move_rotation = Quaternion.LookRotation(followTarget.transform.position - transform.position, Vector3.up);
+                        transform.rotation = Quaternion.Lerp(transform.rotation, move_rotation, 0.1f);
+                        rb.velocity = transform.forward * move_speed;
+
+                        // transform.DOMove(followTarget.transform.position, 0.1f).SetEase(Ease.Linear);
+                    }
+                    else
+                    {
+                        rb.velocity = Vector3.zero;
+                    }
+
+
                 }
 
                 break;
         }
     }
 
-    public void OnCollisionEnter(Collision collision)
+    /*public void OnCollisionEnter(Collision collision)
     {
         if(collision.gameObject.tag == "Human")
         {
@@ -72,7 +95,7 @@ public class DefenceTarget : MonoBehaviour
                 currentMoveMode = MoveMode.Follow;
             }
         }
-    }
+    }*/
 
     //逃げる人がトリガーに触れたら
     public void OnTriggerEnter(Collider other)
@@ -80,8 +103,7 @@ public class DefenceTarget : MonoBehaviour
         if (other.gameObject.tag == "Human")
         {
             followTarget = null;
-            //followTarget = other.transform;
-            InvokeRepeating("Chest",0.1f,0.1f);
+            InvokeRepeating("Chest", 0.1f, 0.1f);
             if (currentMoveMode == MoveMode.Follow)
             {
                 //humanManager.PickUpTreasure(); // 宝箱を持っていることをプレイヤーに伝える
@@ -94,10 +116,9 @@ public class DefenceTarget : MonoBehaviour
     //逃げる人が宝箱から離れたら
     public void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.tag =="Human")
+        if (other.gameObject.tag == "Human")
         {
             followTarget = other.transform;
-            //followTarget = null;
             CancelInvoke("Chest");
             if (currentMoveMode == MoveMode.Idle)
             {
@@ -106,12 +127,11 @@ public class DefenceTarget : MonoBehaviour
                 //humanManager. DropTreasure(); // 宝箱を離れたら、持っていない状態に戻す
             }
         }
-        
     }
 
     //定期的に呼ぶメソッド(宝箱の位置同期)
     public void Chest()
     {
-        gameDirector.MoveChest(this.gameObject.transform.position,this.gameObject.transform.rotation, this.gameObject.name);
+        gameDirector.MoveChest(this.gameObject.transform.position, this.gameObject.transform.rotation, this.gameObject.name);
     }
 }
