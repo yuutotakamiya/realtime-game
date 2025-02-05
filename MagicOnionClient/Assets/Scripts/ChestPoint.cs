@@ -19,13 +19,13 @@ public class ChestPoint : MonoBehaviour
             character.Isstart = false;
             defenceTarget.move_speed = 0;
             Invoke("LoadResult", 3.0f);*/
+            
 
-            /*if ()
+            if (character.currentTreasureChest == other.gameObject)
             {
+                await gameDirector.GainChest();//•ó” Žæ“¾“¯Šú
+            }
 
-            }*/
-
-            await gameDirector.GainChest();//•ó” Žæ“¾“¯Šú
 
             defenceTarget.currentMoveMode = MoveMode.Idle;
             gameDirector.characterList[roomHubModel.ConnectionId].GetComponent<HumanManager>().DropTreasure();

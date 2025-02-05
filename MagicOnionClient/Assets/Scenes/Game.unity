@@ -19841,11 +19841,11 @@ MonoBehaviour:
   NameText: {fileID: 0}
   EffectPrefab: {fileID: 0}
   AttackSE: {fileID: 0}
+  collider: {fileID: 0}
   isInDropArea: 0
   AttckCoolDown: 0
-  collider: {fileID: 0}
   objectRenderer: {fileID: 0}
-  newColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  currentTreasureChest: {fileID: 0}
 --- !u!4 &989157179
 Transform:
   m_ObjectHideFlags: 0
@@ -24656,11 +24656,11 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 100
+    m_FontSize: 180
     m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 0
-    m_MaxSize: 100
+    m_MaxSize: 200
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -24711,7 +24711,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 754, y: 521}
+  m_AnchoredPosition: {x: 754, y: 350}
   m_SizeDelta: {x: 400, y: 400}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1264735658
@@ -28868,7 +28868,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 100
+    m_FontSize: 180
     m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 0
@@ -34525,7 +34525,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 824, y: 451}
+  m_AnchoredPosition: {x: 824, y: 446}
   m_SizeDelta: {x: 200, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1730513849
@@ -34549,19 +34549,19 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 9b9b64474a2616744ac7dbe53dc1a12a, type: 3}
-    m_FontSize: 50
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 80
     m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 0
-    m_MaxSize: 50
+    m_MaxSize: 80
     m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 
+  m_Text: 0
 --- !u!222 &1730513850
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -37802,11 +37802,11 @@ MonoBehaviour:
   NameText: {fileID: 0}
   EffectPrefab: {fileID: 0}
   AttackSE: {fileID: 0}
+  collider: {fileID: 0}
   isInDropArea: 0
   AttckCoolDown: 0
-  collider: {fileID: 0}
   objectRenderer: {fileID: 0}
-  newColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  currentTreasureChest: {fileID: 0}
 --- !u!4 &1909200881
 Transform:
   m_ObjectHideFlags: 0
@@ -40019,6 +40019,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Fixed Joystick
+      objectReference: {fileID: 0}
+    - target: {fileID: 2929252283123773939, guid: aaa2c939c0359ac4dbce3f49e8b90252,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2929252283123773951, guid: aaa2c939c0359ac4dbce3f49e8b90252,
         type: 3}

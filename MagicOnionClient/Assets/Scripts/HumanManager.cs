@@ -95,10 +95,13 @@ public class HumanManager : Character
         IsDead = false;
     }
 
+   
+
     //•ó” ‚ğŠ‚µ‚Ä‚¢‚é
     public void PickUpTreasure()
     {
         HasTreasure = true; // •ó” ‚ğE‚Á‚½ó‘Ô
+        
         //animator.SetInteger("state", 2);
     }
 
@@ -106,6 +109,7 @@ public class HumanManager : Character
     public void DropTreasure()
     {
         HasTreasure = false; // •ó” ‚ğ’u‚¢‚½ó‘Ô
+        currentTreasureChest = null;
         //animator.SetInteger("state", 0);
     }
 }

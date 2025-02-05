@@ -14,6 +14,7 @@ public class Character : MonoBehaviour
     [SerializeField] public Text NameText;
     [SerializeField] GameObject EffectPrefab;
     [SerializeField] AudioClip AttackSE;
+    [SerializeField] Collider collider;//攻撃の当たり判定
     protected bool isDead = false;//死んでいるどうか
     protected bool isself = false;//自分自身かどうか
     protected bool isstart = false;//準備完了しているかどうか
@@ -27,15 +28,15 @@ public class Character : MonoBehaviour
     protected Animator animator;
     protected RoomHubModel roomHub;
     protected GameDirector gameDirector;
-    [SerializeField] Collider collider;//攻撃の当たり判定
     protected DefenceTarget defenceTarget;
     protected CinemachineVirtualCamera virtualCamera;
     public Renderer objectRenderer;
-    public Color newColor = Color.yellow;
-
+    //public Color newColor = Color.yellow;
     AudioSource audioSource;
 
     public static Character instance;
+
+    public GameObject currentTreasureChest;//現在引きずっている宝箱
 
     //自分自身かどうかのフラグのプロパティ
     public bool Isself
@@ -157,15 +158,12 @@ public class Character : MonoBehaviour
                     // キャラクターが動いている場合
                     animator.SetInteger("state", 1); //Runアニメーション
                 }
-
             }
             else
             {
                 // キャラクターが止まっている場合
                 animator.SetInteger("state", 0); //Idleアニメーション
             }
-
-
 
             //攻撃中だったら
             if (IsAttack == true)
@@ -175,8 +173,11 @@ public class Character : MonoBehaviour
             }
         }
     }
-
-
+    // 宝箱をセットするメソッド
+    public void SetTreasureChest(GameObject chest)
+    {
+        currentTreasureChest = chest;
+    }
 
     //アニメーションイベントを使って特定の場所だけColliderをtrueにする
     public void StartAttack()
@@ -199,7 +200,7 @@ public class Character : MonoBehaviour
     {
         IsAttack = true;
         collider.enabled = true;
-        objectRenderer.material.color = newColor;
+        //objectRenderer.material.color = newColor;
     }
 
     //雷攻撃のコライダーの判定をfalseにする

@@ -14,5 +14,9 @@ public class NameTextManger : MonoBehaviour
     void Update()
     {
         transform.LookAt(Camera.main.transform);
+
+        // カメラの上下反転を防ぐため、Y軸の回転のみを適用
+        Vector3 eulerRotation = transform.rotation.eulerAngles;
+        transform.rotation = Quaternion.Euler(0f, eulerRotation.y, 0f);
     }
 }

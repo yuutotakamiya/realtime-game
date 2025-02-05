@@ -153,7 +153,7 @@ public class GameDirector : MonoBehaviour
             {
                 isEnemy = true;
                 AttackButton1.SetActive(true);
-                AttackButton2.SetActive(true);
+                //AttackButton2.SetActive(true);
                 KillNum.gameObject.SetActive(true);
                 //Crrenttext.gameObject.SetActive(true);
                 skullIamge.gameObject.SetActive(true);

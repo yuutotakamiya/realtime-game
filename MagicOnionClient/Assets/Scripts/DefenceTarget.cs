@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -63,8 +64,6 @@ public class DefenceTarget : MonoBehaviour
                     {
                         rb.velocity = Vector3.zero;
                     }
-
-
                 }
 
                 break;
@@ -106,6 +105,7 @@ public class DefenceTarget : MonoBehaviour
             InvokeRepeating("Chest", 0.1f, 0.1f);
             if (currentMoveMode == MoveMode.Follow)
             {
+               character.SetTreasureChest(this.gameObject);
                 //humanManager.PickUpTreasure(); // •ó” ‚ğ‚Á‚Ä‚¢‚é‚±‚Æ‚ğƒvƒŒƒCƒ„[‚É“`‚¦‚é
                 gameDirector.characterList[roomHubModel.ConnectionId].GetComponent<HumanManager>().PickUpTreasure();
                 currentMoveMode = MoveMode.Idle;
