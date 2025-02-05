@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks.Triggers;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,31 +10,29 @@ public class ChestPoint : MonoBehaviour
     [SerializeField] Character character;
     [SerializeField] DefenceTarget defenceTarget;
     [SerializeField] RoomHubModel roomHubModel;
+
+    private bool isChestProcessed = false;
+
     public async void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Chest"))
+        if (other.CompareTag("Chest")&&!isChestProcessed)
         {
-            /*WinText.SetActive(true);
-            WinText2.SetActive(true);
-            gameDirector.StopCoroutine("CountdownTimer");
-            character.Isstart = false;
-            defenceTarget.move_speed = 0;
-            Invoke("LoadResult", 3.0f);*/
-            
+            isChestProcessed = true;
 
-            if (character.currentTreasureChest == other.gameObject)
+            //gameDirecterで呼び出した結果をCharacterクラスの変数に代入
+            Character foundCharacter = gameDirector.GetCharacter();
+
+            //自分が持っている宝箱と宝箱を置く場所に置いた宝箱が一緒だったら
+            if (foundCharacter.currentTreasureChest == other.gameObject)
             {
                 await gameDirector.GainChest();//宝箱取得同期
             }
 
+            Destroy(other.gameObject);
 
-            defenceTarget.currentMoveMode = MoveMode.Idle;
-            gameDirector.characterList[roomHubModel.ConnectionId].GetComponent<HumanManager>().DropTreasure();
+            defenceTarget.CancelInvoke("Chest");
+
+            //HumanManager.DropTreasure();
         }
-    }
-
-    public void LoadResult()
-    {
-        Initiate.Fade("Result", Color.black, 1);
     }
 }

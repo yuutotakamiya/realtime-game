@@ -105,9 +105,10 @@ public class DefenceTarget : MonoBehaviour
             InvokeRepeating("Chest", 0.1f, 0.1f);
             if (currentMoveMode == MoveMode.Follow)
             {
-               character.SetTreasureChest(this.gameObject);
+               Character character　= other.gameObject.GetComponent<Character>();
+                character.SetTreasureChest(this.gameObject);
                 //humanManager.PickUpTreasure(); // 宝箱を持っていることをプレイヤーに伝える
-                gameDirector.characterList[roomHubModel.ConnectionId].GetComponent<HumanManager>().PickUpTreasure();
+                humanManager.PickUpTreasure();
                 currentMoveMode = MoveMode.Idle;
             }
         }
@@ -122,7 +123,7 @@ public class DefenceTarget : MonoBehaviour
             CancelInvoke("Chest");
             if (currentMoveMode == MoveMode.Idle)
             {
-                gameDirector.characterList[roomHubModel.ConnectionId].GetComponent<HumanManager>().DropTreasure();
+                humanManager.DropTreasure();
                 currentMoveMode = MoveMode.Follow;
                 //humanManager. DropTreasure(); // 宝箱を離れたら、持っていない状態に戻す
             }

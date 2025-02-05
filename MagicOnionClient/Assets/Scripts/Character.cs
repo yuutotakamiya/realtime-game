@@ -173,10 +173,11 @@ public class Character : MonoBehaviour
             }
         }
     }
+
     // 宝箱をセットするメソッド
     public void SetTreasureChest(GameObject chest)
     {
-        currentTreasureChest = chest;
+        currentTreasureChest=chest;
     }
 
     //アニメーションイベントを使って特定の場所だけColliderをtrueにする

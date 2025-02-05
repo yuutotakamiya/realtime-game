@@ -65,7 +65,8 @@ public class GameDirector : MonoBehaviour
     Animator animator;
     Rigidbody rigidbody;
     Character character;
-    public Dictionary<Guid, GameObject> characterList = new Dictionary<Guid, GameObject>();
+
+    private Dictionary<Guid, GameObject> characterList = new Dictionary<Guid, GameObject>();
 
     public static GameDirector Instance;
 
@@ -450,6 +451,14 @@ public class GameDirector : MonoBehaviour
     public void AttackButton()
     {
         characterList[roomHubModel.ConnectionId].GetComponent<Character>().AttackButton();
+    }
+
+    //©•ª©g‚ÌÚ‘±ID‚ğæ“¾
+    public Character GetCharacter()
+    {
+        Character foundCharacter = characterList[roomHubModel.ConnectionId].GetComponent<Character>();
+
+        return foundCharacter;
     }
 
     public void LightningAttak()
