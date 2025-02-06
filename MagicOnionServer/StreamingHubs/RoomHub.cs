@@ -196,13 +196,20 @@ namespace StreamingHubs
             var roomData = roomStorage.Get(this.ConnectionId);
             roomData.ChestNum++;
             var roomDataList = roomStorage.AllValues.ToArray<RoomData>();
+
+            //宝箱の合計数を格納
             int totalChestNum = 0;
 
+            //プレイヤー毎の宝箱を格納する変数
             Dictionary<string,int> keyValuePairs = new Dictionary<string,int>();
 
+            // すべてのプレイヤーのデータをループし、宝箱数をカウント
             foreach (var rData in roomDataList)
             {
-                keyValuePairs[rData.JoinedUser.UserData.Name]= roomData.ChestNum;
+                // 各プレイヤーの名前をキーに、宝箱数をディクショナリに追加
+                keyValuePairs[rData.JoinedUser.UserData.Name]= rData.ChestNum;
+
+                // 合計宝箱数に加算
                 totalChestNum += rData.ChestNum;
             }
 

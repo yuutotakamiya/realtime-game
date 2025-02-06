@@ -318,14 +318,18 @@ public class GameDirector : MonoBehaviour
     //ïÛî†ÇÃéÊìæêîí ím
     public void OnChestNum(int TotalChestNum,Dictionary<string,int> keyValuePairs)
     {
-        ChestNumText.text = keyValuePairs[MyName.UserData.Name].ToString();
+        if (keyValuePairs.ContainsKey(MyName.UserData.Name))
+        {
+            ChestNumText.text = keyValuePairs[MyName.UserData.Name].ToString();
+        }
+       
 
         if (TotalChestNum == 2)
         {
+            characterList[roomHubModel.ConnectionId].GetComponent<Character>().Isstart = false;
             WinText.SetActive(true);
             WinText2.SetActive(true);
             StopCoroutine("CountdownTimer");
-            characterList[roomHubModel.ConnectionId].GetComponent<Character>().Isstart = false;
             Invoke("LoadResult",3);
         }
     }
