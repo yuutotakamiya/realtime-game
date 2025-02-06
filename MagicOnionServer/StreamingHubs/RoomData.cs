@@ -22,5 +22,7 @@ namespace StreamingHubs
         public int KillNum {  get; set; }
         //宝箱の数
         public int ChestNum {  get; set; }
+        //ゲーム終了
+        public bool IsEndGame {  get; set; }
     }
 }

@@ -49,7 +49,6 @@ public class GameDirector : MonoBehaviour
     [SerializeField] GameObject WinText2;
     [SerializeField] Image ChestImage;
 
-
     /*[SerializeField] public GameObject openButton;
     [SerializeField] public GameObject closeButton;
     /*[SerializeField] public GameObject holdButton;
@@ -67,8 +66,6 @@ public class GameDirector : MonoBehaviour
     Character character;
 
     private Dictionary<Guid, GameObject> characterList = new Dictionary<Guid, GameObject>();
-
-    public static GameDirector Instance;
 
     public static Dictionary<string,int> keyValuePairs;//名前と宝箱の名前をフィールドに保存
 
@@ -108,6 +105,9 @@ public class GameDirector : MonoBehaviour
 
         //宝箱を全て取得したときにOnGainChestメソッドを実行するよう、モデルに登録
         roomHubModel.OnChestN += this.OnChestNum;
+
+        //ゲームが終了したときにOnEndGameメソッドを実行するよう、モデルに登録
+        roomHubModel.OnEndG += this.OnEndGame;
 
         currentTime = timeLimit; // 初期化: 残り時間を設定
 
@@ -316,21 +316,44 @@ public class GameDirector : MonoBehaviour
     }
 
     //宝箱の取得数通知
-    public void OnChestNum(int TotalChestNum,Dictionary<string,int> keyValuePairs)
+    public async void OnChestNum(int TotalChestNum,Dictionary<string,int> keyValuePairs)
     {
         if (keyValuePairs.ContainsKey(MyName.UserData.Name))
         {
             ChestNumText.text = keyValuePairs[MyName.UserData.Name].ToString();
         }
-       
 
+        //宝箱を合計2個取得したら
         if (TotalChestNum == 2)
+        {
+           await EndGameAsync();
+        }
+    }
+
+    //ゲーム終了同期
+    public async UniTask EndGameAsync()
+    {
+        await roomHubModel.EndGameAsync();
+    }
+
+    //ゲーム終了通知
+    public async void OnEndGame(bool isHumanEndGame)
+    {
+        if (isHumanEndGame==true)
         {
             characterList[roomHubModel.ConnectionId].GetComponent<Character>().Isstart = false;
             WinText.SetActive(true);
             WinText2.SetActive(true);
             StopCoroutine("CountdownTimer");
-            Invoke("LoadResult",3);
+            Invoke("LoadResult", 3);
+        }
+        else
+        {
+            characterList[roomHubModel.ConnectionId].GetComponent<Character>().Isstart = false;
+            timerText.text = "0"; // 0秒になったら表示
+            GameFinish.SetActive(true);
+            //await UniTask.Delay(TimeSpan.FromSeconds(4.0f));  // 非同期で4秒待機
+            Invoke("LoadResult", 3);
         }
     }
 
@@ -437,11 +460,7 @@ public class GameDirector : MonoBehaviour
 
         if (currentTime == 0)
         {
-            characterList[roomHubModel.ConnectionId].GetComponent<Character>().Isstart = false;
-            timerText.text = "0"; // 0秒になったら表示
-            GameFinish.SetActive(true);
-            yield return new WaitForSeconds(3f); // 3秒待機
-            Initiate.Fade("Result", Color.black, 1);
+            EndGameAsync();
         }
     }
 

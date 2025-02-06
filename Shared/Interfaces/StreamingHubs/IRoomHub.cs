@@ -38,5 +38,8 @@ namespace Shared.Interfaces.StreamingHubs
 
         //宝箱の取得合計の同期
         Task GainChest();
+
+        //ゲーム終了
+        Task EndGameAsync();
     }
 }

@@ -164,6 +164,11 @@ namespace StreamingHubs
             var joinedUser = new JoinedUser() { ConnectionId = this.ConnectionId };
             roomData.Timer = time;//タイマーの更新
 
+            if (time == 0)
+            {
+                await EndGameAsync();
+            }
+
             //ルーム内の全員に現在の制限時間を通知
             this.Broadcast(room).OnTimer(joinedUser, time);
         }
@@ -213,6 +218,11 @@ namespace StreamingHubs
                 totalChestNum += rData.ChestNum;
             }
 
+            if (totalChestNum == 2)
+            {
+                await EndGameAsync();
+            }
+
             //ルーム内の全員に宝箱の獲得合計数を通知
             this.Broadcast(room).OnChestNum(totalChestNum,keyValuePairs);
 
@@ -221,7 +231,6 @@ namespace StreamingHubs
         //自動マッチング処理
         public async Task<JoinedUser[]> JoinLobbyAsync(int userId)
         {
-
             JoinedUser[] joinedUserList = await JoinAsync("Lobby", userId);
             //排他制御
             lock (joinedUserList)
@@ -255,6 +264,37 @@ namespace StreamingHubs
             //ルーム参加者全員に(自分以外)、ユーザーの位置、回転、アニメーションを通知
             this.BroadcastExceptSelf(room).OnMoveChest(pos, rotaition, Namechest);
         }
+
+        //ゲーム終了同期
+        public async Task EndGameAsync()
+        {
+            var roomStorage = this.room.GetInMemoryStorage<RoomData>();
+            bool isGameFinish = true;
+
+            //排他制御(全員で何か共有しているとき)
+            lock (roomStorage)
+            {
+                var roomData = roomStorage.Get(this.ConnectionId);
+                roomData.IsEndGame = true;
+                
+                var roomDataList = roomStorage.AllValues.ToArray<RoomData>();
+                foreach (var rData in roomDataList)
+                {
+                    if (!rData.IsEndGame)
+                    {
+                        isGameFinish = false;
+                        break;
+                    }
+                }
+
+                if (isGameFinish == true)
+                {
+                    //ルーム内の全員がゲーム終了していたら、ゲーム終了を通知
+                    this.Broadcast(room).OnEndGame(isGameFinish);
+                }
+            }
+        }
+
 
         //ユーザーが切断したときの処理
         protected override ValueTask OnDisconnected()

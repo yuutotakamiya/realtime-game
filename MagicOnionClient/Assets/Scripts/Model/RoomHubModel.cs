@@ -22,23 +22,25 @@ public class RoomHubModel : BaseModel, IRoomHubReceiver
     public Guid ConnectionId;
 
     //ユーザー接続通知
-    public Action<JoinedUser> OnJoinedUser {  get; set; }//Modelを使うクラスにはActionを使ってサーバーから届いたデータを渡す
+    public Action<JoinedUser> OnJoinedUser { get; set; }//Modelを使うクラスにはActionを使ってサーバーから届いたデータを渡す
     //ユーザー退室通知
     public Action<JoinedUser> OnExitUser { get; set; }
     //ユーザーの移動、回転、アニメーションの通知
-    public Action<Guid,Vector3,Quaternion,CharacterState> OnMoveCharacter {  get; set; }
+    public Action<Guid, Vector3, Quaternion, CharacterState> OnMoveCharacter { get; set; }
     //ユーザー準備完了通知
-    public Action<Guid,bool> OnReadyUser {  get; set; }
+    public Action<Guid, bool> OnReadyUser { get; set; }
     //制限時間の通知
     public Action<JoinedUser, float> OnTime { get; set; }
     //キル通知
-    public Action<Guid,int,string> OnKillNum { get; set; }
+    public Action<Guid, int, string> OnKillNum { get; set; }
     //マッチング通知
-    public Action<string> OnMatch {  get; set; }
+    public Action<string> OnMatch { get; set; }
     //宝箱の位置通知
-    public Action<Vector3,Quaternion, string> OnChest { get; set; }
+    public Action<Vector3, Quaternion, string> OnChest { get; set; }
     //宝箱の取得数通知
-    public Action<int,Dictionary<string,int>> OnChestN {  get; set; }
+    public Action<int, Dictionary<string, int>> OnChestN { get; set; }
+    //ゲーム終了通知
+    public Action<bool> OnEndG { get; set; }
 
 
     //MagicOnion接続処理
@@ -59,16 +61,16 @@ public class RoomHubModel : BaseModel, IRoomHubReceiver
     }
 
     //破棄処理
-   public async void OnDestroy()
-   {
+    public async void OnDestroy()
+    {
         DisconnectAsync();
-   }
+    }
 
     //入室
     public async UniTask JoinAsync(string roomName, int userId)
     {
         JoinedUser[] users = await roomHub.JoinAsync(roomName, userId);
-        foreach (var user in users) 
+        foreach (var user in users)
         {
             if (user.UserData.Id == userId)
             {
@@ -87,7 +89,7 @@ public class RoomHubModel : BaseModel, IRoomHubReceiver
     //退室
     public async UniTask LeaveAsync()
     {
-      await roomHub.LeaveAsync();
+        await roomHub.LeaveAsync();
     }
 
     //退室通知(IRoomHubReceiverインターフェイスの実装)
@@ -97,14 +99,14 @@ public class RoomHubModel : BaseModel, IRoomHubReceiver
     }
 
     //移動、回転通知
-    public void OnMove(Guid connectionId,Vector3 pos, Quaternion rotaition,CharacterState characterState)
+    public void OnMove(Guid connectionId, Vector3 pos, Quaternion rotaition, CharacterState characterState)
     {
-        OnMoveCharacter(connectionId,pos,rotaition,characterState);
+        OnMoveCharacter(connectionId, pos, rotaition, characterState);
     }
 
 
     //移動、回転
-    public async UniTask MoveAsync(Vector3 pos, Quaternion rotaition,CharacterState characterState)
+    public async UniTask MoveAsync(Vector3 pos, Quaternion rotaition, CharacterState characterState)
     {
         await roomHub.MoveAsync(pos, rotaition, characterState);
     }
@@ -116,9 +118,9 @@ public class RoomHubModel : BaseModel, IRoomHubReceiver
     }
 
     //ルーム内にいる全ユーザーが準備完了したかどうかの通知
-    public void OnReady(Guid connectionId,bool isReady)
+    public void OnReady(Guid connectionId, bool isReady)
     {
-        OnReadyUser(connectionId,isReady);
+        OnReadyUser(connectionId, isReady);
     }
 
     //ゲーム内制限時間
@@ -128,9 +130,9 @@ public class RoomHubModel : BaseModel, IRoomHubReceiver
     }
 
     //ルーム内全員に制限時間を通知
-    public void OnTimer(JoinedUser user,float time)
+    public void OnTimer(JoinedUser user, float time)
     {
-        OnTime(user,time);
+        OnTime(user, time);
     }
 
     //鬼が誰をキルしたかの処理
@@ -140,9 +142,9 @@ public class RoomHubModel : BaseModel, IRoomHubReceiver
     }
 
     //鬼がだれをキルしたかを通知
-    public void OnKill(Guid connectionId, int totalKillNum,string userName)
+    public void OnKill(Guid connectionId, int totalKillNum, string userName)
     {
-        OnKillNum(connectionId, totalKillNum,userName);
+        OnKillNum(connectionId, totalKillNum, userName);
     }
 
     //マッチングの同期
@@ -166,7 +168,7 @@ public class RoomHubModel : BaseModel, IRoomHubReceiver
     }
 
     //宝箱の位置同期
-    public async UniTask MoveChest(Vector3 pos ,Quaternion rotaition, string Namechest)
+    public async UniTask MoveChest(Vector3 pos, Quaternion rotaition, string Namechest)
     {
         await roomHub.MoveChest(pos, rotaition, Namechest);
     }
@@ -174,7 +176,7 @@ public class RoomHubModel : BaseModel, IRoomHubReceiver
     //宝箱の位置の通知
     public void OnMoveChest(Vector3 pos, Quaternion rotaition, string Namechest)
     {
-        OnChest(pos,rotaition,Namechest);
+        OnChest(pos, rotaition, Namechest);
     }
 
     //宝箱の取得数同期
@@ -184,8 +186,21 @@ public class RoomHubModel : BaseModel, IRoomHubReceiver
     }
 
     //宝箱の取得数合計の通知
-    public void OnChestNum(int TotalChestNum,Dictionary<string,int>keyValuePairs)
+    public void OnChestNum(int TotalChestNum, Dictionary<string, int> keyValuePairs)
     {
-        OnChestN(TotalChestNum,keyValuePairs);
+        OnChestN(TotalChestNum, keyValuePairs);
     }
+
+    //ゲーム終了同期
+    public async UniTask EndGameAsync()
+    {
+        await roomHub.EndGameAsync();
+    }
+
+    //ゲーム終了通知
+    public void OnEndGame(bool isHumanEndGame)
+    {
+        OnEndG(isHumanEndGame);
+    }
+
 }

@@ -44,5 +44,8 @@ namespace Shared.Interfaces.StreamingHubs
 
         //宝箱の獲得数を通知
         void OnChestNum(int TotalChestNum,Dictionary<string,int> keyValuePairs);
+
+        //ゲーム終了通知
+        void OnEndGame(bool isHumanEndGame);
     }
 }
