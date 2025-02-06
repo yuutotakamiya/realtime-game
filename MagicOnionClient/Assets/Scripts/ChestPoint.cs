@@ -29,8 +29,8 @@ public class ChestPoint : MonoBehaviour
             }
 
             Destroy(other.gameObject);
-
             defenceTarget.CancelInvoke("Chest");
+            isChestProcessed=false;
 
             //HumanManager.DropTreasure();
         }
