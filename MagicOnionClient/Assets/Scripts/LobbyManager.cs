@@ -48,10 +48,16 @@ public class LobbyManager : MonoBehaviour
         await JoinRoom();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnDestroy()
     {
+        //OnJoinedUser’Ê’m‚Ì‚Ì“o˜^‰ğœ
+        roomHubModel.OnJoinedUser -= this.OnJoinedUser;
 
+        //OnMaching’Ê’m‚Ì“o˜^‰ğœ
+        roomHubModel.OnMatch -= this.OnMaching;
+
+        //OnLeave’Ê’m‚Ì“o˜^‰ğœ
+        roomHubModel.OnExitUser -= this.OnExitUser;
     }
 
     //“üº‚·‚é‚ÉŒÄ‚Ño‚·ŠÖ”

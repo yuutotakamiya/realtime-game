@@ -10,6 +10,12 @@ namespace MagicOnionServer.Services
 {
     public class UserService : ServiceBase<IUserService>, IUserService
     {
+        /// <summary>
+        /// ユーザー登録API
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        /// <exception cref="ReturnStatusException"></exception>
         public async UnaryResult<int> RegistUserAsync(string name)
         {
             using var context = new GameDbContext();

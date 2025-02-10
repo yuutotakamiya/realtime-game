@@ -206,13 +206,13 @@ namespace StreamingHubs
             int totalChestNum = 0;
 
             //プレイヤー毎の宝箱を格納する変数
-            Dictionary<string,int> keyValuePairs = new Dictionary<string,int>();
+            Dictionary<string, int> keyValuePairs = new Dictionary<string, int>();
 
             // すべてのプレイヤーのデータをループし、宝箱数をカウント
             foreach (var rData in roomDataList)
             {
                 // 各プレイヤーの名前をキーに、宝箱数をディクショナリに追加
-                keyValuePairs[rData.JoinedUser.UserData.Name]= rData.ChestNum;
+                keyValuePairs[rData.JoinedUser.UserData.Name] = rData.ChestNum;
 
                 // 合計宝箱数に加算
                 totalChestNum += rData.ChestNum;
@@ -224,7 +224,7 @@ namespace StreamingHubs
             }
 
             //ルーム内の全員に宝箱の獲得合計数を通知
-            this.Broadcast(room).OnChestNum(totalChestNum,keyValuePairs);
+            this.Broadcast(room).OnChestNum(totalChestNum, keyValuePairs);
 
         }
 
@@ -271,28 +271,26 @@ namespace StreamingHubs
             var roomStorage = this.room.GetInMemoryStorage<RoomData>();
             bool isGameFinish = true;
 
-            //排他制御(全員で何か共有しているとき)
-            lock (roomStorage)
-            {
-                var roomData = roomStorage.Get(this.ConnectionId);
-                roomData.IsEndGame = true;
-                
-                var roomDataList = roomStorage.AllValues.ToArray<RoomData>();
-                foreach (var rData in roomDataList)
-                {
-                    if (!rData.IsEndGame)
-                    {
-                        isGameFinish = false;
-                        break;
-                    }
-                }
+            var roomDataList = roomStorage.AllValues.ToArray<RoomData>();
 
-                if (isGameFinish == true)
-                {
-                    //ルーム内の全員がゲーム終了していたら、ゲーム終了を通知
-                    this.Broadcast(room).OnEndGame(isGameFinish);
-                }
+            int point = 10;
+
+            foreach (var roomData in roomDataList)
+            {
+                using var context = new GameDbContext();
+                // ユーザーのIDを取得
+                int userId = roomData.JoinedUser.UserData.Id;
+
+                // データベースからユーザー情報を取得
+                var user = await context.Users.FindAsync(userId);
+
+                //User user = context.Users.Where(user => user.Id == id).First();
+                //user.Name = "takamiya";
+                await context.SaveChangesAsync();
             }
+
+            //ゲーム終了を通知
+            this.Broadcast(room).OnEndGame(isGameFinish);
         }
 
 

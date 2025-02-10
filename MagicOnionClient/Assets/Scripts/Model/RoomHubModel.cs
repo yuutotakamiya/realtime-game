@@ -83,7 +83,10 @@ public class RoomHubModel : BaseModel, IRoomHubReceiver
     //入室通知(IRoomHubReceiverインターフェイスの実装)
     public void OnJoin(JoinedUser user)
     {
-        OnJoinedUser(user);
+        if (OnJoinedUser!=null)
+        {
+            OnJoinedUser(user);
+        }
     }
 
     //退室

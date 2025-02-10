@@ -16,6 +16,8 @@ public class UserModel : BaseModel
     public string authToken;//トークンを保存するための変数
 
     private static UserModel instance;
+
+    //UserModelクラスをインスタンス化
     public static UserModel Instance
     {
         get

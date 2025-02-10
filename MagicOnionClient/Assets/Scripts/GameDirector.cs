@@ -122,6 +122,36 @@ public class GameDirector : MonoBehaviour
         await Ready();
     }
 
+    private void OnDestroy()
+    {
+        //OnJoinedUser’Ê’m‚Ì“o˜^‰ğœ
+        roomHubModel.OnJoinedUser -= this.OnJoinedUser;
+
+        //OnLeave’Ê’m‚Ì“o˜^‰ğœ
+        roomHubModel.OnExitUser -= this.OnExitUser;
+
+        //OnMoveCharacter’Ê’m‚Ì“o˜^‰ğœ
+        roomHubModel.OnMoveCharacter -= this.OnMoveCharacter;
+
+        //OnReady’Ê’m‚Ì“o˜^‰ğœ
+        roomHubModel.OnReadyUser -= this.OnReady;
+
+        //OnTime’Ê’m‚ğ“o˜^‰ğœ
+        roomHubModel.OnTime -= this.OnTimer;
+
+        //OnKill’Ê’m‚Ì“o˜^‰ğœ
+        roomHubModel.OnKillNum -= this.OnKill;
+
+        //OnMoveChest‚Ì’Ê’m“o˜^‰ğœ
+        roomHubModel.OnChest -= this.OnMoveChest;
+
+        //OnGainChest’Ê’m‚Ì“o˜^‰ğœ
+        roomHubModel.OnChestN -= this.OnChestNum;
+
+        //OnEndGame’Ê’m‚Ì“o˜^‰ğœ
+        roomHubModel.OnEndG -= this.OnEndGame;
+    }
+
     //“üº‚·‚é‚ÉŒÄ‚Ño‚·ŠÖ”
     public async UniTask JoinRoom()
     {
@@ -484,15 +514,9 @@ public class GameDirector : MonoBehaviour
         return foundCharacter;
     }
 
-    public void LightningAttak()
+    /*public void LightningAttak()
     {
         characterList[roomHubModel.ConnectionId].GetComponent<Character>().LightningAttack();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
+    }*/
 }
 
