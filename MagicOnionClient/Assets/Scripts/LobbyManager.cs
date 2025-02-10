@@ -1,3 +1,9 @@
+//==========================================================
+//
+//マッチングの管理処理
+//Author:高宮祐翔
+//
+//==========================================================
 using MagicOnionServer.Model.Entity;
 using Shared.Interfaces.StreamingHubs;
 using System.Collections;
@@ -7,9 +13,11 @@ using UnityEngine.UI;
 using System;
 using Cysharp.Threading.Tasks;
 
+/// <summary>
+///　マッチングを管理しているスクリプト
+/// </summary>
 public class LobbyManager : MonoBehaviour
 {
-    //[SerializeField] GameObject MachingPrefab;//
     [SerializeField] RoomHubModel roomHubModel;//roomHubModelクラスの設定
     [SerializeField] GameObject MachingText;//マッチングText;
     [SerializeField] GameObject MachingIcon;//マッチング中のIcon
@@ -20,15 +28,15 @@ public class LobbyManager : MonoBehaviour
 
     Dictionary<Guid, GameObject> characterList = new Dictionary<Guid, GameObject>();
 
-    // 最大のJoinOrder（最大プレイヤー数4人）
-    private int maxPlayers = 4;
     //ルーム名をプロパティ化
     public static string RoomName
     {
         get { return roomName; }
     }
 
-    // Start is called before the first frame update
+    /// <summary>
+    /// 一番最初に呼ばれる関数
+    /// </summary>
     public async void Start()
     {
         //接続
@@ -45,7 +53,7 @@ public class LobbyManager : MonoBehaviour
 
         MachingIcon.SetActive(true);
         MachingText.SetActive(true);
-        await JoinRoom();
+        await JoinRoom();//非同期でJoinRoom関数を呼び出し
     }
 
     private void OnDestroy()
@@ -60,7 +68,10 @@ public class LobbyManager : MonoBehaviour
         roomHubModel.OnExitUser -= this.OnExitUser;
     }
 
-    //入室する時に呼び出す関数
+    /// <summary>
+    /// 入室する時に呼び出す関数
+    /// </summary>
+    /// <returns></returns>
     public async UniTask JoinRoom()
     {
         //入室
@@ -68,7 +79,10 @@ public class LobbyManager : MonoBehaviour
     }
 
 
-    //ユーザーが入室した時の処理
+    /// <summary>
+    /// ユーザーが入室した時の処理
+    /// </summary>
+    /// <param name="user"></param>
     private void OnJoinedUser(JoinedUser user)
     {
         //キャラクターの生成
@@ -88,7 +102,10 @@ public class LobbyManager : MonoBehaviour
 
     }
 
-    //マッチングしたときに通知を出す処理
+    /// <summary>
+    /// マッチングしたときに通知を出す処理
+    /// </summary>
+    /// <param name="roomName"></param>
     public async void OnMaching(string roomName)
     {
         LobbyManager.roomName = roomName;
@@ -101,7 +118,9 @@ public class LobbyManager : MonoBehaviour
     }
 
 
-    //退室するときに呼び出す関数
+    /// <summary>
+    /// 退室するときに呼び出す関数
+    /// </summary>
     public async void ExitRoom()
     {
         await roomHubModel.LeaveAsync();
@@ -120,7 +139,10 @@ public class LobbyManager : MonoBehaviour
         Initiate.Fade("Title", Color.black, 1.0f);
     }
 
-    //ユーザーが退室したときの処理
+    /// <summary>
+    /// ユーザーが退室したときの処理
+    /// </summary>
+    /// <param name="user"></param>
     private void OnExitUser(JoinedUser user)
     {
         // 退室したユーザーのキャラクターオブジェクトを削除

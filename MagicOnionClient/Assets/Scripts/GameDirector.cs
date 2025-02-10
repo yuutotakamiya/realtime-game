@@ -1,3 +1,9 @@
+//==========================================================
+//
+//インゲームを管理するスクリプト
+//Author:高宮祐翔
+//
+//==========================================================
 using Cinemachine;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
@@ -14,6 +20,10 @@ using UnityEngine;
 using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
 using static Shared.Interfaces.StreamingHubs.IRoomHubReceiver;
+
+/// <summary>
+/// ゲーム全体を管理しているスクリプト
+/// </summary>
 public class GameDirector : MonoBehaviour
 {
     //キャラクター関係
@@ -25,7 +35,7 @@ public class GameDirector : MonoBehaviour
     [SerializeField] DefenceTarget defenceTarget;
 
     //カウントダウン
-    [SerializeField] public float timeLimit;//制限時間を設定
+    [SerializeField] float timeLimit;//制限時間を設定
     [SerializeField] float currentTime;//現在のタイム
     [SerializeField] int countdownTime;//ゲームが始まる前のカウントダウン設定
 
@@ -38,7 +48,7 @@ public class GameDirector : MonoBehaviour
     [SerializeField] Image skullIamge;//頭蓋骨の画像
     [SerializeField] Text killerKakeru;//×Text;
     [SerializeField] Text humanKakeru;//×Text;
-    [SerializeField] public GameObject GameFinish;//ゲーム終了Text
+    [SerializeField] GameObject GameFinish;//ゲーム終了Text
     [SerializeField] GameObject GameStartText;//ゲームスタートText
     [SerializeField] GameObject Result;//リザルト画面に行くためのボタン
     [SerializeField] GameObject AttackButton1;//デフォルトの攻撃ボタン
@@ -49,14 +59,10 @@ public class GameDirector : MonoBehaviour
     [SerializeField] GameObject WinText2;
     [SerializeField] Image ChestImage;
 
-    /*[SerializeField] public GameObject openButton;
-    [SerializeField] public GameObject closeButton;
-    /*[SerializeField] public GameObject holdButton;
-    [SerializeField] public GameObject notholdButton;
-    [SerializeField] public GameObject placeButton;*/
-
+    //カメラの宣言
     private CinemachineVirtualCamera virtualCamera; // Cinemachine Virtual Camera
 
+    //フラグ関係
     private bool isEnemy = false;//自分が敵かどうか
     private bool ishave = false;//宝箱を持っているかどうか
 
@@ -184,9 +190,7 @@ public class GameDirector : MonoBehaviour
             {
                 isEnemy = true;
                 AttackButton1.SetActive(true);
-                //AttackButton2.SetActive(true);
                 KillNum.gameObject.SetActive(true);
-                //Crrenttext.gameObject.SetActive(true);
                 skullIamge.gameObject.SetActive(true);
                 MiniMap.gameObject.SetActive(true);
                 killerKakeru.gameObject.SetActive(true);
@@ -278,8 +282,6 @@ public class GameDirector : MonoBehaviour
             Animator animator = character.GetComponent<Animator>();
 
             animator.SetInteger("state", (int)characterState);
-
-            //Debug.Log(characterState);
         }
     }
 
@@ -382,7 +384,6 @@ public class GameDirector : MonoBehaviour
             characterList[roomHubModel.ConnectionId].GetComponent<Character>().Isstart = false;
             timerText.text = "0"; // 0秒になったら表示
             GameFinish.SetActive(true);
-            //await UniTask.Delay(TimeSpan.FromSeconds(4.0f));  // 非同期で4秒待機
             Invoke("LoadResult", 3);
         }
     }
@@ -513,10 +514,5 @@ public class GameDirector : MonoBehaviour
 
         return foundCharacter;
     }
-
-    /*public void LightningAttak()
-    {
-        characterList[roomHubModel.ConnectionId].GetComponent<Character>().LightningAttack();
-    }*/
 }
 

@@ -1,3 +1,9 @@
+//==========================================================
+//
+//キャラクターを管理処理
+//Author:高宮祐翔
+//
+//==========================================================
 using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,35 +13,39 @@ using UnityEngine.UI;
 using UnityEngine.UIElements;
 using static Shared.Interfaces.StreamingHubs.IRoomHubReceiver;
 
+/// <summary>
+/// キャラクターを管理しているスクリプト
+/// </summary>
 public class Character : MonoBehaviour
 {
-    [SerializeField] float speed;
-    [SerializeField] float rotateSpeed;
-    [SerializeField] public Text NameText;
-    [SerializeField] GameObject EffectPrefab;
-    [SerializeField] AudioClip AttackSE;
+    [SerializeField] float speed;//移動のスピードの設定
+    [SerializeField] float rotateSpeed;//回転の設定
+    [SerializeField] float AttckCoolDown;//攻撃のクールダウン
+    [SerializeField] public Text NameText;//名前Text
+    [SerializeField] AudioClip AttackSE;//攻撃SE
     [SerializeField] Collider collider;//攻撃の当たり判定
+
+    /// <summary>
+    /// フラグ関係
+    /// </summary>
     protected bool isDead = false;//死んでいるどうか
     protected bool isself = false;//自分自身かどうか
     protected bool isstart = false;//準備完了しているかどうか
     protected bool isAttack = false;//攻撃中かどうか
-    public bool isInDropArea = false;//宝箱の置くエリアにいるかどうか
-    public float AttckCoolDown;//攻撃のクールダウン
     protected bool hasTreasure = false;//宝箱を持っているかどうかのフラグ
 
+
+    /// <summary>
+    /// クラスの宣言
+    /// </summary>
     protected FixedJoystick joystick;
     protected Rigidbody rb;
     protected Animator animator;
-    protected RoomHubModel roomHub;
+    protected RoomHubModel roomHubModel;
     protected GameDirector gameDirector;
     protected DefenceTarget defenceTarget;
     protected CinemachineVirtualCamera virtualCamera;
-    public Renderer objectRenderer;
-    //public Color newColor = Color.yellow;
-    AudioSource audioSource;
-
-    public static Character instance;
-
+    private AudioSource audioSource;
     public GameObject currentTreasureChest;//現在引きずっている宝箱
 
     //自分自身かどうかのフラグのプロパティ
@@ -65,14 +75,6 @@ public class Character : MonoBehaviour
         get { return isstart; }
         set { isstart = value; }
     }
-
-    //宝箱を置くエリアにいるかどうかのフラグのプロパティ
-    public bool IsInDropArea
-    {
-        get { return isInDropArea; }
-        set { isInDropArea = value; }
-    }
-
     //宝箱を既に持っているかどうかのフラグのプロパティ
     public bool HasTreasure
     {
@@ -80,16 +82,18 @@ public class Character : MonoBehaviour
         set { hasTreasure = value; }
     }
 
+    /// <summary>
+    /// 一番最初に呼ばれる関数
+    /// </summary>
     public virtual void Start()
     {
         audioSource = GetComponent<AudioSource>();
         rb = GetComponent<Rigidbody>();
         joystick = GameObject.Find("Fixed Joystick").GetComponent<FixedJoystick>();
         animator = GetComponent<Animator>();
-        roomHub = GameObject.Find("RoomModel").GetComponent<RoomHubModel>();
+        roomHubModel = GameObject.Find("RoomModel").GetComponent<RoomHubModel>();
         gameDirector = GameObject.Find("GameDirector").GetComponent<GameDirector>();
         defenceTarget = GameObject.Find("DefenceTarget").GetComponent<DefenceTarget>();
-        objectRenderer = GetComponent<Renderer>();
 
         //defenceTargetがnullだったとき何もしない
         if (defenceTarget == null)
@@ -121,14 +125,13 @@ public class Character : MonoBehaviour
         {
             return;
         }
-        //Rendererがnullだったら何もしない
-        if (objectRenderer == null)
-        {
-            return;
-        }
+       
         collider.enabled = false;
     }
 
+    /// <summary>
+    /// 毎フレーム呼ばれる関数
+    /// </summary>
     public virtual async void Update()
     {
         if (Isstart == true)
@@ -169,18 +172,23 @@ public class Character : MonoBehaviour
             if (IsAttack == true)
             {
                 animator.SetInteger("state", 2);//攻撃アニメーション
-                await roomHub.MoveAsync(this.transform.position, this.transform.rotation, CharacterState.Attack);//攻撃アニメーションの同期
+                await roomHubModel.MoveAsync(this.transform.position, this.transform.rotation, CharacterState.Attack);//攻撃アニメーションの同期
             }
         }
     }
 
-    // 宝箱をセットするメソッド
+    /// <summary>
+    /// 宝箱をセットするメソッド
+    /// </summary>
+    /// <param name="chest"></param>
     public void SetTreasureChest(GameObject chest)
     {
         currentTreasureChest = chest;
     }
 
-    //アニメーションイベントを使って特定の場所だけColliderをtrueにする
+    /// <summary>
+    /// アニメーションイベントを使って特定の場所だけColliderをtrueにする
+    /// </summary>
     public void StartAttack()
     {
         IsAttack = true;
@@ -188,7 +196,9 @@ public class Character : MonoBehaviour
         collider.enabled = true;
     }
 
-    //コライダーの判定をfalseにする
+    /// <summary>
+    /// コライダーの判定をfalseにする
+    /// </summary>
     public void StopAttack()
     {
         IsAttack = false;
@@ -196,23 +206,10 @@ public class Character : MonoBehaviour
         animator.SetInteger("state", 0);
     }
 
-    //雷攻撃のコライダーの判定をtrueにする
-    public void StartAttackAnimation()
-    {
-        IsAttack = true;
-        collider.enabled = true;
-        //objectRenderer.material.color = newColor;
-    }
-
-    //雷攻撃のコライダーの判定をfalseにする
-    public void StopAttackAnimation()
-    {
-        IsAttack = false;
-        Destroy(EffectPrefab, 4);
-        collider.enabled = false;
-    }
-
-    //攻撃アニメーションが終わるまで
+    /// <summary>
+    /// 攻撃アニメーションが終わるまで
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator AttackAnimation()
     {
         // アニメーションの終了を待つ代わりに、クールダウン時間を待つ
@@ -223,7 +220,10 @@ public class Character : MonoBehaviour
         animator.SetInteger("state", 0); // Idleアニメーションに戻す
     }
 
-    //名前を表示
+    /// <summary>
+    /// 名前を表示
+    /// </summary>
+    /// <param name="Name"></param>
     public void Name(string Name)
     {
         if (NameText != null)
@@ -232,23 +232,14 @@ public class Character : MonoBehaviour
         }
     }
 
-    //デフォルトのアタックボタンの処理
+    /// <summary>
+    /// デフォルトのアタックボタンの処理
+    /// </summary>
     public void AttackButton()
     {
         if (gameDirector.IsEnemy == true && Isstart == true && Isself == true && IsAttack == false)
         {
             IsAttack = true;
-            StartCoroutine(AttackAnimation());
-        }
-    }
-
-    //雷攻撃アニメーション処理
-    public void LightningAttack()
-    {
-        if (gameDirector.IsEnemy == true && Isstart == true && Isself == true && IsAttack == false)
-        {
-            IsAttack = true;
-            Instantiate(EffectPrefab, transform.position, Quaternion.identity);
             StartCoroutine(AttackAnimation());
         }
     }

@@ -83,7 +83,7 @@ public class RoomHubModel : BaseModel, IRoomHubReceiver
     //入室通知(IRoomHubReceiverインターフェイスの実装)
     public void OnJoin(JoinedUser user)
     {
-        if (OnJoinedUser!=null)
+        if (OnJoinedUser != null)
         {
             OnJoinedUser(user);
         }
@@ -98,15 +98,20 @@ public class RoomHubModel : BaseModel, IRoomHubReceiver
     //退室通知(IRoomHubReceiverインターフェイスの実装)
     public void OnLeave(JoinedUser user)
     {
-        OnExitUser(user);
+        if (OnExitUser != null)
+        {
+            OnExitUser(user);
+        }
     }
 
     //移動、回転通知
     public void OnMove(Guid connectionId, Vector3 pos, Quaternion rotaition, CharacterState characterState)
     {
-        OnMoveCharacter(connectionId, pos, rotaition, characterState);
+        if (OnMoveCharacter!=null)
+        {
+            OnMoveCharacter(connectionId, pos, rotaition, characterState);
+        }
     }
-
 
     //移動、回転
     public async UniTask MoveAsync(Vector3 pos, Quaternion rotaition, CharacterState characterState)

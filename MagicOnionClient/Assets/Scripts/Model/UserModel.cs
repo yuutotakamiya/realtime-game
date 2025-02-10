@@ -1,3 +1,9 @@
+//==========================================================
+//
+//ユーザー管理処理
+//Author:高宮祐翔
+//
+//==========================================================
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Cysharp.Net.Http;
@@ -10,6 +16,9 @@ using System;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
 
+/// <summary>
+/// ユーザーを管理しているスクリプト
+/// </summary>
 public class UserModel : BaseModel
 {
     public int userId;//ユーザーIDを保存する変数
