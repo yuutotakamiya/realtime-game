@@ -9,15 +9,5 @@ public class BaseModel : MonoBehaviour
 #else
     public const  string ServerURL = "http://realtimegame.japaneast.cloudapp.azure.com:7000";
 #endif
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+   
 }

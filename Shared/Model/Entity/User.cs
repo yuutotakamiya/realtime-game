@@ -16,8 +16,10 @@ namespace MagicOnionServer.Model.Entity
         [Key(2)]
         public string Token { get; set; }
         [Key(3)]
-        public DateTime Created_at { get; set; }
+        public int point {  get; set; }
         [Key(4)]
+        public DateTime Created_at { get; set; }
+        [Key(5)]
         public DateTime Updated_at { get; set; }
     }
 }

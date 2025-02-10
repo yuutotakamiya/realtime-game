@@ -1,3 +1,9 @@
+//==========================================================
+//
+//タイトル管理処理
+//Author:高宮祐翔
+//
+//==========================================================
 using DG.Tweening;
 using MessagePack.Formatters.MagicOnionServer.Model.Entity;
 using System.Collections;
@@ -7,19 +13,19 @@ using UnityEngine;
 using UnityEngine.UI;
 using static UnityEngine.Rendering.DebugUI;
 
+/// <summary>
+/// タイトルを管理しているスクリプト
+/// </summary>
 public class TitleManager : BaseModel
 {
     [SerializeField] InputField inputFieldName;//名前を入力するフィールド
+    [SerializeField] InputField InputFieldUserID;//Debug用ユーザーのID入力フィールド
 
     [SerializeField] Text InputText;//名前入力されたテキスト
-
-    [SerializeField] UserModel userModel;//ユーザーモデルクラス定義
-
-    [SerializeField] GameObject StartButton;//スタートボタン
-
     [SerializeField] Text ErrorText;//エラーテキスト
 
-    [SerializeField] InputField InputFieldUserID;//Debug用ユーザーのID入力フィールド
+    [SerializeField] UserModel userModel;//ユーザーモデルクラス定義
+    [SerializeField] GameObject StartButton;//スタートボタン
 
     [SerializeField] CanvasGroup buttonCanvasGroup; // ボタンに追加したCanvasGroup
     [SerializeField] float fadeDuration = 0.5f; // フェードの時間

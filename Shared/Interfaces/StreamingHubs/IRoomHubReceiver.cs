@@ -46,6 +46,6 @@ namespace Shared.Interfaces.StreamingHubs
         void OnChestNum(int TotalChestNum,Dictionary<string,int> keyValuePairs);
 
         //ゲーム終了通知
-        void OnEndGame(bool isHumanEndGame);
+        void OnEndGame(bool isHumanEndGame,List<ResultData> resultData);
     }
 }

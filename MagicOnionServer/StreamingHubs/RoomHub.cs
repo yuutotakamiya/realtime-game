@@ -17,7 +17,12 @@ namespace StreamingHubs
     {
         private IGroup room;
 
-        //ユーザー入室
+        /// <summary>
+        /// ユーザー入室
+        /// </summary>
+        /// <param name="roomName"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public async Task<JoinedUser[]> JoinAsync(string roomName, int userId)//スレッドセーフ
         {
             //ルームに参加&ルーム保持
@@ -65,8 +70,6 @@ namespace StreamingHubs
                     }
 
                 }
-                /*ルーム参加者全員に(自分を含む)、ユーザーの入室通知を送信
-                this.Broadcast(room).OnJoin(joinedUser);*/
 
                 //ルーム参加者全員に(自分以外)、ユーザーの入室通知を送信
                 this.BroadcastExceptSelf(room).OnJoin(joinedUser);
@@ -85,7 +88,10 @@ namespace StreamingHubs
             }
         }
 
-        //ユーザーの退室
+        /// <summary>
+        /// ユーザーの退室
+        /// </summary>
+        /// <returns></returns>
         public async Task LeaveAsync()
         {
             //グループデータから削除
@@ -101,7 +107,13 @@ namespace StreamingHubs
 
         }
 
-        //ユーザーの移動、回転、アニメーション
+        /// <summary>
+        /// ユーザーの移動、回転、アニメーション
+        /// </summary>
+        /// <param name="pos"></param>
+        /// <param name="rotaition"></param>
+        /// <param name="characterState"></param>
+        /// <returns></returns>
         public async Task MoveAsync(Vector3 pos, Quaternion rotaition, CharacterState characterState)
         {
             //RoomDataの情報を取得
@@ -118,7 +130,10 @@ namespace StreamingHubs
             this.BroadcastExceptSelf(room).OnMove(this.ConnectionId, pos, rotaition, characterState);
         }
 
-        //ユーザーの準備
+        /// <summary>
+        /// ユーザーの準備
+        /// </summary>
+        /// <returns></returns>
         public async Task ReadyAsync()//スレッドセーフ
         {
             //準備できたことをRoomDataに保存
@@ -156,7 +171,11 @@ namespace StreamingHubs
 
         }
 
-        //ゲームの制限時間処理
+        /// <summary>
+        /// ゲームの制限時間処理
+        /// </summary>
+        /// <param name="time"></param>
+        /// <returns></returns>
         public async Task TimeAsync(float time)
         {
             var roomStorage = this.room.GetInMemoryStorage<RoomData>();
@@ -173,7 +192,10 @@ namespace StreamingHubs
             this.Broadcast(room).OnTimer(joinedUser, time);
         }
 
-        //鬼のキル数更新処理
+        /// <summary>
+        /// 鬼のキル数更新処理
+        /// </summary>
+        /// <returns></returns>
         public async Task KillAsync()
         {
             var roomStorage = this.room.GetInMemoryStorage<RoomData>();
@@ -194,7 +216,10 @@ namespace StreamingHubs
             this.Broadcast(room).OnKill(this.ConnectionId, totalKillNum, roomData.JoinedUser.UserData.Name);
         }
 
-        //宝箱の獲得合計数同期
+        /// <summary>
+        /// 宝箱の獲得合計数同期
+        /// </summary>
+        /// <returns></returns>
         public async Task GainChest()
         {
             var roomStorage = this.room.GetInMemoryStorage<RoomData>();
@@ -248,7 +273,13 @@ namespace StreamingHubs
         }
 
 
-        //宝箱の位置同期
+        /// <summary>
+        /// 宝箱の位置同期
+        /// </summary>
+        /// <param name="pos"></param>
+        /// <param name="rotaition"></param>
+        /// <param name="Namechest"></param>
+        /// <returns></returns>
         public async Task MoveChest(Vector3 pos, Quaternion rotaition, string Namechest)
         {
             //RoomDataの情報を取得
@@ -265,7 +296,10 @@ namespace StreamingHubs
             this.BroadcastExceptSelf(room).OnMoveChest(pos, rotaition, Namechest);
         }
 
-        //ゲーム終了同期
+        /// <summary>
+        /// ゲーム終了同期
+        /// </summary>
+        /// <returns></returns>
         public async Task EndGameAsync()
         {
             var roomStorage = this.room.GetInMemoryStorage<RoomData>();
@@ -275,32 +309,46 @@ namespace StreamingHubs
 
             int point = 10;
 
+            using var context = new GameDbContext();
+
+            List<ResultData> resultData = new List<ResultData>();
+
             foreach (var roomData in roomDataList)
-            {
-                using var context = new GameDbContext();
+            { 
                 // ユーザーのIDを取得
                 int userId = roomData.JoinedUser.UserData.Id;
 
                 // データベースからユーザー情報を取得
                 var user = await context.Users.FindAsync(userId);
 
-                //User user = context.Users.Where(user => user.Id == id).First();
-                //user.Name = "takamiya";
-                await context.SaveChangesAsync();
+                resultData.Add(new ResultData
+                {
+                    Name = roomData.JoinedUser.UserData.Name, 
+                    ChestNum = roomData.ChestNum,
+                    KillNum = roomData.KillNum,
+                    Point = user.point
+                });
+
+                user.point += point;
             }
+            await context.SaveChangesAsync();
 
             //ゲーム終了を通知
-            this.Broadcast(room).OnEndGame(isGameFinish);
+            this.Broadcast(room).OnEndGame(isGameFinish,resultData);
         }
 
 
-        //ユーザーが切断したときの処理
+        /// <summary>
+        /// ユーザーが切断したときの処理
+        /// </summary>
+        /// <returns></returns>
         protected override ValueTask OnDisconnected()
         {
             //グループデータから削除
             this.room.GetInMemoryStorage<RoomData>().Remove(this.ConnectionId);
 
             var joinedUser = new JoinedUser() { ConnectionId = this.ConnectionId };
+
             //ルーム参加者全員に(自分以外)、ユーザーの退室通知を送信
             this.Broadcast(room).OnLeave(joinedUser);
 

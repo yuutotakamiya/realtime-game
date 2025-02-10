@@ -41,19 +41,9 @@ public class UserModel : BaseModel
         }
     }
     
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    //ユーザーIDをローカルファイルに保存する
+    /// <summary>
+    /// ユーザーIDをローカルファイルに保存する
+    /// </summary>
     public void SaveUserData()
     {
         SaveData saveData = new SaveData();
@@ -66,7 +56,10 @@ public class UserModel : BaseModel
         writer.Close();
     }
 
-    //ユーザーIDをローカルファイルから読み込む
+    /// <summary>
+    /// ユーザーIDをローカルファイルから読み込む
+    /// </summary>
+    /// <returns></returns>
     public bool LoadUserData()
     {
         if (!File.Exists(Application.persistentDataPath + "/saveData.json"))

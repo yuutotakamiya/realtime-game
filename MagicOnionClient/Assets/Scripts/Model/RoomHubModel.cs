@@ -40,10 +40,13 @@ public class RoomHubModel : BaseModel, IRoomHubReceiver
     //宝箱の取得数通知
     public Action<int, Dictionary<string, int>> OnChestN { get; set; }
     //ゲーム終了通知
-    public Action<bool> OnEndG { get; set; }
+    public Action<bool,List<ResultData>> OnEndG { get; set; }
 
 
-    //MagicOnion接続処理
+    /// <summary>
+    /// MagicOnion接続処理
+    /// </summary>
+    /// <returns></returns>
     public async UniTask ConnectionAsync()
     {
         var handler = new YetAnotherHttpHandler() { Http2Only = true };
@@ -51,7 +54,10 @@ public class RoomHubModel : BaseModel, IRoomHubReceiver
         roomHub = await StreamingHubClient.ConnectAsync<IRoomHub, IRoomHubReceiver>(channel, this);
     }
 
-    //MagicOnion切断処理
+    /// <summary>
+    /// MagicOnion切断処理
+    /// </summary>
+    /// <returns></returns>
     public async UniTask DisconnectAsync()
     {
         if (roomHub != null) await roomHub.DisposeAsync();
@@ -60,13 +66,20 @@ public class RoomHubModel : BaseModel, IRoomHubReceiver
         channel = null;
     }
 
-    //破棄処理
+    /// <summary>
+    /// 破棄処理
+    /// </summary>
     public async void OnDestroy()
     {
         DisconnectAsync();
     }
 
-    //入室
+    /// <summary>
+    /// 入室
+    /// </summary>
+    /// <param name="roomName"></param>
+    /// <param name="userId"></param>
+    /// <returns></returns>
     public async UniTask JoinAsync(string roomName, int userId)
     {
         JoinedUser[] users = await roomHub.JoinAsync(roomName, userId);
@@ -80,7 +93,10 @@ public class RoomHubModel : BaseModel, IRoomHubReceiver
         }
     }
 
-    //入室通知(IRoomHubReceiverインターフェイスの実装)
+    /// <summary>
+    /// 入室通知(IRoomHubReceiverインターフェイスの実装)
+    /// </summary>
+    /// <param name="user"></param>
     public void OnJoin(JoinedUser user)
     {
         if (OnJoinedUser != null)
@@ -89,13 +105,19 @@ public class RoomHubModel : BaseModel, IRoomHubReceiver
         }
     }
 
-    //退室
+    /// <summary>
+    /// 退室
+    /// </summary>
+    /// <returns></returns>
     public async UniTask LeaveAsync()
     {
         await roomHub.LeaveAsync();
     }
 
-    //退室通知(IRoomHubReceiverインターフェイスの実装)
+    /// <summary>
+    /// 退室通知(IRoomHubReceiverインターフェイスの実装)
+    /// </summary>
+    /// <param name="user"></param>
     public void OnLeave(JoinedUser user)
     {
         if (OnExitUser != null)
@@ -104,7 +126,13 @@ public class RoomHubModel : BaseModel, IRoomHubReceiver
         }
     }
 
-    //移動、回転通知
+    /// <summary>
+    /// 移動、回転通知
+    /// </summary>
+    /// <param name="connectionId"></param>
+    /// <param name="pos"></param>
+    /// <param name="rotaition"></param>
+    /// <param name="characterState"></param>
     public void OnMove(Guid connectionId, Vector3 pos, Quaternion rotaition, CharacterState characterState)
     {
         if (OnMoveCharacter!=null)
@@ -113,49 +141,82 @@ public class RoomHubModel : BaseModel, IRoomHubReceiver
         }
     }
 
-    //移動、回転
+    /// <summary>
+    /// 移動、回転
+    /// </summary>
+    /// <param name="pos"></param>
+    /// <param name="rotaition"></param>
+    /// <param name="characterState"></param>
+    /// <returns></returns>
     public async UniTask MoveAsync(Vector3 pos, Quaternion rotaition, CharacterState characterState)
     {
         await roomHub.MoveAsync(pos, rotaition, characterState);
     }
 
-    //ユーザーの準備
+    /// <summary>
+    /// ユーザーの準備
+    /// </summary>
+    /// <returns></returns>
     public async UniTask ReadyAsync()
     {
         await roomHub.ReadyAsync();
     }
 
-    //ルーム内にいる全ユーザーが準備完了したかどうかの通知
+    /// <summary>
+    /// 準備完了通知
+    /// </summary>
+    /// <param name="connectionId"></param>
+    /// <param name="isReady"></param>
     public void OnReady(Guid connectionId, bool isReady)
     {
         OnReadyUser(connectionId, isReady);
     }
 
-    //ゲーム内制限時間
+    /// <summary>
+    /// ゲーム内制限時間
+    /// </summary>
+    /// <param name="time"></param>
+    /// <returns></returns>
     public async UniTask TimeAsync(float time)
     {
         await roomHub.TimeAsync(time);
     }
 
-    //ルーム内全員に制限時間を通知
+    /// <summary>
+    /// 制限時間通知
+    /// </summary>
+    /// <param name="user"></param>
+    /// <param name="time"></param>
     public void OnTimer(JoinedUser user, float time)
     {
         OnTime(user, time);
     }
 
-    //鬼が誰をキルしたかの処理
+    /// <summary>
+    /// 鬼が誰をキルしたかの処理
+    /// </summary>
+    /// <returns></returns>
     public async UniTask KillAsync()
     {
         await roomHub.KillAsync();
     }
 
-    //鬼がだれをキルしたかを通知
+    /// <summary>
+    /// 鬼がだれをキルしたかを通知
+    /// </summary>
+    /// <param name="connectionId"></param>
+    /// <param name="totalKillNum"></param>
+    /// <param name="userName"></param>
     public void OnKill(Guid connectionId, int totalKillNum, string userName)
     {
         OnKillNum(connectionId, totalKillNum, userName);
     }
 
-    //マッチングの同期
+    /// <summary>
+    /// マッチングの同期
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <returns></returns>
     public async UniTask JoinLobbyAsync(int userId)
     {
         JoinedUser[] users = await roomHub.JoinLobbyAsync(userId);
@@ -169,46 +230,73 @@ public class RoomHubModel : BaseModel, IRoomHubReceiver
         }
     }
 
-    //マッチング通知
+    /// <summary>
+    /// マッチング通知
+    /// </summary>
+    /// <param name="roomName"></param>
     public void OnMatching(string roomName)
     {
         OnMatch(roomName);
     }
 
-    //宝箱の位置同期
+    /// <summary>
+    /// 宝箱の位置同期
+    /// </summary>
+    /// <param name="pos"></param>
+    /// <param name="rotaition"></param>
+    /// <param name="Namechest"></param>
+    /// <returns></returns>
     public async UniTask MoveChest(Vector3 pos, Quaternion rotaition, string Namechest)
     {
         await roomHub.MoveChest(pos, rotaition, Namechest);
     }
 
-    //宝箱の位置の通知
+    /// <summary>
+    /// 宝箱の位置の通知
+    /// </summary>
+    /// <param name="pos"></param>
+    /// <param name="rotaition"></param>
+    /// <param name="Namechest"></param>
     public void OnMoveChest(Vector3 pos, Quaternion rotaition, string Namechest)
     {
         OnChest(pos, rotaition, Namechest);
     }
 
-    //宝箱の取得数同期
+   /// <summary>
+   /// 宝箱の取得数同期
+   /// </summary>
+   /// <returns></returns>
     public async UniTask GainChest()
     {
         await roomHub.GainChest();
     }
 
-    //宝箱の取得数合計の通知
+    /// <summary>
+    /// 宝箱の取得数合計の通知
+    /// </summary>
+    /// <param name="TotalChestNum"></param>
+    /// <param name="keyValuePairs"></param>
     public void OnChestNum(int TotalChestNum, Dictionary<string, int> keyValuePairs)
     {
         OnChestN(TotalChestNum, keyValuePairs);
     }
 
-    //ゲーム終了同期
+    /// <summary>
+    /// ゲーム終了同期
+    /// </summary>
+    /// <returns></returns>
     public async UniTask EndGameAsync()
     {
         await roomHub.EndGameAsync();
     }
 
-    //ゲーム終了通知
-    public void OnEndGame(bool isHumanEndGame)
+    /// <summary>
+    /// ゲーム終了通知
+    /// </summary>
+    /// <param name="isHumanEndGame"></param>
+    public void OnEndGame(bool isHumanEndGame,List<ResultData> resultData)
     {
-        OnEndG(isHumanEndGame);
+        OnEndG(isHumanEndGame,resultData);
     }
 
 }

@@ -20,19 +20,23 @@ class UsersTableSeeder extends Seeder
         //
         User::create([
             'name' => '勇者',
-            'token'=>''
+            'token'=>'',
+            'point'=>0
         ]);
         User::create([
             'name' => 'aa',
-            'token'=>''
+            'token'=>'',
+             'point'=>1
         ]);
         User::create([
             'name' => 'takamiya',
-            'token'=>''
+            'token'=>'',
+            'point'=>2
         ]);
         User::create([
             'name' => 'uuu',
-            'token'=>''
+            'token'=>'',
+            'point'=>3
         ]);
     }
 }

@@ -59,7 +59,7 @@ public class GameDirector : MonoBehaviour
     [SerializeField] GameObject WinText2;
     [SerializeField] Image ChestImage;
 
-    //カメラの宣言
+    //virtualCameraカメラの宣言
     private CinemachineVirtualCamera virtualCamera; // Cinemachine Virtual Camera
 
     //フラグ関係
@@ -71,18 +71,24 @@ public class GameDirector : MonoBehaviour
     Rigidbody rigidbody;
     Character character;
 
+    //キャラクターの情報を保存するためのフィールド
     private Dictionary<Guid, GameObject> characterList = new Dictionary<Guid, GameObject>();
 
-    public static Dictionary<string,int> keyValuePairs;//名前と宝箱の名前をフィールドに保存
+    //名前と宝箱の名前をフィールドに保存
+    public static Dictionary<string,int> keyValuePairs;
 
     private JoinedUser MyName; //自分自身の名前をフィールドに保存
 
-    //自分自身が敵かどうかのプロパティ
+    //自分自身が敵かどうかを判断するフラグをプロパティ化
     public bool IsEnemy
     {
         get { return isEnemy; }
         set { isEnemy = value; }
     }
+
+    /// <summary>
+    /// 開始処理
+    /// </summary>
     public async void Start()
     {
         //接続
@@ -128,6 +134,9 @@ public class GameDirector : MonoBehaviour
         await Ready();
     }
 
+    /// <summary>
+    /// 次のシーンに行ったときに登録したものを解除する関数
+    /// </summary>
     private void OnDestroy()
     {
         //OnJoinedUser通知の登録解除
@@ -158,7 +167,10 @@ public class GameDirector : MonoBehaviour
         roomHubModel.OnEndG -= this.OnEndGame;
     }
 
-    //入室する時に呼び出す関数
+    /// <summary>
+    /// 入室する時に呼び出す関数
+    /// </summary>
+    /// <returns></returns>
     public async UniTask JoinRoom()
     {
         //入室
@@ -167,7 +179,10 @@ public class GameDirector : MonoBehaviour
         InvokeRepeating("Move", 0.1f, 0.1f);
     }
 
-    //ユーザーが入室した時の処理
+    /// <summary>
+    /// ユーザーが入室した時の処理
+    /// </summary>
+    /// <param name="user"></param>
     private void OnJoinedUser(JoinedUser user)
     {
         //キャラクターを生成
@@ -194,20 +209,9 @@ public class GameDirector : MonoBehaviour
                 skullIamge.gameObject.SetActive(true);
                 MiniMap.gameObject.SetActive(true);
                 killerKakeru.gameObject.SetActive(true);
-                ChestNumText.gameObject.SetActive(false);
-                ChestImage.gameObject.SetActive(false);
-                humanKakeru.gameObject.SetActive (false);
-
             }
             else
             {
-                AttackButton1.SetActive(false);
-                AttackButton2.SetActive(false);
-                KillNum.gameObject.SetActive(false);
-                Crrenttext.gameObject.SetActive(false);
-                skullIamge.gameObject .SetActive(false);
-                MiniMap.gameObject .SetActive(false);
-                killerKakeru.gameObject .SetActive(false);
                 ChestNumText.gameObject .SetActive(true);
                 ChestImage.gameObject .SetActive(true);
                 humanKakeru.gameObject.SetActive (true);
@@ -228,7 +232,9 @@ public class GameDirector : MonoBehaviour
         characterList[user.ConnectionId] = characterObject;//フィールドで保持
     }
 
-    //退室するときに呼び出す関数
+    /// <summary>
+    /// 退室するときに呼び出す関数
+    /// </summary>
     public async void ExitRoom()
     {
         await roomHubModel.LeaveAsync();
@@ -247,7 +253,10 @@ public class GameDirector : MonoBehaviour
         roomHubModel.ConnectionId = Guid.Empty;
     }
 
-    //ユーザーが退室したときの処理
+    /// <summary>
+    /// ユーザーが退室したときの処理
+    /// </summary>
+    /// <param name="user"></param>
     private void OnExitUser(JoinedUser user)
     {
         // 退室したユーザーのキャラクターオブジェクトを削除
@@ -258,7 +267,9 @@ public class GameDirector : MonoBehaviour
         }
     }
 
-    //キャラクターの位置を定期的に呼び出すメソッド
+    /// <summary>
+    /// キャラクターの位置を定期的に呼び出すメソッド
+    /// </summary>
     public async void Move()
     {
         //自分自身のtransform.position、Quaternion.identity,アニメーションをサーバーに送信
@@ -267,7 +278,13 @@ public class GameDirector : MonoBehaviour
            (CharacterState)characterList[roomHubModel.ConnectionId].GetComponent<Animator>().GetInteger("state"));
     }
 
-    //ユーザーの移動、回転、アニメーション
+    /// <summary>
+    /// ユーザーの移動、回転、アニメーション
+    /// </summary>
+    /// <param name="connectionId"></param>
+    /// <param name="pos"></param>
+    /// <param name="rotaition"></param>
+    /// <param name="characterState"></param>
     private void OnMoveCharacter(Guid connectionId, Vector3 pos, Quaternion rotaition, CharacterState characterState)
     {
         if (characterList.ContainsKey(connectionId))
@@ -285,13 +302,20 @@ public class GameDirector : MonoBehaviour
         }
     }
 
-    //ユーザーが準備完了を押した時のメソッド
+    /// <summary>
+    /// ユーザーが準備完了を押した時のメソッド
+    /// </summary>
+    /// <returns></returns>
     public async UniTask Ready()
     {
         await roomHubModel.ReadyAsync();
     }
 
-    //ルーム内のユーザー全員が準備完了していたらの処理
+    /// <summary>
+    /// ルーム内のユーザー全員が準備完了していたらの処理
+    /// </summary>
+    /// <param name="connectionId"></param>
+    /// <param name="isReady"></param>
     private void OnReady(Guid connectionId, bool isReady)
     {
         isReady = true;
@@ -299,26 +323,40 @@ public class GameDirector : MonoBehaviour
         StartCoroutine("Text");
     }
 
-    //ゲーム内制限時間
+    /// <summary>
+    /// ゲーム内制限時間
+    /// </summary>
+    /// <param name="time"></param>
     public async void Time(float time)
     {
         await roomHubModel.TimeAsync(time);
     }
 
-    //定期的に呼ぶメソッド(ゲーム内制限時間)
+    /// <summary>
+    /// 定期的に呼ぶメソッド(ゲーム内制限時間)
+    /// </summary>
+    /// <param name="user"></param>
+    /// <param name="time"></param>
     private async void OnTimer(JoinedUser user, float time)
     {
         currentTime = time;
         await Ready();
     }
 
-    //キルしたときのメソッド
+    /// <summary>
+    /// キルしたときのメソッド
+    /// </summary>
     public async void KillAsync()
     {
         await roomHubModel.KillAsync();
     }
 
-    //キルしたときの通知
+    /// <summary>
+    /// キルしたときの通知
+    /// </summary>
+    /// <param name="connectionId"></param>
+    /// <param name="TotalKillNum"></param>
+    /// <param name="userName"></param>
     public void OnKill(Guid connectionId, int TotalKillNum,string userName)
     {
         KillNum.text = TotalKillNum.ToString();
@@ -326,13 +364,23 @@ public class GameDirector : MonoBehaviour
         AnimateKillLog(userName);
     }
 
-    //宝箱の位置同期
+    /// <summary>
+    /// 宝箱の位置同期
+    /// </summary>
+    /// <param name="pos"></param>
+    /// <param name="rotaition"></param>
+    /// <param name="Namechest"></param>
     public async void MoveChest(Vector3 pos, Quaternion rotaition, string Namechest)
     {
         await roomHubModel.MoveChest(pos, rotaition, Namechest);
     }
 
-    //宝箱の位置を定期的に通知するメソッド
+    /// <summary>
+    /// 宝箱の位置を定期的に通知するメソッド
+    /// </summary>
+    /// <param name="pos"></param>
+    /// <param name="rotaition"></param>
+    /// <param name="Namechest"></param>
     public void OnMoveChest(Vector3 pos, Quaternion rotaition, string Namechest)
     {
         GameObject chest = GameObject.Find(Namechest);
@@ -341,13 +389,20 @@ public class GameDirector : MonoBehaviour
         chest.transform.position = pos;
     }
 
-    //宝箱の取得数同期
+    /// <summary>
+    /// 宝箱の取得数同期
+    /// </summary>
+    /// <returns></returns>
     public async UniTask GainChest()
     {
         await roomHubModel.GainChest();
     }
 
-    //宝箱の取得数通知
+    /// <summary>
+    /// 宝箱の取得数通知
+    /// </summary>
+    /// <param name="TotalChestNum"></param>
+    /// <param name="keyValuePairs"></param>
     public async void OnChestNum(int TotalChestNum,Dictionary<string,int> keyValuePairs)
     {
         if (keyValuePairs.ContainsKey(MyName.UserData.Name))
@@ -362,14 +417,20 @@ public class GameDirector : MonoBehaviour
         }
     }
 
-    //ゲーム終了同期
+    /// <summary>
+    /// ゲーム終了同期
+    /// </summary>
+    /// <returns></returns>
     public async UniTask EndGameAsync()
     {
         await roomHubModel.EndGameAsync();
     }
 
-    //ゲーム終了通知
-    public async void OnEndGame(bool isHumanEndGame)
+    /// <summary>
+    /// ゲーム終了通知
+    /// </summary>
+    /// <param name="isHumanEndGame"></param>
+    public async void OnEndGame(bool isHumanEndGame, List<ResultData> resultData)
     {
         if (isHumanEndGame==true)
         {
@@ -388,13 +449,18 @@ public class GameDirector : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// リザルトシーンへ遷移する関数
+    /// </summary>
     public void LoadResult()
     {
         Initiate.Fade("Result", Color.black, 1);
     }
 
-
-    //DoTweenを使ったキルログアニメーション
+    /// <summary>
+    /// DoTweenを使ったキルログアニメーション
+    /// </summary>
+    /// <param name="userName"></param>
     private void AnimateKillLog(string userName)
     {
         // KillLog テキストの初期位置を保存
@@ -434,7 +500,10 @@ public class GameDirector : MonoBehaviour
     }
 
 
-    // カウントダウンを行うメソッド
+    /// <summary>
+    /// カウントダウンを行うメソッド
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator StartCountdown()
     {
         countdownTime = 3; //3秒のカウントダウン
@@ -466,20 +535,30 @@ public class GameDirector : MonoBehaviour
         StartCoroutine(CountdownTimer());
     }
 
-    //ゲームスタートオブジェクトを一秒後にテキストを非表示にする関数
+    /// <summary>
+    /// ゲームスタートオブジェクトを一秒後にテキストを非表示にする関数
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator HideGameStartText()
     {
         yield return new WaitForSeconds(1.0f); // 1秒待機
         GameStartText.SetActive(false); // ゲーム開始メッセージを非表示
     }
-    //一秒後にテキストを消す
+
+    /// <summary>
+    /// 一秒後にテキストを消す
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator Text()
     {
         yield return new WaitForSeconds(1.0f);
         countdownText.text = "";
     }
 
-    // タイマーをカウントダウンするメソッド
+    /// <summary>
+    /// タイマーをカウントダウンするメソッド
+    /// </summary>
+    /// <returns></returns>
     public  IEnumerator CountdownTimer()
     {
         while (currentTime > 0)
@@ -495,19 +574,26 @@ public class GameDirector : MonoBehaviour
         }
     }
 
-    //リザルトボタンが押された時の処理
+    /// <summary>
+    /// リザルトボタンが押された時の処理
+    /// </summary>
     public void OnResult()
     {
         Initiate.Fade("Result", Color.black, 1);
     }
 
-    //デフォルト攻撃ボタンが押された時の処理
+    /// <summary>
+    /// デフォルト攻撃ボタンが押された時の処理
+    /// </summary>
     public void AttackButton()
     {
         characterList[roomHubModel.ConnectionId].GetComponent<Character>().AttackButton();
     }
 
-    //自分自身の接続IDを取得
+    /// <summary>
+    /// 自分自身の接続IDを取得する関数
+    /// </summary>
+    /// <returns></returns>
     public Character GetCharacter()
     {
         Character foundCharacter = characterList[roomHubModel.ConnectionId].GetComponent<Character>();

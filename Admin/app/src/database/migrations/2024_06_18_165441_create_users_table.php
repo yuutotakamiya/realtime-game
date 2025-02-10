@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->string('name');
              $table->string('token');
+             $table->integer('point');
             $table->timestamps();
 
             $table->unique('name');//ユニーク制約

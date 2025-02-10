@@ -4309,7 +4309,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 400, y: 400}
+  m_SizeDelta: {x: 500, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &150291829
 MonoBehaviour:
@@ -16252,7 +16252,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 861, y: 108}
+  m_AnchoredPosition: {x: 861, y: 26}
   m_SizeDelta: {x: 150, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &728912591
@@ -16907,7 +16907,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 500, y: 400}
+  m_SizeDelta: {x: 500, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &791125000
 MonoBehaviour:
@@ -17156,7 +17156,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 736, y: 110}
+  m_AnchoredPosition: {x: 736, y: 24}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &813005403
@@ -19838,13 +19838,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 0
   rotateSpeed: 0
+  AttckCoolDown: 0
   NameText: {fileID: 0}
-  EffectPrefab: {fileID: 0}
   AttackSE: {fileID: 0}
   collider: {fileID: 0}
-  isInDropArea: 0
-  AttckCoolDown: 0
-  objectRenderer: {fileID: 0}
   currentTreasureChest: {fileID: 0}
 --- !u!4 &989157179
 Transform:
@@ -24711,8 +24708,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 754, y: 350}
-  m_SizeDelta: {x: 400, y: 400}
+  m_AnchoredPosition: {x: 721, y: 310}
+  m_SizeDelta: {x: 500, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1264735658
 MonoBehaviour:
@@ -27923,7 +27920,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 639, y: 99}
+  m_AnchoredPosition: {x: 639, y: 23}
   m_SizeDelta: {x: 140, y: 140}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1426355683
@@ -28346,7 +28343,7 @@ Camera:
   far clip plane: 4406.8
   field of view: 114
   orthographic: 1
-  orthographic size: 223.99
+  orthographic size: 194.4
   m_Depth: -5
   m_CullingMask:
     serializedVersion: 2
@@ -37799,13 +37796,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 0
   rotateSpeed: 0
+  AttckCoolDown: 0
   NameText: {fileID: 0}
-  EffectPrefab: {fileID: 0}
   AttackSE: {fileID: 0}
   collider: {fileID: 0}
-  isInDropArea: 0
-  AttckCoolDown: 0
-  objectRenderer: {fileID: 0}
   currentTreasureChest: {fileID: 0}
 --- !u!4 &1909200881
 Transform:

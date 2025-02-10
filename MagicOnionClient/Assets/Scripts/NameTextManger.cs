@@ -1,7 +1,16 @@
+//==========================================================
+//
+//名前表示を常にカメラの方向に向ける処理
+//Author:高宮祐翔
+//
+//==========================================================
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 名前を表示しているTextを常にカメラの方向に向けるスクリプト
+/// </summary>
 public class NameTextManger : MonoBehaviour
 {
     // Start is called before the first frame update
