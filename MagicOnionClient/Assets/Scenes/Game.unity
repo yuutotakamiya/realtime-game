@@ -16235,7 +16235,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &728912590
 RectTransform:
   m_ObjectHideFlags: 0
@@ -30828,18 +30828,18 @@ MonoBehaviour:
   Crrenttext: {fileID: 1855830441}
   KillNum: {fileID: 728912591}
   KillLog: {fileID: 2088851948}
-  skullIamge: {fileID: 1426355683}
   killerKakeru: {fileID: 813005403}
   humanKakeru: {fileID: 1695302404}
+  ChestNumText: {fileID: 1730513849}
   GameFinish: {fileID: 1676645795}
   GameStartText: {fileID: 1264109165}
   Result: {fileID: 1176918945}
   AttackButton1: {fileID: 1385876981}
   AttackButton2: {fileID: 286096454}
-  MiniMap: {fileID: 1264735658}
-  ChestNumText: {fileID: 1730513849}
   WinText: {fileID: 1303877542}
   WinText2: {fileID: 658141625}
+  skullIamge: {fileID: 1426355683}
+  MiniMap: {fileID: 1264735658}
   ChestImage: {fileID: 654082190}
 --- !u!82 &1571008283
 AudioSource:

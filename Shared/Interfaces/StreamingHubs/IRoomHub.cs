@@ -40,6 +40,6 @@ namespace Shared.Interfaces.StreamingHubs
         Task GainChest();
 
         //ゲーム終了
-        Task EndGameAsync();
+        Task EndGameAsync(bool isEndGame);
     }
 }

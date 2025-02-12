@@ -185,7 +185,7 @@ namespace StreamingHubs
 
             if (time == 0)
             {
-                await EndGameAsync();
+                await EndGameAsync(false);
             }
 
             //ルーム内の全員に現在の制限時間を通知
@@ -245,7 +245,7 @@ namespace StreamingHubs
 
             if (totalChestNum == 2)
             {
-                await EndGameAsync();
+                await EndGameAsync(true);
             }
 
             //ルーム内の全員に宝箱の獲得合計数を通知
@@ -300,10 +300,9 @@ namespace StreamingHubs
         /// ゲーム終了同期
         /// </summary>
         /// <returns></returns>
-        public async Task EndGameAsync()
+        public async Task EndGameAsync(bool isEndGame)
         {
             var roomStorage = this.room.GetInMemoryStorage<RoomData>();
-            bool isGameFinish = true;
 
             var roomDataList = roomStorage.AllValues.ToArray<RoomData>();
 
@@ -321,6 +320,7 @@ namespace StreamingHubs
                 // データベースからユーザー情報を取得
                 var user = await context.Users.FindAsync(userId);
 
+                //リザルトデータを作成
                 resultData.Add(new ResultData
                 {
                     Name = roomData.JoinedUser.UserData.Name, 
@@ -334,7 +334,7 @@ namespace StreamingHubs
             await context.SaveChangesAsync();
 
             //ゲーム終了を通知
-            this.Broadcast(room).OnEndGame(isGameFinish,resultData);
+            this.Broadcast(room).OnEndGame(isEndGame, resultData);
         }
 
 

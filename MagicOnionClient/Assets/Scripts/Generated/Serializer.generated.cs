@@ -47,10 +47,11 @@ namespace MessagePack.Resolvers
 
         static GeneratedResolverGetFormatterHelper()
         {
-            lookup = new global::System.Collections.Generic.Dictionary<global::System.Type, int>(2)
+            lookup = new global::System.Collections.Generic.Dictionary<global::System.Type, int>(3)
             {
                 { typeof(global::MagicOnionServer.Model.Entity.User), 0 },
                 { typeof(global::Shared.Interfaces.StreamingHubs.JoinedUser), 1 },
+                { typeof(global::Shared.Interfaces.StreamingHubs.ResultData), 2 },
             };
         }
 
@@ -66,6 +67,7 @@ namespace MessagePack.Resolvers
             {
                 case 0: return new MessagePack.Formatters.MagicOnionServer.Model.Entity.UserFormatter();
                 case 1: return new MessagePack.Formatters.Shared.Interfaces.StreamingHubs.JoinedUserFormatter();
+                case 2: return new MessagePack.Formatters.Shared.Interfaces.StreamingHubs.ResultDataFormatter();
                 default: return null;
             }
         }
@@ -113,10 +115,11 @@ namespace MessagePack.Formatters.MagicOnionServer.Model.Entity
             }
 
             global::MessagePack.IFormatterResolver formatterResolver = options.Resolver;
-            writer.WriteArrayHeader(5);
+            writer.WriteArrayHeader(6);
             writer.Write(value.Id);
             global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Serialize(ref writer, value.Name, options);
             global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Serialize(ref writer, value.Token, options);
+            writer.Write(value.point);
             global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::System.DateTime>(formatterResolver).Serialize(ref writer, value.Created_at, options);
             global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::System.DateTime>(formatterResolver).Serialize(ref writer, value.Updated_at, options);
         }
@@ -147,9 +150,12 @@ namespace MessagePack.Formatters.MagicOnionServer.Model.Entity
                         ____result.Token = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Deserialize(ref reader, options);
                         break;
                     case 3:
-                        ____result.Created_at = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::System.DateTime>(formatterResolver).Deserialize(ref reader, options);
+                        ____result.point = reader.ReadInt32();
                         break;
                     case 4:
+                        ____result.Created_at = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::System.DateTime>(formatterResolver).Deserialize(ref reader, options);
+                        break;
+                    case 5:
                         ____result.Updated_at = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<global::System.DateTime>(formatterResolver).Deserialize(ref reader, options);
                         break;
                     default:
@@ -236,6 +242,64 @@ namespace MessagePack.Formatters.Shared.Interfaces.StreamingHubs
                         break;
                     case 2:
                         ____result.JoinOrder = reader.ReadInt32();
+                        break;
+                    default:
+                        reader.Skip();
+                        break;
+                }
+            }
+
+            reader.Depth--;
+            return ____result;
+        }
+    }
+
+    public sealed class ResultDataFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::Shared.Interfaces.StreamingHubs.ResultData>
+    {
+
+        public void Serialize(ref global::MessagePack.MessagePackWriter writer, global::Shared.Interfaces.StreamingHubs.ResultData value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (value == null)
+            {
+                writer.WriteNil();
+                return;
+            }
+
+            global::MessagePack.IFormatterResolver formatterResolver = options.Resolver;
+            writer.WriteArrayHeader(4);
+            writer.Write(value.KillNum);
+            writer.Write(value.ChestNum);
+            writer.Write(value.Point);
+            global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Serialize(ref writer, value.Name, options);
+        }
+
+        public global::Shared.Interfaces.StreamingHubs.ResultData Deserialize(ref global::MessagePack.MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                return null;
+            }
+
+            options.Security.DepthStep(ref reader);
+            global::MessagePack.IFormatterResolver formatterResolver = options.Resolver;
+            var length = reader.ReadArrayHeader();
+            var ____result = new global::Shared.Interfaces.StreamingHubs.ResultData();
+
+            for (int i = 0; i < length; i++)
+            {
+                switch (i)
+                {
+                    case 0:
+                        ____result.KillNum = reader.ReadInt32();
+                        break;
+                    case 1:
+                        ____result.ChestNum = reader.ReadInt32();
+                        break;
+                    case 2:
+                        ____result.Point = reader.ReadInt32();
+                        break;
+                    case 3:
+                        ____result.Name = global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Deserialize(ref reader, options);
                         break;
                     default:
                         reader.Skip();

@@ -32,7 +32,7 @@ public class GameDirector : MonoBehaviour
 
     //クラスの設定
     [SerializeField] RoomHubModel roomHubModel;//RoomHubModelのクラスの設定
-    [SerializeField] DefenceTarget defenceTarget;
+    [SerializeField] DefenceTarget defenceTarget;//DefenceTargetクラスの設定
 
     //カウントダウン
     [SerializeField] float timeLimit;//制限時間を設定
@@ -45,19 +45,20 @@ public class GameDirector : MonoBehaviour
     [SerializeField] Text Crrenttext;//現在のキル数
     [SerializeField] Text KillNum;//キル数
     [SerializeField] Text KillLog;//キル通知
-    [SerializeField] Image skullIamge;//頭蓋骨の画像
     [SerializeField] Text killerKakeru;//×Text;
     [SerializeField] Text humanKakeru;//×Text;
+    [SerializeField] Text ChestNumText;//宝箱の取得した数を入れるText
     [SerializeField] GameObject GameFinish;//ゲーム終了Text
     [SerializeField] GameObject GameStartText;//ゲームスタートText
     [SerializeField] GameObject Result;//リザルト画面に行くためのボタン
     [SerializeField] GameObject AttackButton1;//デフォルトの攻撃ボタン
     [SerializeField] GameObject AttackButton2;//雷攻撃
-    [SerializeField] Image MiniMap;//ミニマップ
-    [SerializeField] Text ChestNumText;//宝箱の取得した数を入れるText
     [SerializeField] GameObject WinText;
     [SerializeField] GameObject WinText2;
-    [SerializeField] Image ChestImage;
+    [SerializeField] Image skullIamge;//頭蓋骨の画像
+    [SerializeField] Image MiniMap;//ミニマップ
+    [SerializeField] Image ChestImage;//宝箱の画像
+    
 
     //virtualCameraカメラの宣言
     private CinemachineVirtualCamera virtualCamera; // Cinemachine Virtual Camera
@@ -66,10 +67,12 @@ public class GameDirector : MonoBehaviour
     private bool isEnemy = false;//自分が敵かどうか
     private bool ishave = false;//宝箱を持っているかどうか
 
+    
     Vector3 position;
+
+    //コンポーネントの宣言
     Animator animator;
     Rigidbody rigidbody;
-    Character character;
 
     //キャラクターの情報を保存するためのフィールド
     private Dictionary<Guid, GameObject> characterList = new Dictionary<Guid, GameObject>();
@@ -413,7 +416,7 @@ public class GameDirector : MonoBehaviour
         //宝箱を合計2個取得したら
         if (TotalChestNum == 2)
         {
-           await EndGameAsync();
+           await EndGameAsync(true);
         }
     }
 
@@ -421,18 +424,20 @@ public class GameDirector : MonoBehaviour
     /// ゲーム終了同期
     /// </summary>
     /// <returns></returns>
-    public async UniTask EndGameAsync()
+    public async UniTask EndGameAsync(bool isEndGame)
     {
-        await roomHubModel.EndGameAsync();
+        await roomHubModel.EndGameAsync(isEndGame);
     }
 
     /// <summary>
     /// ゲーム終了通知
     /// </summary>
     /// <param name="isHumanEndGame"></param>
-    public async void OnEndGame(bool isHumanEndGame, List<ResultData> resultData)
+    public async  void OnEndGame(bool isEndGame, List<ResultData> resultData)
     {
-        if (isHumanEndGame==true)
+        ResultManager.SetResult(resultData);
+
+        if (isEndGame == true)
         {
             characterList[roomHubModel.ConnectionId].GetComponent<Character>().Isstart = false;
             WinText.SetActive(true);
@@ -568,9 +573,18 @@ public class GameDirector : MonoBehaviour
             yield return new WaitForSeconds(1f); // 1秒待機
         }
 
+        Timer();
+
+    }
+
+    /// <summary>
+    /// 制限時間が0になったら
+    /// </summary>
+    private async void Timer()
+    {
         if (currentTime == 0)
         {
-            EndGameAsync();
+          await  EndGameAsync(false);
         }
     }
 

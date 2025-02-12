@@ -285,18 +285,18 @@ public class RoomHubModel : BaseModel, IRoomHubReceiver
     /// ゲーム終了同期
     /// </summary>
     /// <returns></returns>
-    public async UniTask EndGameAsync()
+    public async UniTask EndGameAsync(bool isEndGame)
     {
-        await roomHub.EndGameAsync();
+        await roomHub.EndGameAsync(isEndGame);
     }
 
     /// <summary>
     /// ゲーム終了通知
     /// </summary>
     /// <param name="isHumanEndGame"></param>
-    public void OnEndGame(bool isHumanEndGame,List<ResultData> resultData)
+    public void OnEndGame(bool isEndGame,List<ResultData> resultData)
     {
-        OnEndG(isHumanEndGame,resultData);
+        OnEndG(isEndGame,resultData);
     }
 
 }
