@@ -267,7 +267,7 @@ namespace MessagePack.Formatters.Shared.Interfaces.StreamingHubs
 
             global::MessagePack.IFormatterResolver formatterResolver = options.Resolver;
             writer.WriteArrayHeader(4);
-            writer.Write(value.KillNum);
+            writer.Write(value.KillCount);
             writer.Write(value.ChestNum);
             writer.Write(value.Point);
             global::MessagePack.FormatterResolverExtensions.GetFormatterWithVerify<string>(formatterResolver).Serialize(ref writer, value.Name, options);
@@ -290,7 +290,7 @@ namespace MessagePack.Formatters.Shared.Interfaces.StreamingHubs
                 switch (i)
                 {
                     case 0:
-                        ____result.KillNum = reader.ReadInt32();
+                        ____result.KillCount = reader.ReadInt32();
                         break;
                     case 1:
                         ____result.ChestNum = reader.ReadInt32();

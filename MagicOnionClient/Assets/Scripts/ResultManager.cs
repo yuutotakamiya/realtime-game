@@ -12,6 +12,18 @@ public class ResultManager : MonoBehaviour
     [SerializeField]  GameObject playerResultPrefab;// プレイヤーリザルト表示用のPrefab
     [SerializeField]  Transform resultPanel;// リザルトを表示するパネル
 
+    /*// プレイヤーの名前を表示するTextコンポーネント
+    [SerializeField] Text NameText;
+
+    // プレイヤーが取得した宝箱の数を表示するTextコンポーネント
+    [SerializeField] Text ChestNumText;
+
+    // プレイヤーのキル数を表示するTextコンポーネント
+    [SerializeField] Text KillCountText;
+
+    // プレイヤーのポイントを表示するTextコンポーネント
+    [SerializeField] Text PointText;*/
+
     static List<ResultData> resultData;
 
     /// <summary>
@@ -19,17 +31,20 @@ public class ResultManager : MonoBehaviour
     /// </summary>
     void Start()
     {
-        foreach (var result in resultData)
+        // resultDataが設定されていない場合はエラーハンドリング
+        if (resultData != null && resultData.Count > 0)
         {
-            // プレハブを生成して、結果パネル（resultPanel）に追加
-            GameObject resultUI = Instantiate(playerResultPrefab, resultPanel);
+            for (int i = 0; i < resultData.Count; i++)
+            {
+                // プレハブを生成して、結果パネル（resultPanel）に追加
+                GameObject resultUI = Instantiate(playerResultPrefab, resultPanel);
 
-            // プレハブ内のTextコンポーネントを取得し、データを設定
-            resultUI.gameObject.transform.Find("NameText").GetComponent<Text>().text = result.Name;
-            resultUI.gameObject.transform.Find("KillCountText").GetComponent<Text>().text = "Kills: " + result.KillNum.ToString();
-            resultUI.gameObject.transform.Find("ChestNumText").GetComponent<Text>().text = "Chests: " + result.ChestNum.ToString();
-            resultUI.gameObject.transform.Find("PointText").GetComponent<Text>().text = "Points: " + result.Point.ToString();
-
+                // 各プレイヤーのリザルトデータを設定
+                resultUI.transform.Find("NameText").GetComponent<Text>().text = resultData[i].Name;
+                resultUI.transform.Find("ChestNumText").GetComponent<Text>().text = "Chests:  " + resultData[i].ChestNum.ToString();
+                resultUI.transform.Find("KillCountText").GetComponent<Text>().text = "Kills:  " + resultData[i].KillCount.ToString();
+                resultUI.transform.Find("PointText").GetComponent<Text>().text = "Points:  " + resultData[i].Point.ToString();
+            }
         }
     }
 
@@ -38,7 +53,7 @@ public class ResultManager : MonoBehaviour
     {
         
     }
-
+    
     /// <summary>
     /// タイトル画面に遷移
     /// </summary>

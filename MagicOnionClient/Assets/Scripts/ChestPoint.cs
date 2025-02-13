@@ -45,6 +45,7 @@ public class ChestPoint : MonoBehaviour
             }
 
             Destroy(other.gameObject);//•ó” ‚ğíœ
+            gameDirector.CancelInvoke("MoveChest");
             defenceTarget.CancelInvoke("Chest");
             isChestProcessed=false;
         }

@@ -325,13 +325,14 @@ namespace StreamingHubs
                 {
                     Name = roomData.JoinedUser.UserData.Name, 
                     ChestNum = roomData.ChestNum,
-                    KillNum = roomData.KillNum,
-                    Point = user.point
+                    KillCount = roomData.KillNum,
+                    Point = user.point,
+                  
                 });
-
                 user.point += point;
+
+                await context.SaveChangesAsync();
             }
-            await context.SaveChangesAsync();
 
             //ゲーム終了を通知
             this.Broadcast(room).OnEndGame(isEndGame, resultData);
