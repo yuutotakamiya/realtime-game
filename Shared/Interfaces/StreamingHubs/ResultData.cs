@@ -12,16 +12,24 @@ namespace Shared.Interfaces.StreamingHubs
     [MessagePackObject]
     public class ResultData
     {
+        /// <summary>
+        /// キルした数
+        /// </summary>
         [Key(0)]
-        //キルした数
         public int KillCount { get; set; }
+        /// <summary>
+        /// 宝箱の獲得した数
+        /// </summary>
         [Key(1)]
-        //宝箱の獲得した数
         public int ChestNum { get; set; }
-        //ポイント
+        /// <summary>
+        /// ポイント
+        /// </summary>
         [Key(2)]
-        public int Point {  get; set; }
-        //自分の名前
+        public int Point { get; set; }
+        /// <summary>
+        /// 自分の名前
+        /// </summary>
         [Key(3)]
         public string Name { get; set; }
     }

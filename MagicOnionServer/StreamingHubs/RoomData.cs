@@ -24,5 +24,6 @@ namespace StreamingHubs
         public int ChestNum {  get; set; }
         //ゲーム終了
         public bool IsEndGame {  get; set; }
+        
     }
 }

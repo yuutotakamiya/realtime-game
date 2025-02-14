@@ -78,11 +78,11 @@ public class HumanManager : Character
     /// <summary>
     /// 死亡アニメーション関数
     /// </summary>
-    public void OnAnimationDestroy()
+    public async void OnAnimationDestroy()
     {
         if (IsDead == true)
         {
-            gameDirector.KillAsync();
+           await gameDirector.KillAsync();//非同期で鬼がキルしたときの関数を呼び出し
         }
     }
 

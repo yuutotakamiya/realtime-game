@@ -52,9 +52,8 @@ public class GameDirector : MonoBehaviour
     [SerializeField] GameObject GameStartText;//ゲームスタートText
     [SerializeField] GameObject Result;//リザルト画面に行くためのボタン
     [SerializeField] GameObject AttackButton1;//デフォルトの攻撃ボタン
-    [SerializeField] GameObject AttackButton2;//雷攻撃
-    [SerializeField] GameObject WinText;
-    [SerializeField] GameObject WinText2;
+    [SerializeField] GameObject WinText;//
+    [SerializeField] GameObject WinText2;//
     [SerializeField] Image skullIamge;//頭蓋骨の画像
     [SerializeField] Image MiniMap;//ミニマップ
     [SerializeField] Image ChestImage;//宝箱の画像
@@ -80,7 +79,8 @@ public class GameDirector : MonoBehaviour
     //名前と宝箱の名前をフィールドに保存
     public static Dictionary<string,int> keyValuePairs;
 
-    private JoinedUser MyName; //自分自身の名前をフィールドに保存
+    //自分自身の名前をフィールドに保存
+    private JoinedUser MyName; 
 
     //自分自身が敵かどうかを判断するフラグをプロパティ化
     public bool IsEnemy
@@ -126,9 +126,9 @@ public class GameDirector : MonoBehaviour
 
         currentTime = timeLimit; // 初期化: 残り時間を設定
 
-        animator = GetComponent<Animator>();
-        rigidbody = GetComponent<Rigidbody>();
-        virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
+        animator = GetComponent<Animator>();//Animatorコンポーネントの取得
+        rigidbody = GetComponent<Rigidbody>();//Rigidbodyコンポーネントの取得
+        virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();//CinemachineVirtualCameraオブジェクトの取得
 
         KillNum.text = "0";
 
@@ -226,6 +226,7 @@ public class GameDirector : MonoBehaviour
             virtualCamera.LookAt = characterTransform;//キャラクターにカメラをロック
         }
 
+        //自分自身の接続IDとroomHubModelの接続が一緒だったら
         if (roomHubModel.ConnectionId == user.ConnectionId)
         {
             characterObject.GetComponent<Character>().Isself = true;
@@ -349,7 +350,7 @@ public class GameDirector : MonoBehaviour
     /// <summary>
     /// キルしたときのメソッド
     /// </summary>
-    public async void KillAsync()
+    public async UniTask KillAsync()
     {
         await roomHubModel.KillAsync();
     }
@@ -362,9 +363,9 @@ public class GameDirector : MonoBehaviour
     /// <param name="userName"></param>
     public void OnKill(Guid connectionId, int TotalKillNum,string userName)
     {
-        KillNum.text = TotalKillNum.ToString();
+        KillNum.text = TotalKillNum.ToString();//キルした数
 
-        AnimateKillLog(userName);
+        AnimateKillLog(userName);//キルログ
     }
 
     /// <summary>
@@ -373,7 +374,7 @@ public class GameDirector : MonoBehaviour
     /// <param name="pos"></param>
     /// <param name="rotaition"></param>
     /// <param name="Namechest"></param>
-    public async void MoveChest(Vector3 pos, Quaternion rotaition, string Namechest)
+    public async UniTask MoveChest(Vector3 pos, Quaternion rotaition, string Namechest)
     {
         await roomHubModel.MoveChest(pos, rotaition, Namechest);
     }
@@ -386,10 +387,10 @@ public class GameDirector : MonoBehaviour
     /// <param name="Namechest"></param>
     public void OnMoveChest(Vector3 pos, Quaternion rotaition, string Namechest)
     {
-        GameObject chest = GameObject.Find(Namechest);
+        GameObject chest = GameObject.Find(Namechest);//宝箱の名前を検索
 
-        chest.transform.rotation = rotaition;
-        chest.transform.position = pos;
+        chest.transform.rotation = rotaition;//宝箱の回転を代入
+        chest.transform.position = pos;//宝箱の位置を代入
     }
 
     /// <summary>
@@ -398,7 +399,7 @@ public class GameDirector : MonoBehaviour
     /// <returns></returns>
     public async UniTask GainChest()
     {
-        await roomHubModel.GainChest();
+        await roomHubModel.GainChest();//宝箱取得数を非同期で呼び出し
     }
 
     /// <summary>
@@ -408,15 +409,16 @@ public class GameDirector : MonoBehaviour
     /// <param name="keyValuePairs"></param>
     public async void OnChestNum(int TotalChestNum,Dictionary<string,int> keyValuePairs)
     {
+        //自分自身の場合
         if (keyValuePairs.ContainsKey(MyName.UserData.Name))
         {
-            ChestNumText.text = keyValuePairs[MyName.UserData.Name].ToString();
+            ChestNumText.text = keyValuePairs[MyName.UserData.Name].ToString();//宝箱の数をTextに代入
         }
 
         //宝箱を合計2個取得したら
         if (TotalChestNum == 2)
         {
-           await EndGameAsync(true);
+           await EndGameAsync(true);//ゲーム終了同期を非同期で呼び出し
         }
     }
 
@@ -432,19 +434,21 @@ public class GameDirector : MonoBehaviour
     /// <summary>
     /// ゲーム終了通知
     /// </summary>
-    /// <param name="isHumanEndGame"></param>
+    /// <param name="isEndGame"></param>
     public async  void OnEndGame(bool isEndGame, List<ResultData> resultData)
     {
         ResultManager.SetResult(resultData);
 
+        //人間側が勝利した場合
         if (isEndGame == true)
         {
             characterList[roomHubModel.ConnectionId].GetComponent<Character>().Isstart = false;
             WinText.SetActive(true);
             WinText2.SetActive(true);
-            StopCoroutine("CountdownTimer");
+            StopCoroutine(CountdownTimer());
             Invoke("LoadResult", 3);
         }
+        //追いかける側が勝利した場合
         else
         {
             characterList[roomHubModel.ConnectionId].GetComponent<Character>().Isstart = false;
@@ -459,7 +463,7 @@ public class GameDirector : MonoBehaviour
     /// </summary>
     public void LoadResult()
     {
-        Initiate.Fade("Result", Color.black, 1);
+        Initiate.Fade("Result", Color.black, 1);//Resultシーンへ遷移
     }
 
     /// <summary>
@@ -572,9 +576,6 @@ public class GameDirector : MonoBehaviour
             currentTime -= 1f; // 1秒減らす
             yield return new WaitForSeconds(1f); // 1秒待機
         }
-
-        Timer();
-
     }
 
     /// <summary>
@@ -610,6 +611,7 @@ public class GameDirector : MonoBehaviour
     /// <returns></returns>
     public Character GetCharacter()
     {
+        //自分の接続IDを取得
         Character foundCharacter = characterList[roomHubModel.ConnectionId].GetComponent<Character>();
 
         return foundCharacter;

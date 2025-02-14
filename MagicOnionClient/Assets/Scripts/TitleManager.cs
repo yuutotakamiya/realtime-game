@@ -53,13 +53,13 @@ public class TitleManager : BaseModel
     //スタートボタンが押されたら呼び出す
     public void OnStart()
     {
-        if (!string.IsNullOrEmpty(InputFieldUserID.text))
+        /*if (!string.IsNullOrEmpty(InputFieldUserID.text))
         {
             UserModel.Instance.userId = int.Parse(InputFieldUserID.text);
             audioSource.PlayOneShot(startbuttonSE);
             Initiate.Fade("MachingScene", Color.black, 1.0f);
             return;
-        }
+        }*/
 
         //ユーザーのデータを読み込む
         bool isSuccess = UserModel.Instance.LoadUserData();
@@ -73,7 +73,6 @@ public class TitleManager : BaseModel
         {
             inputFieldName.gameObject.SetActive(true);
             StartButton.SetActive(false);
-            //OKButton.SetActive(true);
         }
     }
 

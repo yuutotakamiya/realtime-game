@@ -32,7 +32,6 @@ namespace StreamingHubs
             GameDbContext context = new GameDbContext();
             var user = context.Users.Where(user => user.Id == userId).First();
 
-
             //グループストレージにユーザーデータを格納
             var roomStorage = this.room.GetInMemoryStorage<RoomData>();
 
@@ -102,7 +101,7 @@ namespace StreamingHubs
 
             var joinedUser = new JoinedUser() { ConnectionId = this.ConnectionId };
 
-            //ルーム参加者全員に(自分以外)、ユーザーの退室通知を送信
+            //ルーム参加者全員にユーザーの退室通知を送信
             this.Broadcast(room).OnLeave(joinedUser);
 
         }
@@ -126,7 +125,7 @@ namespace StreamingHubs
             roomData.Rotation = rotaition;
             roomStorage.Set(this.ConnectionId, roomData);  // 更新されたデータを保存
 
-            //ルーム参加者全員に(自分以外)、ユーザーの位置、回転、アニメーションを通知
+            //ルーム参加者(自分以外)に、ユーザーの位置、回転、アニメーションを通知
             this.BroadcastExceptSelf(room).OnMove(this.ConnectionId, pos, rotaition, characterState);
         }
 
@@ -202,10 +201,8 @@ namespace StreamingHubs
             var roomData = roomStorage.Get(this.ConnectionId);
             roomData.KillNum++;
             var roomDataList = roomStorage.AllValues.ToArray<RoomData>();
-            int totalKillNum = 0;
 
-            // 鬼の名前を取得
-            string killerName = roomData.JoinedUser.UserData.Name;
+            int totalKillNum = 0;
 
             foreach (var rData in roomDataList)
             {
@@ -292,7 +289,7 @@ namespace StreamingHubs
             roomData.Rotation = rotaition;
             roomStorage.Set(this.ConnectionId, roomData);  // 更新されたデータを保存
 
-            //ルーム参加者全員に(自分以外)、ユーザーの位置、回転、アニメーションを通知
+            //ルーム参加者(自分以外)に、宝箱位置、回転、宝箱の名前を通知
             this.BroadcastExceptSelf(room).OnMoveChest(pos, rotaition, Namechest);
         }
 
@@ -302,6 +299,8 @@ namespace StreamingHubs
         /// <returns></returns>
         public async Task EndGameAsync(bool isEndGame)
         {
+            Console.WriteLine("EndGameAsync start");
+
             var roomStorage = this.room.GetInMemoryStorage<RoomData>();
 
             var roomDataList = roomStorage.AllValues.ToArray<RoomData>();
@@ -313,28 +312,28 @@ namespace StreamingHubs
             List<ResultData> resultData = new List<ResultData>();
 
             foreach (var roomData in roomDataList)
-            { 
+            {
                 // ユーザーのIDを取得
                 int userId = roomData.JoinedUser.UserData.Id;
 
                 // データベースからユーザー情報を取得
                 var user = await context.Users.FindAsync(userId);
 
+                user.point += point;
+
                 //リザルトデータを作成
                 resultData.Add(new ResultData
                 {
-                    Name = roomData.JoinedUser.UserData.Name, 
+                    Name = roomData.JoinedUser.UserData.Name,
                     ChestNum = roomData.ChestNum,
                     KillCount = roomData.KillNum,
                     Point = user.point,
-                  
                 });
-                user.point += point;
 
                 await context.SaveChangesAsync();
             }
 
-            //ゲーム終了を通知
+            //ゲーム終了、リザルトデータを通知
             this.Broadcast(room).OnEndGame(isEndGame, resultData);
         }
 
@@ -350,7 +349,7 @@ namespace StreamingHubs
 
             var joinedUser = new JoinedUser() { ConnectionId = this.ConnectionId };
 
-            //ルーム参加者全員に(自分以外)、ユーザーの退室通知を送信
+            //ルーム参加者全員に、ユーザーの退室通知を送信
             this.Broadcast(room).OnLeave(joinedUser);
 
             //ルーム内のメンバーから自分を削除
