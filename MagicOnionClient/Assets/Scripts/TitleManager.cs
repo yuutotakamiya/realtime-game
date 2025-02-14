@@ -26,7 +26,8 @@ public class TitleManager : BaseModel
 
     [SerializeField] UserModel userModel;//ユーザーモデルクラス定義
     [SerializeField] GameObject StartButton;//スタートボタン
-
+    [SerializeField] GameObject SubmitButton;
+ 
     [SerializeField] CanvasGroup buttonCanvasGroup; // ボタンに追加したCanvasGroup
     [SerializeField] float fadeDuration = 0.5f; // フェードの時間
     [SerializeField] float fadeDelay = 0.5f; // 次のフェードまでの遅延
@@ -53,13 +54,13 @@ public class TitleManager : BaseModel
     //スタートボタンが押されたら呼び出す
     public void OnStart()
     {
-        /*if (!string.IsNullOrEmpty(InputFieldUserID.text))
+        if (!string.IsNullOrEmpty(InputFieldUserID.text))
         {
             UserModel.Instance.userId = int.Parse(InputFieldUserID.text);
             audioSource.PlayOneShot(startbuttonSE);
             Initiate.Fade("MachingScene", Color.black, 1.0f);
             return;
-        }*/
+        }
 
         //ユーザーのデータを読み込む
         bool isSuccess = UserModel.Instance.LoadUserData();
@@ -73,6 +74,7 @@ public class TitleManager : BaseModel
         {
             inputFieldName.gameObject.SetActive(true);
             StartButton.SetActive(false);
+            //SubmitButton.SetActive(true);
         }
     }
 

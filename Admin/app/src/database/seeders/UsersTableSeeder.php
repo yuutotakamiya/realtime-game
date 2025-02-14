@@ -38,5 +38,30 @@ class UsersTableSeeder extends Seeder
             'token'=>'',
             'point'=>3
         ]);
+        User::create([
+            'name' => 'ss',
+            'token'=>'',
+            'point'=>4
+        ]);
+        User::create([
+            'name' => 'tt',
+            'token'=>'',
+            'point'=>5
+        ]);
+        User::create([
+            'name' => 'yy',
+            'token'=>'',
+            'point'=>6
+        ]);
+        User::create([
+            'name' => 'pp',
+            'token'=>'',
+            'point'=>7
+        ]);
+        User::create([
+            'name' => 'kk',
+            'token'=>'',
+            'point'=>8
+        ]);
     }
 }
