@@ -177,7 +177,7 @@ public class GameDirector : MonoBehaviour
     public async UniTask JoinRoom()
     {
         //“üŽº
-        await roomHubModel.JoinAsync(LobbyManager.RoomName, UserModel.Instance.userId);
+        await roomHubModel.JoinAsync(LobbyManager.RoomName, UserModel.Instance.UserID);
 
         InvokeRepeating("Move", 0.1f, 0.1f);
     }

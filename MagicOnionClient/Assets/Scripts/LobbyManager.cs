@@ -75,7 +75,7 @@ public class LobbyManager : MonoBehaviour
     public async UniTask JoinRoom()
     {
         //“üŽº
-        await roomHubModel.JoinLobbyAsync(UserModel.Instance.userId);
+        await roomHubModel.JoinLobbyAsync(UserModel.Instance.UserID);
     }
 
 

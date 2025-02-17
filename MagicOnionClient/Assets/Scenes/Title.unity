@@ -1134,8 +1134,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 375b9a3d1e8161f499e1bbf28b380233, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  userId: 0
-  authToken: 
 --- !u!4 &127397922
 Transform:
   m_ObjectHideFlags: 0
@@ -4700,7 +4698,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -110}
+  m_AnchoredPosition: {x: 0, y: -93}
   m_SizeDelta: {x: 800, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &573277427
@@ -5279,7 +5277,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -135}
+  m_AnchoredPosition: {x: 0, y: 69}
   m_SizeDelta: {x: 700, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &626299303
@@ -6432,7 +6430,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1764139212}
         m_TargetAssemblyTypeName: TitleManager, Assembly-CSharp
-        m_MethodName: OnSubmitButton
+        m_MethodName: RegistUserAsync
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -12064,7 +12062,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 6}
+  m_AnchoredPosition: {x: 0, y: -88}
   m_SizeDelta: {x: 800, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1333241604

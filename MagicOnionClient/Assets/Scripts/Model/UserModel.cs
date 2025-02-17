@@ -21,10 +21,17 @@ using Newtonsoft.Json;
 /// </summary>
 public class UserModel : BaseModel
 {
-    public int userId;//ユーザーIDを保存する変数
-    public string authToken;//トークンを保存するための変数
+    private int userId;//ユーザーIDを保存する変数
+    private string authToken;//トークンを保存するための変数
 
     private static UserModel instance;
+
+    //userIdをプロパティ化
+    public int UserID
+    {
+       get { return userId; }
+       set { userId = value; }
+    }
 
     //UserModelクラスをインスタンス化
     public static UserModel Instance
@@ -72,7 +79,6 @@ public class UserModel : BaseModel
         reader.Close();
         SaveData saveData = JsonConvert.DeserializeObject<SaveData>(json);
         this.userId = saveData.UserID;
-        //this.authToken = saveData.AuthToken;
         return true;
     }
 

@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class BaseModel : MonoBehaviour
 {
-    public const string ServerURL = "http://localhost:7000";
+    public const string ServerURL = "http://realtimegame.japaneast.cloudapp.azure.com:7000";
+
     /*#if DEBUG
-      
+      public const string ServerURL = "http://localhost:7000";
     #else
-       public const string ServerURL = "http://realtimegame.japaneast.cloudapp.azure.com:7000";
+      
     #endif*/
 
 }

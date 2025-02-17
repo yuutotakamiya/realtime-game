@@ -4,6 +4,7 @@
 //Author:高宮祐翔
 //
 //==========================================================
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using MessagePack.Formatters.MagicOnionServer.Model.Entity;
 using System.Collections;
@@ -35,7 +36,9 @@ public class TitleManager : BaseModel
     [SerializeField]AudioClip startbuttonSE;
     AudioSource audioSource;
 
-
+    /// <summary>
+    /// 開始処理
+    /// </summary>
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
@@ -51,12 +54,14 @@ public class TitleManager : BaseModel
 
     }
 
-    //スタートボタンが押されたら呼び出す
+    /// <summary>
+    /// スタートボタンが押されたら呼び出す
+    /// </summary>
     public void OnStart()
     {
         if (!string.IsNullOrEmpty(InputFieldUserID.text))
         {
-            UserModel.Instance.userId = int.Parse(InputFieldUserID.text);
+            UserModel.Instance.UserID = int.Parse(InputFieldUserID.text);
             audioSource.PlayOneShot(startbuttonSE);
             Initiate.Fade("MachingScene", Color.black, 1.0f);
             return;
@@ -65,26 +70,30 @@ public class TitleManager : BaseModel
         //ユーザーのデータを読み込む
         bool isSuccess = UserModel.Instance.LoadUserData();
 
-        if (isSuccess == true)
+        if (!isSuccess)
+        {
+            inputFieldName.gameObject.SetActive(true);
+            StartButton.SetActive(false);
+            SubmitButton.SetActive(true);
+        }
+        else
         {
             audioSource.PlayOneShot(startbuttonSE);
             Initiate.Fade("MachingScene", Color.black, 1.0f);
         }
-        else
-        {
-            inputFieldName.gameObject.SetActive(true);
-            StartButton.SetActive(false);
-            //SubmitButton.SetActive(true);
-        }
     }
 
-    //ユーザー登録API呼び出し
-    public async void OnSubmitButton(string name)
+    /// <summary>
+    /// ユーザー登録API呼び出し
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns></returns>
+    public async void RegistUserAsync(string name)
     {
         name = inputFieldName.text;
         if (!string.IsNullOrEmpty(name))
         {
-            await userModel.RegistUserAsync(name);
+            await UserModel.Instance.RegistUserAsync(name);
             audioSource.PlayOneShot(startbuttonSE);
             Initiate.Fade("MachingScene", Color.black, 1.0f);
         }
